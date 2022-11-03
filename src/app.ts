@@ -1,0 +1,167 @@
+import axios from 'axios';
+import express from 'express';
+import { Client, LocalAuth } from 'whatsapp-web.js';
+
+import { Estado } from './interfaces/estado.js';
+import router from './routes/index.js';
+
+import { checkPage } from './helpers/checkPage.js';
+
+//! CONFIGURACION WHATSAPP WEB JS
+
+const client = new Client({
+	authStrategy: new LocalAuth(),
+	puppeteer: {
+		handleSIGINT: false,
+		args: ['--no-sandbox', '--disable-setuid-sandbox'],
+	},
+
+	// puppeteer: { headless: true }, // Make headless true or remove to run browser in background
+	// puppeteer: {
+	//     headless: true,
+	//     args: [
+	//         '--no-sandbox',
+	//         '--disable-setuid-sandbox',
+	//         '--disable-dev-shm-usage',
+	//         '--disable-accelerated-2d-canvas',
+	//         '--no-first-run',
+	//         '--no-zygote',
+	//         '--single-process', // <- this one doesn't works in Windows
+	//         '--disable-gpu'
+	//     ],
+	// },
+});
+
+// VARIABLES GLOBALES
+globalThis.client = client;
+
+globalThis.estados = [
+	{
+		estado: 'INICIANDO',
+		valor: 0,
+	} as Estado,
+];
+
+client.on('loading_screen', (percent, message) => {
+	console.log('LOADING', percent, message);
+	globalThis.estado = globalThis.estados.push({
+		estado: 'INICIANDO',
+		valor: percent,
+	} as Estado);
+});
+
+client.on('authenticated', session => {
+	console.log('AUTHENTICATED');
+	globalThis.estado = globalThis.estados.push({
+		estado: 'AUTENTICADO',
+		valor: 0,
+	} as Estado);
+});
+
+client.on('auth_failure', msg => {
+	// Fired if session restore was unsuccessful
+	console.error('AUTHENTICATION FAILURE', msg);
+	globalThis.estado = globalThis.estados.push({
+		estado: 'ERROR DE AUTENTICACION',
+		valor: 0,
+	} as Estado);
+});
+
+client.on('message_create', msg => {
+	// Fired on all message creations, including your own
+	if (msg.fromMe) {
+		// do stuff here
+		// console.log({ msg });
+	}
+});
+
+client.on('message_revoke_everyone', async (after, before) => {
+	// Fired whenever a message is deleted by anyone (including you)
+	console.log({ after: after.body }); // message after it was deleted.
+	if (before) {
+		console.log({ before: before.body }); // message before it was deleted.
+	}
+});
+
+client.on('qr', qr => {
+	// Generate and scan this code with your phone
+	console.log('QR RECIBIDO', qr);
+	globalThis.estado = globalThis.estados.push({
+		estado: 'QR',
+		valor: qr,
+	} as Estado);
+
+	globalThis.qrCode = qr;
+});
+
+client.on('ready', () => {
+	console.log('Client is ready!');
+	// Number where you want to send the message.
+	// const number = '+5493516461960';
+
+	// // Your message.
+	// const text = 'Hola pollo desde Node!';
+
+	// // Getting chatId from the number.
+	// // we have to delete "+" from the beginning and add "@c.us" at the end of the number.
+	// const chatId = number.substring(1) + '@c.us';
+
+	// // Sending message.
+	// client.sendMessage(chatId, text);
+
+	globalThis.estado = globalThis.estados.push({
+		estado: 'LISTO',
+		valor: 0,
+	} as Estado);
+});
+
+client.on('message', async msg => {
+	if (msg.body == '!ping') {
+		msg.reply('pong');
+	}
+	if (msg.body == '!gordochoto') {
+		msg.reply('OINK OINK');
+	}
+
+	if (msg.body.startsWith('!!s')) {
+		const text = msg.body.split('!!s')[1];
+		const { data } = await axios.post('http://192.168.1.69/api/speak', { text, ip: '127.0.0.1' });
+	}
+
+	//! CHATS
+	msg.getContact().then(contact => {
+		if (msg.from.slice(0, msg.from.length - 5) === 'status@broa') return;
+
+		// console.log({ contact });
+		if (msg.type === 'chat')
+			console.log(
+				`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: ${msg.body}`
+			);
+
+		if (msg.type !== 'chat')
+			console.log(
+				`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: type:${
+					msg.type
+				}`
+			);
+	});
+});
+
+client.initialize();
+
+//! CONFIGURACION CHEQUEO PAGINA
+setInterval(checkPage, 10000);
+
+//! CONFIGURACION EXPRESS
+const app = express();
+
+app.use(express.json()); //! Este codigo es clave para que haga la conversion a JSON sino no llega
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/', router);
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(4000, () => {
+	console.log(`Servidor Funcionando en: 🚀 @ http://localhost:${PORT}`);
+});
