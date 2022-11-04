@@ -1,5 +1,4 @@
 import express from 'express';
-import client from '../client.js';
 import { mandarMensage, probar, putearPollo, putearCarlitos, qrImage } from '../controllers/messageController.js';
 
 const router = express.Router();
