@@ -9,6 +9,12 @@ import { checkPage } from './helpers/checkPage.js';
 
 //! CONFIGURACION WHATSAPP WEB JS
 
+const destroyClient = async starter => {
+	console.log(`(${starter}) Shutting down...`);
+	await client.destroy();
+	process.exit(0);
+};
+
 const client = new Client({
 	authStrategy: new LocalAuth(),
 	puppeteer: {
@@ -148,6 +154,10 @@ client.on('message', async msg => {
 });
 
 client.initialize();
+
+process.on('SIGINT', async () => {
+	destroyClient('SIGINT');
+});
 
 //! CONFIGURACION CHEQUEO PAGINA
 setInterval(checkPage, 10000);
