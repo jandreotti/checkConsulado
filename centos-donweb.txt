@@ -1,0 +1,14 @@
+yum check-update
+yum update
+
+
+useradd chanfi
+passwd chanfi
+groupadd sudo
+usermod -aG sudo chanfi
+editar /etc/sudoers
+	-> %sudo ALL=(ALL) NOPASSWD: ALL
+
+yum install htop nano git perl-Digest-SHA 
+
+
