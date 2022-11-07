@@ -11,12 +11,12 @@ jobs:
   build:
 
     runs-on: self-hosted
-    env:
-      working-directory: /home/chanfi/Apps/
+    # env:
+    #   working-directory: /home/chanfi/Apps/
 
-    defaults:
-      run:
-        working-directory: ${{ env.working-directory }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ env.working-directory }}
 
 
     strategy:
@@ -35,7 +35,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        GITHUB_WORKSPACE: /home/chanfi/Apps/git
+        # GITHUB_WORKSPACE: /home/chanfi/Apps/git
     - run: npm i
       # working-directory: ${{env.working-directory}}
 #run: npm run build --if-present
