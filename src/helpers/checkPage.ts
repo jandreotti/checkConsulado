@@ -29,7 +29,8 @@ export const checkPage = async () => {
 	if (stringOriginalAChekear === '' && main.includes(trozoCodigoPagina)) {
 		stringOriginalAChekear = main;
 		//Enviar Mensaje
-		const chatId = '5493515925801-1556554776@g.us';
+		// const chatId = '5493515925801-1556554776@g.us';
+		const chatId = '5493515925801@c.us';
 		const text = 'Iniciado chequeo de pagina';
 		await globalThis.client.sendMessage(chatId, text);
 		return;
@@ -41,7 +42,7 @@ export const checkPage = async () => {
 		stringOriginalAChekear = main;
 
 		//Enviar Mensaje
-		const chatId = '5493515925801-1556554776@g.us';
+		const chatId = '5493515925801@c.us';
 		const text =
 			'Hay un cambio en la pagina de la embajada -> https://www.exteriores.gob.es/Consulados/cordoba/es/Paginas/index.aspx';
 		await globalThis.client.sendMessage(chatId, text);
