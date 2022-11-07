@@ -35,6 +35,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        path: '/home/chanfi/Apps/git'
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
     - run: npm i
       # working-directory: ${{env.working-directory}}
