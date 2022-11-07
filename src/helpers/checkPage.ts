@@ -17,34 +17,37 @@ export const checkPage = async () => {
 		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
 	}
-	console.log(1);
-	const { data } = await axios.get<string>('https://www.exteriores.gob.es/Consulados/cordoba/es/Paginas/index.aspx');
-	console.log(2);
-	const main = data.split('<main>')[1];
-	console.log(3);
 
-	// console.log({ stringACheckear: md5(stringOriginalAChekear) });
-	// console.log({ main: md5(main) });
+	try {
+		const { data } = await axios.get<string>('https://www.exteriores.gob.es/Consulados/cordoba/es/Paginas/index.aspx');
 
-	if (stringOriginalAChekear === '' && main.includes(trozoCodigoPagina)) {
-		stringOriginalAChekear = main;
-		//Enviar Mensaje
-		// const chatId = '5493515925801-1556554776@g.us';
-		const chatId = '5493515925801@c.us';
-		const text = 'Iniciado chequeo de pagina';
-		await globalThis.client.sendMessage(chatId, text);
-		return;
-	}
+		const main = data.split('<main>')[1];
 
-	if (main != stringOriginalAChekear) {
-		console.log('      ------> Cambio la pagina -> AVISAR!\n');
+		// console.log({ stringACheckear: md5(stringOriginalAChekear) });
+		// console.log({ main: md5(main) });
 
-		stringOriginalAChekear = main;
+		if (stringOriginalAChekear === '' && main.includes(trozoCodigoPagina)) {
+			stringOriginalAChekear = main;
+			//Enviar Mensaje
+			// const chatId = '5493515925801-1556554776@g.us';
+			const chatId = '5493515925801@c.us';
+			const text = 'Iniciado chequeo de pagina';
+			await globalThis.client.sendMessage(chatId, text);
+			return;
+		}
 
-		//Enviar Mensaje
-		const chatId = '5493515925801@c.us';
-		const text =
-			'Hay un cambio en la pagina de la embajada -> https://www.exteriores.gob.es/Consulados/cordoba/es/Paginas/index.aspx';
-		await globalThis.client.sendMessage(chatId, text);
+		if (main != stringOriginalAChekear) {
+			console.log('      ------> Cambio la pagina -> AVISAR!\n');
+
+			stringOriginalAChekear = main;
+
+			//Enviar Mensaje
+			const chatId = '5493515925801@c.us';
+			const text =
+				'Hay un cambio en la pagina de la embajada -> https://www.exteriores.gob.es/Consulados/cordoba/es/Paginas/index.aspx';
+			await globalThis.client.sendMessage(chatId, text);
+		}
+	} catch (error) {
+		console.log({ errorCheckPage: error });
 	}
 };
