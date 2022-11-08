@@ -37,9 +37,10 @@ jobs:
         cache: 'npm'
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
     - run: npm i
+    - run: pm2 reload checkConsulado
       # working-directory: ${{env.working-directory}}
 #run: npm run build --if-present
-    - run: echo "pruebita andando ok"
+#    - run: echo "pruebita andando ok"
      
 
 # FUENTE: https://stackoverflow.com/questions/72360263/how-to-checkout-a-repository-outside-of-the-workspace-in-github-actions

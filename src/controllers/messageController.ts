@@ -122,7 +122,7 @@ const qrImage = async (req, res, next) => {
 				<title>QR</title>
 			</head>
 			<body>
-				<h1>QR (Estado Actual: ${estadoActual} )</h1>
+				<h1>(QR) (Estado Actual: ${estadoActual} )</h1>
 				${htmlCode}
 
 				<label>QR: \n${qrCode}</label>

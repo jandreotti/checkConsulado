@@ -1,0 +1,77 @@
+-> Actualizar Distribucion
+yum check-update
+yum update
+
+-> Instalar el .bashrc y en .bash_profile en /home/chanfi/
+
+-> Agregar un usuario
+useradd chanfi
+passwd chanfi
+groupadd sudo
+usermod -aG sudo chanfi
+editar /etc/sudoers
+	-> %sudo ALL=(ALL) NOPASSWD: ALL
+
+
+-> Instalar paquetes necesarios
+yum install htop nano git perl-Digest-SHA 
+
+-> Instalar nvm
+instalar nvm (FUENTE:https://github.com/nvm-sh/nvm)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+source ~/.bashrc
+# nvm install --lts
+nvm install v16.18.0
+
+
+
+-> Instalar dependencias de puppeter (FUENTE:https://frugalisminds.com/how-to-setup-puppeteer-in-centos-7/)
+yum install pango.x86_64 libXcomposite.x86_64 libXcursor.x86_64 libXdamage.x86_64 libXext.x86_64 libXi.x86_64 libXtst.x86_64 cups-libs.x86_64 libXScrnSaver.x86_64 libXrandr.x86_64 GConf2.x86_64 alsa-lib.x86_64 atk.x86_64 gtk3.x86_64 ipa-gothic-fonts xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-utils xorg-x11-fonts-cyrillic xorg-x11-fonts-Type1 xorg-x11-fonts-misc
+
+
+-> Instalar pm2  e iniciar la app
+npm install -g pm2
+cd /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado
+pm2 start npm --name "checkConsulado" -- start # start next app
+pm2 startup -u chanfi
+---> ACA TE VA A TIRAR UNA LINEA QUE HAY QUE COPIAR Y EJECUTAR CON SUDO
+pm2 save
+
+
+-> Abrir puertos necesarios para probar la app
+
+-> Solucion al error en github actions -> pm2 command not found  al hacer el reload: FUENTE: https://stackoverflow.com/questions/69644460/github-actions-pm2-command-not-found
+	sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
+	sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
+	sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/pm2" "/usr/local/bin/pm2"
+	...
+	sudo ln -s "$NVM_DIR/versions/node/v16.18.0/bin/node" "/usr/local/bin/node"
+	sudo ln -s "$NVM_DIR/versions/node/v16.18.0/bin/npm" "/usr/local/bin/npm"
+	sudo ln -s "$NVM_DIR/versions/node/v16.18.0/bin/pm2" "/usr/local/bin/pm2"
+
+-> Instalar ngnix (https://phoenixnap.com/kb/how-to-install-nginx-on-centos-7)
+sudo yum install -y epel-release
+sudo yum install nginx
+sudo systemctl start nginx
+sudo systemctl status nginx
+sudo systemctl enable nginx
+
+-> Configurar el sites-available y el sites-enabled (https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-server-blocks-on-centos-7)
+sudo mkdir /etc/nginx/sites-available
+sudo mkdir /etc/nginx/sites-enabled
+
+sudo nano /etc/nginx/nginx.conf
+	Add these lines to the end of the http {} block:
+		include /etc/nginx/sites-enabled/*.conf;
+		server_names_hash_bucket_size 64;
+
+- copiar los archivos conf de sites-available
+- linkearlos 
+	sudo ln -s /etc/nginx/sites-available/ARCHIVO.conf /etc/nginx/sites-enabled/ARCHIVO.conf
+
+
+
+
+
+
+
