@@ -123,10 +123,10 @@ export const iniciarCliente = async () => {
 			msg.reply('OINK OINK');
 		}
 
-		if (msg.body.startsWith('!!s')) {
-			const text = msg.body.split('!!s')[1];
-			const { data } = await axios.post('http://192.168.1.69/api/speak', { text, ip: '127.0.0.1' });
-		}
+		// if (msg.body.startsWith('!!s')) {
+		// 	const text = msg.body.split('!!s')[1];
+		// 	const { data } = await axios.post('http://192.168.1.69/api/speak', { text, ip: '127.0.0.1' });
+		// }
 
 		//! CHATS
 		msg.getContact().then(contact => {

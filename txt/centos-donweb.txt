@@ -49,6 +49,12 @@ pm2 save
 	sudo ln -s "$NVM_DIR/versions/node/v16.18.0/bin/npm" "/usr/local/bin/npm"
 	sudo ln -s "$NVM_DIR/versions/node/v16.18.0/bin/pm2" "/usr/local/bin/pm2"
 
+
+-> Configurar  Githubaction y runners
+	- Repositorio -> Settings -> Actions -> Runners -> new Self-Host Runner
+	- una vez creada la carpeta crear enlace simbolico O NO:
+		ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/sesionWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_auth
+
 -> Instalar ngnix (https://phoenixnap.com/kb/how-to-install-nginx-on-centos-7)
 sudo yum install -y epel-release
 sudo yum install nginx
