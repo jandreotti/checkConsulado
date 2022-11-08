@@ -35,6 +35,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        clean: false
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
     - run: npm i
     - run: pm2 reload checkConsulado
