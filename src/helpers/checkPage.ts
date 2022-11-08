@@ -17,7 +17,6 @@ export const checkConsuladoPage = async () => {
 	if (estadoActual !== 'LISTO') {
 		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
-		
 	}
 
 	try {
@@ -115,7 +114,8 @@ export const checkDolarBlueCordoba = async () => {
 			dolarBlueVenta = parseFloat(venta);
 
 			//Enviar Mensaje
-			const chatIds = ['5493515925801@c.us', '5493512298961@c.us'];
+
+			const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us'];
 			// const chatIds = ['5493515925801@c.us'];
 
 			const text = `Cambio la cotizacion del dolar:
