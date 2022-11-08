@@ -67,7 +67,9 @@ export const checkDolarBlueCordoba = async () => {
 	}
 
 	try {
-		const browser = await puppeteer.launch();
+		const browser = await puppeteer.launch({
+			args: ['--no-sandbox', '--disable-setuid-sandbox'],
+		});
 		const page = await browser.newPage();
 		// await page.goto('https://www.dolarhoy.com/cotizacion-dolar-blue-hoy-cordoba');
 		await page.goto('https://www.infodolar.com/cotizacion-dolar-provincia-cordoba.aspx');
