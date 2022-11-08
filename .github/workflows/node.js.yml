@@ -37,6 +37,7 @@ jobs:
         cache: 'npm'
         clean: false
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
+    - run: ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/sesionWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_auth
     - run: npm i
     - run: pm2 reload checkConsulado
       # working-directory: ${{env.working-directory}}
