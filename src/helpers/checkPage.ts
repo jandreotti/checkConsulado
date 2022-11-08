@@ -58,20 +58,19 @@ export let dolarBlueVenta = 0;
 
 export const checkDolarBlueCordoba = async () => {
 	console.log(`\n[${momento()}] Checkeando Dolar...`);
+
 	const estados = globalThis.estados;
 	const estadoActual = globalThis.estados[estados.length - 1].estado;
 	if (estadoActual !== 'LISTO') {
 		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
 	}
+
 	try {
 		const browser = await puppeteer.launch();
-
 		const page = await browser.newPage();
-
 		// await page.goto('https://www.dolarhoy.com/cotizacion-dolar-blue-hoy-cordoba');
 		await page.goto('https://www.infodolar.com/cotizacion-dolar-provincia-cordoba.aspx');
-
 		const dolarBlue = await page.evaluate(() => {
 			const compra = document
 				.querySelector('#BluePromedio')
@@ -99,7 +98,7 @@ export const checkDolarBlueCordoba = async () => {
 		if (dolarBlueCompra === 0 && dolarBlueVenta === 0) {
 			dolarBlueCompra = parseFloat(compra);
 			dolarBlueVenta = parseFloat(venta);
-
+			console.log(`[${momento()}] Fin Primer Chequeo...`);
 			return;
 		}
 
@@ -113,8 +112,8 @@ export const checkDolarBlueCordoba = async () => {
 			dolarBlueVenta = parseFloat(venta);
 
 			//Enviar Mensaje
-
 			const chatIds = ['5493515925801@c.us', '5493512298961@c.us'];
+			// const chatIds = ['5493515925801@c.us'];
 
 			const text = `Cambio la cotizacion del dolar:
 
