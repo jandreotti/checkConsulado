@@ -17,6 +17,7 @@ export const checkConsuladoPage = async () => {
 	if (estadoActual !== 'LISTO') {
 		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
+		
 	}
 
 	try {
