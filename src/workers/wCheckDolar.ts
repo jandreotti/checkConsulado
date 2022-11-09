@@ -4,10 +4,18 @@ import { momento } from '../helpers/momento';
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
 
+export interface IInputData_WCheckDolar {}
+
+export interface IOutputData_WCheckDolar {
+	compra?: string;
+	venta?: string;
+}
+
 const run = async () => {
 	//! CON ESTAS LINEAS OBTENGO EL VALOR DEL ARGUMENTO QUE LE PASO AL PROCESO HIJO SI ES QUE LO NECESITO
 	// const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
-	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString());
+	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckDolar;
+	let outputData: IOutputData_WCheckDolar = {};
 
 	try {
 		const browser = await puppeteer.launch({
@@ -25,7 +33,7 @@ const run = async () => {
 			// }
 		);
 
-		const dolarBlue = await page.evaluate(() => {
+		const outputData = await page.evaluate(() => {
 			const compra = document
 				.querySelector('#BluePromedio')
 				?.querySelectorAll('.colCompraVenta')[0]
@@ -48,10 +56,10 @@ const run = async () => {
 		await page.close();
 		await browser.close();
 
-		console.log(JSON.stringify(dolarBlue)); // print out data to STDOUT -> outputData
+		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 	} catch (error) {
 		// console.error({ errorCheckDolarBlueCordoba: error });
-		console.log(JSON.stringify({})); // print out data to STDOUT
+		console.log(JSON.stringify(outputData)); // print out data to STDOUT
 	}
 
 	process.exit(1); // Esto es clave para que salga, porque a veces no salia

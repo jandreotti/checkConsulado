@@ -49,7 +49,14 @@ export const checkConsuladoPage = async () => {
 			await globalThis.client.sendMessage(chatId, text);
 		}
 	} catch (error) {
-		console.log({ errorCheckConsuladoPage: error });
+		if (axios.isAxiosError(error)) {
+			// Access to config, request, and response
+
+			console.log({ errorCheckConsuladoPage: { code: error.code, url: error.config.url } });
+		} else {
+			// Just a stock error
+			console.log({ errorCheckConsuladoPage: error });
+		}
 	}
 };
 

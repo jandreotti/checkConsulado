@@ -12,7 +12,7 @@ setInterval(checkConsuladoPage, 10000);
 
 //! CONFIGURACION CHEQUEO DE DOLAR
 // setInterval(checkDolarBlueCordoba, 30000);
-setInterval(runCheckDolar, 10000);
+setInterval(runCheckDolar, 30000);
 
 //! CONFIGURACION EXPRESS
 const app = express();

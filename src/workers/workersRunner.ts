@@ -4,9 +4,12 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import { momento } from '../helpers/momento';
+import { ejecutar } from './runner';
+import { IOutputData_WCheckDolar } from './wCheckDolar';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
 
+//! DEFINICION DE VARIABLES
 export let dolarBlueCompra = 0;
 export let dolarBlueVenta = 0;
 let lastCheck = 0;
@@ -16,52 +19,29 @@ export const runCheckDolar = async data => {
 	const actualCheck = Date.now();
 
 	//! VALIDACIONES
-
 	const estados = globalThis.estados;
 	if (!estados) {
-		console.error('Cliente de whastapp-web.js no esta listo');
+		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
 	}
 	const estadoActual = globalThis.estados[estados.length - 1].estado;
 	if (estadoActual !== 'LISTO') {
-		console.error('Cliente de whastapp-web.js no esta listo');
+		console.log('Cliente de whastapp-web.js no esta listo');
 		return;
 	}
 
-	//! VARIABLES PASADAS AL PROCESO
-	const jsonData = JSON.stringify(data || {});
-	const b64Data = Buffer.from(jsonData).toString('base64');
-	let stdoutData = '';
-
 	//! EJECUCION DEL PROCESO HIJO
-	const retorno = await new Promise(resolve => {
-		// console.log(path.resolve(__dirname, 'wCheckDolar.js'));
-		const proc = spawn('node', [path.resolve(__dirname, 'wCheckDolar.js'), `--input-data${b64Data}`, '--tagprocess'], {
-			shell: false,
-		});
-
-		proc.stdout.on('data', data => {
-			stdoutData += data;
-		});
-
-		proc.stderr.on('data', data => {
-			console.error(`wCheckDolar (:---> ${data}`);
-		});
-
-		proc.on('close', async code => {});
-
-		proc.on('exit', function () {
-			console.log("wCheckDolar -> 'exit'");
-			proc.kill();
-			resolve(JSON.parse(stdoutData || '{}'));
-		});
+	const retorno = await ejecutar({
+		filename: 'wCheckDolar.js', // Archivo a ejecutar
+		data, // Datos a enviar al proceso hijo (osea al archivo wCheckDolar.js en el inputData)
+		tagProcess: 'worker-check-dolar', // Tag para identificar el proceso hijo
+		debug: false, // Si se quiere ver el log del proceso hijo que largue con console.error
 	});
 
-	// console.log({ retorno });
-
 	//! PROCESAMIENTO DEL RESULTADO
-	const { compra, venta } = retorno as any;
+	const { compra, venta } = retorno as IOutputData_WCheckDolar;
 
+	//! VALIDACIONES
 	// primer chequeo
 	if (dolarBlueCompra === 0 && dolarBlueVenta === 0) {
 		dolarBlueCompra = parseFloat(compra);
@@ -79,11 +59,13 @@ export const runCheckDolar = async data => {
 		lastCheck = actualCheck;
 	}
 
+	// validacion para que no chequee una compra/venta nula
 	if (!compra || !venta) {
 		console.log(`[${momento()}] runCheckDolar -> Fin Chequeo por compra/venta nula...`, { compra, venta });
 		return;
 	}
 
+	//! PROCESAMIENTO DEL RESULTADO
 	if (dolarBlueCompra != parseFloat(compra) || dolarBlueVenta != parseFloat(venta)) {
 		console.log(`      ------> runCheckDolar -> Cambio el dolar -> AVISAR!`);
 
