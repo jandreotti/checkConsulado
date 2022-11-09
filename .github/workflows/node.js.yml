@@ -30,8 +30,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      # with:
-        # clean: false
+      with:
+        clean: false
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -39,6 +39,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
+
+    - run: pm2 stop checkConsulado 
 
     - run: ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/sesionWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_auth
 
