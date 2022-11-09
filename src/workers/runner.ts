@@ -5,7 +5,7 @@ interface IEjecutar {
 	data?: any;
 	filename: string;
 	tagProcess?: string;
-	debug?: boolean;
+	debug?: boolean; 
 }
 
 export const ejecutar = ({ filename, data = {}, tagProcess = 'worker-sin-tag', debug = false }: IEjecutar) => {
