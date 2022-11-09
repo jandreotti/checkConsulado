@@ -29,6 +29,9 @@ jobs:
   #      working-directory: /home/chanfi/Apps/
 
     steps:
+
+    - run: pm2 stop checkConsulado 
+
     - uses: actions/checkout@v3
       with:
         clean: false
@@ -39,8 +42,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         # GITHUB_WORKSPACE: /home/chanfi/Apps/git
-
-    - run: pm2 stop checkConsulado 
 
     - run: ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/sesionWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_auth
 
