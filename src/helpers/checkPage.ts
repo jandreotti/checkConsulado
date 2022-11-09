@@ -10,7 +10,7 @@ let stringOriginalAChekear = ``;
 //FUNCIONES
 export const checkConsuladoPage = async () => {
 	// const fecha = moment().format('DD/MM/YYYY HH:mm:ss');
-	console.log(`\n[${momento()}] Checkeando Pagina...`);
+	console.log(`\n[${momento()}] checkConsuladoPage -> Checkeando Pagina...`);
 
 	const estados = globalThis.estados;
 	const estadoActual = globalThis.estados[estados.length - 1].estado;
