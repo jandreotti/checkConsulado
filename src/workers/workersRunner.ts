@@ -75,7 +75,7 @@ export const runCheckDolar = async data => {
 		dolarBlueCompra = parseFloat(compra);
 		dolarBlueVenta = parseFloat(venta);
 
-		//Enviar Mensaje
+		//Enviar Mensaje 
  
 		const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us'];
 		// const chatIds = ['5493515925801@c.us'];
