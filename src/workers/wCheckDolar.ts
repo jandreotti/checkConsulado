@@ -53,7 +53,7 @@ const run = async () => {
 			return { compra, venta };
 		});
 
-		await page.close(); 
+		await page.close();
 		await browser.close();
 
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
