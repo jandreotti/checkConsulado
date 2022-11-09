@@ -17,16 +17,16 @@ export const runCheckDolar = async data => {
 
 	//! VALIDACIONES
 
-	// const estados = globalThis.estados;
-	// if (!estados) {
-	// 	console.error('Cliente de whastapp-web.js no esta listo');
-	// 	return;
-	// }
-	// const estadoActual = globalThis.estados[estados.length - 1].estado;
-	// if (estadoActual !== 'LISTO') {
-	// 	console.error('Cliente de whastapp-web.js no esta listo');
-	// 	return;
-	// }
+	const estados = globalThis.estados;
+	if (!estados) {
+		console.error('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+	const estadoActual = globalThis.estados[estados.length - 1].estado;
+	if (estadoActual !== 'LISTO') {
+		console.error('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
 
 	//! VARIABLES PASADAS AL PROCESO
 	const jsonData = JSON.stringify(data || {});
@@ -104,7 +104,7 @@ Compra: $${compra} (${diferenciaCompra > 0 ? '+' : ''}${diferenciaCompra})
 Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 
 		for (const chatId of chatIds) {
-			// await globalThis.client.sendMessage(chatId, text);
+			await globalThis.client.sendMessage(chatId, text);
 		}
 	}
 };
