@@ -121,13 +121,19 @@ export const iniciarCliente = async () => {
 		if (msg.body == '!stats') {
 			let mensaje = '*ESTADO:*\n';
 
-			const obtenerCpu = new Promise<number>((resolve, reject) => {
+			// const obtenerCpu = new Promise<number>((resolve, reject) => {
+			// 	os.cpuUsage(cpu => {
+			// 		resolve(cpu);
+			// 	});
+			// });
+			// const cpu = await obtenerCpu;
+
+			const cpu = await new Promise<number>((resolve, reject) => {
 				os.cpuUsage(cpu => {
 					resolve(cpu);
 				});
 			});
 
-			const cpu = await obtenerCpu;
 			mensaje += `\n*CPU:* ${(cpu * 100).toFixed(2)}%`;
 
 			mensaje += `\n*Plataforma:* ${os.platform()}`;
