@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { momento, wait } from '../helpers/momento';
+import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
@@ -69,6 +69,11 @@ const run = async () => {
 
 		// console.log('3');
 		const nuevaURL = page2.url();
+
+		if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
+			//Saco fotos si hay turnos disponibles
+			await page2.screenshot({ path: `fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		}
 
 		await page.close();
 		await page2.close();
