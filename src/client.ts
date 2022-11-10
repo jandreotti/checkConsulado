@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Client, LocalAuth } from 'whatsapp-web.js';
 import { Estado } from './interfaces/estado';
 import os from 'os-utils';
-import { momentoSecondsToTime } from './helpers/momento';
+import { momentoSecondsToTime, momentoSecondsToTime2 } from './helpers/momento';
 
 const destroyClient = async starter => {
 	console.log(`(${starter}) Shutting down...`);
@@ -137,8 +137,8 @@ export const iniciarCliente = async () => {
 			mensaje += `\n*% Memoria Usada:* ${(100 - os.freememPercentage() * 100).toFixed(2)}%`;
 
 			mensaje += `\n*Cantidad de Cores:* ${os.cpuCount()}`;
-			mensaje += `\n*Uptime (sys):* ${momentoSecondsToTime(os.sysUptime())}`;
-			mensaje += `\n*Uptime (process):* ${momentoSecondsToTime(os.processUptime())}`;
+			mensaje += `\n*Uptime (sys):* ${momentoSecondsToTime2(os.sysUptime().toFixed(0))}`;
+			mensaje += `\n*Uptime (process):* ${momentoSecondsToTime2(os.processUptime().toFixed(0))}`;
 
 			msg.reply(mensaje);
 		}
