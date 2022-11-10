@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Client, LocalAuth } from 'whatsapp-web.js';
 import { Estado } from './interfaces/estado';
+import os from 'os-utils';
+import { momentoSecondsToTime } from './helpers/momento';
 
 const destroyClient = async starter => {
 	console.log(`(${starter}) Shutting down...`);
@@ -116,6 +118,30 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('message', async msg => {
+		if (msg.body == '!stats') {
+			let mensaje = '*ESTADO:*\n';
+
+			const obtenerCpu = new Promise<number>((resolve, reject) => {
+				os.cpuUsage(cpu => {
+					resolve(cpu);
+				});
+			});
+
+			const cpu = await obtenerCpu;
+			mensaje += `\n*CPU:* ${(cpu * 100).toFixed(2)}%`;
+
+			mensaje += `\n*Plataforma:* ${os.platform()}`;
+
+			mensaje += `\n*Memoria Usada:* ${(os.totalmem() - os.freemem()).toFixed(0)}MB`;
+
+			mensaje += `\n*% Memoria Usada:* ${(100 - os.freememPercentage() * 100).toFixed(2)}%`;
+
+			mensaje += `\n*Cantidad de Cores:* ${os.cpuCount()}`;
+			mensaje += `\n*Uptime (sys):* ${momentoSecondsToTime(os.sysUptime())}`;
+			mensaje += `\n*Uptime (process):* ${momentoSecondsToTime(os.processUptime())}`;
+
+			msg.reply(mensaje);
+		}
 		if (msg.body == '!ping') {
 			msg.reply('pong');
 		}
