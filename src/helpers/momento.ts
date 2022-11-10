@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export const momento = () => moment().format('DD/MM/YYYY HH:mm:ss');
 export const momentoFormateado = (format: string) => moment().format(format);
-export const momentoSecondsToTime = segundos => moment.utc(segundos * 1000).format('DHH:mm:ss');
+export const momentoSecondsToTime = segundos => moment.utc(segundos * 1000).format('HH:mm:ss');
 
 export const momentoSecondsToTime2 = segundos => {
 	let d = (segundos / 8.64e4) | 0;

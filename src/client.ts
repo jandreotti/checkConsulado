@@ -132,7 +132,7 @@ export const iniciarCliente = async () => {
 
 			mensaje += `\n*Plataforma:* ${os.platform()}`;
 
-			mensaje += `\n*Memoria Usada:* ${(os.totalmem() - os.freemem()).toFixed(0)}MB`;
+			mensaje += `\n*Memoria Usada:* ${(os.totalmem() - os.freemem()).toFixed(0)}MB / ${os.totalmem().toFixed(0)}MB`;
 
 			mensaje += `\n*% Memoria Usada:* ${(100 - os.freememPercentage() * 100).toFixed(2)}%`;
 
