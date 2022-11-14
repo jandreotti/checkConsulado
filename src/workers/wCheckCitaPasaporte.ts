@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
+import fs from 'fs';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -71,8 +72,17 @@ const run = async () => {
 		const nuevaURL = page2.url();
 
 		if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
-			//Saco fotos si hay turnos disponibles
+			//* Saco fotos si hay turnos disponibles
 			await page2.screenshot({ path: `fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+
+			//* Guardo el HTML de la pagina para Debuguear
+			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+			const bodyHTML3 = await page2.content();
+			//
+			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+			fs.writeFileSync(`fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
 		}
 
 		await page.close();
