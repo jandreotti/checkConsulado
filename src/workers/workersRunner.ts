@@ -72,6 +72,14 @@ export const runCheckDolar = async data => {
 	if (dolarBlueCompra != parseFloat(compra) || dolarBlueVenta != parseFloat(venta)) {
 		console.log(`      ------> runCheckDolar -> Cambio el dolar -> AVISAR!`);
 
+		console.log({
+			mensaje: 'AVISO DE CAMBIO DE DOLAR',
+			compra,
+			venta,
+			dolarBlueCompra,
+			dolarBlueVenta,
+		});
+
 		const diferenciaCompra = parseFloat(compra) - dolarBlueCompra;
 		const diferenciaVenta = parseFloat(venta) - dolarBlueVenta;
 
