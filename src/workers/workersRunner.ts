@@ -87,8 +87,7 @@ export const runCheckDolar = async data => {
 		dolarBlueVenta = parseFloat(venta);
 
 		//Enviar Mensaje
-
-		const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us'];
+		const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
 		// const chatIds = ['5493515925801@c.us'];
 
 		const text = `Cambio la cotizacion del dolar:
