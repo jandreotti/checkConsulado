@@ -14,6 +14,7 @@ export interface IOutputData_WCheckCitaPasaporte {
 	nuevaURL: string;
 	idDivSlotColumnContainer_1: boolean;
 	valueIdDivBktDatetimeSelectedDate: string;
+	error?: string;
 }
 
 const run = async () => {
@@ -85,7 +86,7 @@ const run = async () => {
 
 		//div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
 		const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate-1');
-		
+
 		let valueIdDivBktDatetimeSelectedDate = await page2.evaluate(el => el.textContent, idDivBktDatetimeSelectedDate);
 
 		//! Verifico si el error esya visible
@@ -145,7 +146,7 @@ const run = async () => {
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 	} catch (error) {
 		// console.error({ errorCheckDolarBlueCordoba: error });
-		console.log(JSON.stringify(outputData)); // print out data to STDOUT
+		console.log(JSON.stringify({ ...outputData, error })); // print out data to STDOUT
 	}
 
 	process.exit(1); // Esto es clave para que salga, porque a veces no salia

@@ -191,6 +191,7 @@ export const runCheckTurnosPasaporte = async () => {
 		nuevaURL,
 		idDivSlotColumnContainer_1,
 		valueIdDivBktDatetimeSelectedDate,
+		error,
 	} = retorno as IOutputData_WCheckCitaPasaporte;
 
 	console.log({
@@ -207,6 +208,7 @@ export const runCheckTurnosPasaporte = async () => {
 			nuevaURL.includes('#datetime') &&
 			idDivSlotColumnContainer_1 &&
 			valueIdDivBktDatetimeSelectedDate != '',
+		error,
 	});
 
 	//AVISO VIEJO (A VECES AVISABA CON ERROR)
