@@ -242,8 +242,8 @@ ${JSON.stringify(retorno)}
 	) {
 		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
 		//Enviar Mensaje
-		const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
-		// const chatIds = ['5493515925801@c.us'];
+		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
+		const chatIds = ['5493515925801@c.us'];
 		const text = `NEW - Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
 https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
