@@ -38,54 +38,52 @@ const run = async () => {
 			// headless: false,
 		});
 
+		// Abrir una nueva pagina
 		const page = await browser.newPage();
 		await page.goto(url, { waitUntil: 'load' });
 
+		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://app.bookitit.com/es/hosteds/widgetdefault/2517d2c8d726687ab7f770d8c3c4a7c7f']"
 		);
 		await a.click();
 
+		// Esperar a que se cargue la nueva pagina
 		const newPagePromise = await getNewPageWhenLoaded(browser);
 		const page2 = (await newPagePromise) as puppeteer.Page;
-
 		await page2.waitForNavigation();
 		// await page.waitForNavigation({ waitUntil: 'networkidle2' });
 		// await page.waitForNavigation({ timeout: 20 });
-
 		await wait(5000);
 
+		///obtener el boton de continuar y presionarlo
 		const bktContinue = await page2.$('#bktContinue');
-		// console.log({ bktContinue });
 		await bktContinue.click();
 
+		//obtener la parte de abajo y presionarla para continuar
 		const idBktDefaultServicesContainer = await page2.$('#idBktDefaultServicesContainer');
-		// console.log({ idBktDefaultServicesContainer });
-		// console.log('1');
 		await idBktDefaultServicesContainer.click();
-		// console.log('2');
 
 		// await wait(15000);
-		// console.log('start');
+		// esperar a que cargue la pagina
 		await page2.waitForNetworkIdle();
-		// console.log('end');
 
-		// div que aparece cuando NO hay citas habilitadas => debe ser NULL
+		// AQUI SE ANALIZA LA PAGINA
+		// -> div que aparece cuando NO hay citas habilitadas => debe ser NULL
 		const idDivNotAvailableSlotsTextTop = await page2.$('#idDivNotAvailableSlotsTextTop');
 
-		// div que aparece cuando hay citas habilitadas => debe ser != null
+		// -> div que aparece cuando hay citas habilitadas => debe ser != null
 		// este div tambien aparece (aunque aparece vacio, sin hijos) cuando la pagina da un error de -> SE HA PRODUCIDO UN ERROR AL CARGAR LOS DATOS
 		const idTimeListTable = await page2.$('#idTimeListTable');
 
-		// URL en la que se encuentra -> debe incluir #datetime al final
+		// -> URL en la que se encuentra -> debe incluir #datetime al final
 		const nuevaURL = page2.url();
 
 		//
-		// div que aparece cuando hay citas habilitadas => debe ser != null
+		// -> div que aparece cuando hay citas habilitadas => debe ser != null
 		const idDivSlotColumnContainer_1 = await page2.$('#idDivSlotColumnContainer-1');
 
-		//div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
-		// const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate-1');
+		// -> div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
 		const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate');
 		let valueIdDivBktDatetimeSelectedDate = await page2.evaluate(el => el.textContent, idDivBktDatetimeSelectedDate);
 
@@ -143,7 +141,6 @@ const run = async () => {
 
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 	} catch (error) {
-		// console.error({ errorCheckDolarBlueCordoba: error });
 		console.log(
 			JSON.stringify({
 				...outputData,

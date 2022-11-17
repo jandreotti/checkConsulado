@@ -223,8 +223,7 @@ https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/
 
 ----------------------------------------------------------------------------------------------------
 
-${JSON.stringify(retorno)}
-		`;
+${JSON.stringify(retorno)}`;
 		for (const chatId of chatIds) {
 			await globalThis.client.sendMessage(chatId, text);
 		}
