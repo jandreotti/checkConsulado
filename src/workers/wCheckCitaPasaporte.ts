@@ -85,7 +85,8 @@ const run = async () => {
 		const idDivSlotColumnContainer_1 = await page2.$('#idDivSlotColumnContainer-1');
 
 		//div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
-		const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate-1');
+		// const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate-1');
+		const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate');
 
 		let valueIdDivBktDatetimeSelectedDate = await page2.evaluate(el => el.textContent, idDivBktDatetimeSelectedDate);
 
