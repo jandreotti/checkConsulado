@@ -164,7 +164,7 @@ export const runCheckTurnosPasaporte = async () => {
 
 	console.log(`\n[${momento()}] runCheckTurnosPasaporte START`);
 
-	//! VALIDACIONES
+	// //! VALIDACIONES
 	const estados = globalThis.estados;
 	if (!estados) {
 		console.log('Cliente de whastapp-web.js no esta listo');
@@ -185,21 +185,43 @@ export const runCheckTurnosPasaporte = async () => {
 	});
 
 	//! PROCESAMIENTO DEL RESULTADO
-	const { idDivNotAvailableSlotsTextTop, idTimeListTable, nuevaURL } = retorno as IOutputData_WCheckCitaPasaporte;
+	const {
+		idDivNotAvailableSlotsTextTop,
+		idTimeListTable,
+		nuevaURL,
+		idDivSlotColumnContainer_1,
+		valueIdDivBktDatetimeSelectedDate,
+	} = retorno as IOutputData_WCheckCitaPasaporte;
 
 	console.log({
 		idDivNotAvailableSlotsTextTop,
 		idTimeListTable,
 		nuevaURL,
+		idDivSlotColumnContainer_1,
+		valueIdDivBktDatetimeSelectedDate,
+
+		avisarViejo: !idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime'),
+		avisarNuevo:
+			!idDivNotAvailableSlotsTextTop &&
+			idTimeListTable &&
+			nuevaURL.includes('#datetime') &&
+			idDivSlotColumnContainer_1 &&
+			valueIdDivBktDatetimeSelectedDate != '',
 	});
 
+	//AVISO VIEJO (A VECES AVISABA CON ERROR)
 	if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
 		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
 		//Enviar Mensaje
-		const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
+		const chatIds = ['5493515925801@c.us'];
 		// const chatIds = ['5493515925801@c.us'];
-		const text = `Verificar Cita para renovar pasaporte:
-		https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
+		const text = `OLD - Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
+
+https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
+
+----------------------------------------------------------------------------------------------------
+
+${JSON.stringify(retorno)}
 		`;
 		for (const chatId of chatIds) {
 			await globalThis.client.sendMessage(chatId, text);
@@ -208,22 +230,26 @@ export const runCheckTurnosPasaporte = async () => {
 		console.log(' 	------> runCheckTurnosPasaporte -> No hay turnos disponibles');
 	}
 
-	// 	if (idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
-	// 		console.log(' 	------> runCheckTurnosPasaporte -> No hay turnos disponibles');
-	// 	} else {
-	// 		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
+	// AVISO NUEVO
+	if (
+		!idDivNotAvailableSlotsTextTop &&
+		idTimeListTable &&
+		nuevaURL.includes('#datetime') &&
+		idDivSlotColumnContainer_1 &&
+		valueIdDivBktDatetimeSelectedDate != ''
+	) {
+		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
+		//Enviar Mensaje
+		const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
+		// const chatIds = ['5493515925801@c.us'];
+		const text = `NEW - Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
-	// 		//Enviar Mensaje
-	// 		const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
-	// 		// const chatIds = ['5493515925801@c.us'];
-
-	// 		const text = `Verificar Cita para renovar pasaporte:
-
-	// https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
-	// `;
-
-	// 		for (const chatId of chatIds) {
-	// 			await globalThis.client.sendMessage(chatId, text);
-	// 		}
-	// 	}
+https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
+		`;
+		for (const chatId of chatIds) {
+			await globalThis.client.sendMessage(chatId, text);
+		}
+	} else {
+		console.log(' 	------> runCheckTurnosPasaporte -> No hay turnos disponibles');
+	}
 };

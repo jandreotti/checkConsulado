@@ -12,6 +12,8 @@ export interface IOutputData_WCheckCitaPasaporte {
 	idDivNotAvailableSlotsTextTop: boolean;
 	idTimeListTable: boolean;
 	nuevaURL: string;
+	idDivSlotColumnContainer_1: boolean;
+	valueIdDivBktDatetimeSelectedDate: string;
 }
 
 const run = async () => {
@@ -22,6 +24,8 @@ const run = async () => {
 		idDivNotAvailableSlotsTextTop: false,
 		idTimeListTable: false,
 		nuevaURL: '',
+		idDivSlotColumnContainer_1: false,
+		valueIdDivBktDatetimeSelectedDate: '',
 	};
 
 	try {
@@ -65,15 +69,33 @@ const run = async () => {
 		await page2.waitForNetworkIdle();
 		// console.log('end');
 
+		// div que aparece cuando NO hay citas habilitadas => debe ser NULL
 		const idDivNotAvailableSlotsTextTop = await page2.$('#idDivNotAvailableSlotsTextTop');
+
+		// div que aparece cuando hay citas habilitadas => debe ser != null
+		// este div tambien aparece (aunque aparece vacio, sin hijos) cuando la pagina da un error de -> SE HA PRODUCIDO UN ERROR AL CARGAR LOS DATOS
 		const idTimeListTable = await page2.$('#idTimeListTable');
 
-		// console.log('3');
+		// URL en la que se encuentra -> debe incluir #datetime al final
 		const nuevaURL = page2.url();
 
+		//
+		// div que aparece cuando hay citas habilitadas => debe ser != null
+		const idDivSlotColumnContainer_1 = await page2.$('#idDivSlotColumnContainer-1');
+
+		//div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
+		const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate-1');
+		let valueIdDivBktDatetimeSelectedDate = await page.evaluate(el => el.textContent, idDivBktDatetimeSelectedDate);
+
+		//! Verifico si el error esya visible
+		// await page.waitForSelector('#idBktDefaultDatetimeErrorContainer', {
+		// 	visible: true,
+		//   })
+
+		// GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
 		if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
 			//* Saco fotos si hay turnos disponibles
-			await page2.screenshot({ path: `fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+			await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 
 			//* Guardo el HTML de la pagina para Debuguear
 			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
@@ -82,7 +104,28 @@ const run = async () => {
 			//
 			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
 			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-			fs.writeFileSync(`fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+			fs.writeFileSync(`1fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+		}
+
+		// GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
+		if (
+			!idDivNotAvailableSlotsTextTop &&
+			idTimeListTable &&
+			nuevaURL.includes('#datetime') &&
+			idDivSlotColumnContainer_1 &&
+			valueIdDivBktDatetimeSelectedDate != ''
+		) {
+			//* Saco fotos si hay turnos disponibles
+			await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+
+			//* Guardo el HTML de la pagina para Debuguear
+			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+			const bodyHTML3 = await page2.content();
+			//
+			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+			fs.writeFileSync(`2fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
 		}
 
 		await page.close();
@@ -93,6 +136,9 @@ const run = async () => {
 			idDivNotAvailableSlotsTextTop: !!idDivNotAvailableSlotsTextTop,
 			idTimeListTable: !!idTimeListTable,
 			nuevaURL,
+
+			idDivSlotColumnContainer_1: !!idDivSlotColumnContainer_1,
+			valueIdDivBktDatetimeSelectedDate,
 		};
 
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
