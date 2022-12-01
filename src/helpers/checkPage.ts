@@ -1,5 +1,6 @@
+//! OBSOLETO
+
 import axios from 'axios';
-import moment from 'moment';
 import { momento } from './momento';
 import puppeteer from 'puppeteer';
 

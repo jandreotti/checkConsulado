@@ -1,14 +1,13 @@
 import express from 'express';
 import router from './routes/index.js';
-import { checkConsuladoPage, checkDolarBlueCordoba } from './helpers/checkPage.js';
 import { iniciarCliente } from './client.js';
 import { runCheckDolar, runCheckTurnosPasaporte } from './workers/workersRunner.js';
 
 //! CONFIGURACION WHATSAPP WEB JS
 iniciarCliente();
 
-//! CONFIGURACION CHEQUEO PAGINA DE CONSULADO
-setInterval(checkConsuladoPage, 10000);
+// ! CONFIGURACION CHEQUEO PAGINA DE CONSULADO
+// setInterval(checkConsuladoPage, 10000);
 
 //! CONFIGURACION CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);

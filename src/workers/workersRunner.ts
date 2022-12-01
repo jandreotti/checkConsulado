@@ -102,66 +102,6 @@ Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 };
 
 export const runCheckTurnosPasaporte = async () => {
-	// const url =
-	// 	'https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo';
-
-	// const browser = await puppeteer.launch({
-	// 	args: ['--no-sandbox', '--disable-setuid-sandbox'],
-	// 	headless: false,
-	// });
-
-	// const page = await browser.newPage();
-	// await page.goto(url, { waitUntil: 'load' });
-
-	// // let pages2 = await browser.pages();
-	// // console.log({ pages2 });
-
-	// const a = await page.$(
-	// 	"a[href='https://app.bookitit.com/es/hosteds/widgetdefault/2517d2c8d726687ab7f770d8c3c4a7c7f']"
-	// );
-	// await a.click();
-
-	// // const newTarget = await browser.waitForTarget(target => target.opener() === pageTarget);
-
-	// // let pages3 = await browser.pages();
-	// // console.log({ pages3 });
-
-	// const newPagePromise = await getNewPageWhenLoaded(browser);
-	// const page2 = (await newPagePromise) as puppeteer.Page;
-
-	// await page2.waitForNavigation();
-	// // await page.waitForNavigation({ waitUntil: 'networkidle2' });
-	// // await page.waitForNavigation({ timeout: 20 });
-
-	// await wait(5000);
-
-	// const bktContinue = await page2.$('#bktContinue');
-	// // console.log({ bktContinue });
-	// await bktContinue.click();
-
-	// const idBktDefaultServicesContainer = await page2.$('#idBktDefaultServicesContainer');
-	// // console.log({ idBktDefaultServicesContainer });
-	// console.log('1');
-	// await idBktDefaultServicesContainer.click();
-	// console.log('2');
-
-	// // await wait(15000);
-	// console.log('start');
-	// await page2.waitForNetworkIdle();
-	// console.log('end');
-
-	// const idDivNotAvailableSlotsTextTop = await page2.$('#idDivNotAvailableSlotsTextTop');
-	// const idTimeListTable = await page2.$('#idTimeListTable');
-
-	// console.log('3');
-	// const nuevaURL = page2.url(); //https://www.citaconsular.es/es/hosteds/widgetdefault/2517d2c8d726687ab7f770d8c3c4a7c7f#datetime
-
-	// console.log({
-	// 	idDivNotAvailableSlotsTextTop: !!idDivNotAvailableSlotsTextTop,
-	// 	idTimeListTable: !!idTimeListTable,
-	// 	nuevaURL,
-	// });
-
 	console.log(`\n[${momento()}] runCheckTurnosPasaporte START`);
 
 	// //! VALIDACIONES
@@ -201,35 +141,15 @@ export const runCheckTurnosPasaporte = async () => {
 		idDivSlotColumnContainer_1,
 		valueIdDivBktDatetimeSelectedDate,
 
-		avisarViejo: !idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime'),
-		avisarNuevo:
-			!idDivNotAvailableSlotsTextTop &&
-			idTimeListTable &&
-			nuevaURL.includes('#datetime') &&
-			idDivSlotColumnContainer_1 &&
-			valueIdDivBktDatetimeSelectedDate != '',
+		// avisarViejo: !idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime'),
+		// avisarNuevo:
+		// 	!idDivNotAvailableSlotsTextTop &&
+		// 	idTimeListTable &&
+		// 	nuevaURL.includes('#datetime') &&
+		// 	idDivSlotColumnContainer_1 &&
+		// 	valueIdDivBktDatetimeSelectedDate != '',
 		error,
 	});
-
-	//AVISO VIEJO (A VECES AVISABA CON ERROR)
-	if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
-		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
-		//Enviar Mensaje
-		const chatIds = ['5493515925801@c.us'];
-		// const chatIds = ['5493515925801@c.us'];
-		const text = `OLD - Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
-
-https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
-
-----------------------------------------------------------------------------------------------------
-
-${JSON.stringify(retorno)}`;
-		for (const chatId of chatIds) {
-			await globalThis.client.sendMessage(chatId, text);
-		}
-	} else {
-		console.log(' 	------> runCheckTurnosPasaporte -> No hay turnos disponibles');
-	}
 
 	// AVISO NUEVO
 	if (
@@ -243,7 +163,7 @@ ${JSON.stringify(retorno)}`;
 		//Enviar Mensaje
 		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
 		const chatIds = ['5493515925801@c.us'];
-		const text = `NEW - Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
+		const text = `Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
 https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
 		`;

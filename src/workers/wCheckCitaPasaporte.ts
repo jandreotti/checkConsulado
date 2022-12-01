@@ -20,7 +20,9 @@ export interface IOutputData_WCheckCitaPasaporte {
 const run = async () => {
 	//! CON ESTAS LINEAS OBTENGO EL VALOR DEL ARGUMENTO QUE LE PASO AL PROCESO HIJO SI ES QUE LO NECESITO
 	// const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
-	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckDolar;
+	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaPasaporte;
+
+	//! DECLARO EL VALOR POR DEFECTO QUE VOY A DEVOLVER EN CASO DE ERROR
 	let outputData: IOutputData_WCheckCitaPasaporte = {
 		idDivNotAvailableSlotsTextTop: false,
 		idTimeListTable: false,
@@ -30,6 +32,7 @@ const run = async () => {
 	};
 
 	try {
+		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url =
 			'https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo';
 
@@ -38,6 +41,7 @@ const run = async () => {
 			// headless: false,
 		});
 
+		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
 		const page = await browser.newPage();
 		await page.goto(url, { waitUntil: 'load' });
@@ -90,46 +94,47 @@ const run = async () => {
 		// Hacer click aqui:
 		// idDivBktDatetimeDatePickerText
 
-		// GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
-		if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
-			//* Saco fotos si hay turnos disponibles
-			await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
+		// if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
+		// 	//* Saco fotos si hay turnos disponibles
+		// 	await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 
-			//* Guardo el HTML de la pagina para Debuguear
-			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
-			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
-			const bodyHTML3 = await page2.content();
-			//
-			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-			fs.writeFileSync(`1fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
-		}
+		// 	//* Guardo el HTML de la pagina para Debuguear
+		// 	// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+		// 	// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+		// 	const bodyHTML3 = await page2.content();
+		// 	//
+		// 	// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+		// 	// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+		// 	fs.writeFileSync(`1fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+		// }
 
-		// GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
-		if (
-			!idDivNotAvailableSlotsTextTop &&
-			idTimeListTable &&
-			nuevaURL.includes('#datetime') &&
-			idDivSlotColumnContainer_1 &&
-			valueIdDivBktDatetimeSelectedDate != ''
-		) {
-			//* Saco fotos si hay turnos disponibles
-			await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
+		// if (
+		// 	!idDivNotAvailableSlotsTextTop &&
+		// 	idTimeListTable &&
+		// 	nuevaURL.includes('#datetime') &&
+		// 	idDivSlotColumnContainer_1 &&
+		// 	valueIdDivBktDatetimeSelectedDate != ''
+		// ) {
+		// 	//* Saco fotos si hay turnos disponibles
+		// 	await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 
-			//* Guardo el HTML de la pagina para Debuguear
-			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
-			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
-			const bodyHTML3 = await page2.content();
-			//
-			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-			fs.writeFileSync(`2fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
-		}
+		// 	//* Guardo el HTML de la pagina para Debuguear
+		// 	// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+		// 	// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+		// 	const bodyHTML3 = await page2.content();
+		// 	//
+		// 	// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+		// 	// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+		// 	fs.writeFileSync(`2fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+		// }
 
 		await page.close();
 		await page2.close();
 		await browser.close();
 
+		//! GUARDO EN EL OBJETO outputData lo que quiero retornar
 		outputData = {
 			idDivNotAvailableSlotsTextTop: !!idDivNotAvailableSlotsTextTop,
 			idTimeListTable: !!idTimeListTable,
@@ -139,8 +144,10 @@ const run = async () => {
 			valueIdDivBktDatetimeSelectedDate,
 		};
 
+		//! RETORNO EL OBJETO outputData por medio del console.log
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 	} catch (error) {
+		//! SI HAY UN ERROR, retorno el objeto outputData con los valores originales y el error
 		console.log(
 			JSON.stringify({
 				...outputData,
@@ -152,7 +159,8 @@ const run = async () => {
 		); // print out data to STDOUT
 	}
 
-	process.exit(1); // Esto es clave para que salga, porque a veces no salia
+	//! Esto es clave para que salga, porque a veces no salia
+	process.exit(1);
 };
 
 run();
