@@ -119,7 +119,7 @@ export const runCheckTurnosPasaporte = async () => {
 	//! EJECUCION DEL PROCESO HIJO
 	const retorno = await ejecutar({
 		filename: 'wCheckCitaPasaporte.js', // Archivo a ejecutar
-		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckDolar.js en el inputData)
+		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
 		tagProcess: 'worker-check-cita-pasaporte', // Tag para identificar el proceso hijo
 		debug: false, // Si se quiere ver el log del proceso hijo que largue con console.error
 	});
