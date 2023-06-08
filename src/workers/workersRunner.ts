@@ -161,8 +161,9 @@ export const runCheckTurnosPasaporte = async () => {
 	) {
 		console.log(' 	------> runCheckTurnosPasaporte -> Hay turnos disponibles -> AVISAR!');
 		//Enviar Mensaje
-		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us'];
-		const chatIds = ['5493515925801@c.us','5493515312948@c.us'];
+		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
+		//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
+		const chatIds = ['5493515925801@c.us']; //Yo 
 
 	 const text = `Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
