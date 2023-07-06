@@ -15,7 +15,8 @@ const mandarMensage = async (req, res, next) => {
 	//     "text":"Hola Charly, sobame los huevitos :)"
 	// }
 
-	const { number, text } = req.body;
+
+	const { number, text } = req.body; //
 
 	// Getting chatId from the number.
 	// we have to delete "+" from the beginning and add "@c.us" at the end of the number.

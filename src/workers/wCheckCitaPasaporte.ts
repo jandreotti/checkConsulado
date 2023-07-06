@@ -38,7 +38,9 @@ const run = async () => {
 
 		const browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
-			// headless: false,
+			// headless: false, // para ver que hace el explorador en la pagina
+			// slowMo:200, // Camara lenta para ver que hace el explorador
+			
 		});
 
 		//! OPERAR EN LA PAGINA
