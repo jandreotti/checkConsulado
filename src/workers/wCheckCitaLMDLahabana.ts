@@ -163,7 +163,7 @@ const run = async () => {
 		let idDivBktServicesContainer_textContext;
 
 		try {
-			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
+			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 80 * 1000 });
 			console.error('Analizando la pagina...2');
 			//Intento leer el elemento que dice No hay horas disponibles
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
