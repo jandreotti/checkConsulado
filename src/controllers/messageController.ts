@@ -15,7 +15,6 @@ const mandarMensage = async (req, res, next) => {
 	//     "text":"Hola Charly, sobame los huevitos :)"
 	// }
 
-
 	const { number, text } = req.body; //
 
 	// Getting chatId from the number.

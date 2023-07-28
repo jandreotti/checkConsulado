@@ -183,16 +183,16 @@ export const runCheckCitaLMDLahabana = async () => {
 	log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 
 	//! VALIDACIONES
-	const estados = globalThis.estados;
-	if (!estados) {
-		console.log('Cliente de whastapp-web.js no esta listo');
-		return;
-	}
-	const estadoActual = globalThis.estados[estados.length - 1].estado;
-	if (estadoActual !== 'LISTO') {
-		console.log('Cliente de whastapp-web.js no esta listo');
-		return;
-	}
+	// const estados = globalThis.estados;
+	// if (!estados) {
+	// 	console.log('Cliente de whastapp-web.js no esta listo');
+	// 	return;
+	// }
+	// const estadoActual = globalThis.estados[estados.length - 1].estado;
+	// if (estadoActual !== 'LISTO') {
+	// 	console.log('Cliente de whastapp-web.js no esta listo');
+	// 	return;
+	// }
 
 	//! EJECUCION DEL PROCESO HIJO
 	const retorno = (await ejecutar({
@@ -314,12 +314,12 @@ export const runCheckCitaLMDLahabana = async () => {
 
 			`;
 		for (const chatId of chatIds) {
-			await globalThis.client.sendMessage(chatId, text);
+			// await globalThis.client.sendMessage(chatId, text);
 		}
 	} else {
 		const chatIds = ['120363146280744024@g.us']; //GRUPO LMD la habana
 		for (const chatId of chatIds) {
-			await globalThis.client.sendMessage(chatId, 'NADA');
+			// await globalThis.client.sendMessage(chatId, 'NADA');
 		}
 		console.log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 		log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
