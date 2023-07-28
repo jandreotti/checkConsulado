@@ -195,16 +195,15 @@ export const runCheckCitaLMDLahabana = async () => {
 	}
 
 	//! EJECUCION DEL PROCESO HIJO
-	const retorno = await ejecutar({
+	const retorno = (await ejecutar({
 		filename: 'wCheckCitaLMDLahabana.js', // Archivo a ejecutar
 		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
 		tagProcess: 'worker-check-cita-lmd-lahabana', // Tag para identificar el proceso hijo
 		debug: true, // Si se quiere ver el log del proceso hijo que largue con console.error
-	});
+	})) as IOutputData_WCheckCitaLMDLahabana;
 
 	//! PROCESAMIENTO DEL RESULTADO
-	const { idDivBktServicesContainer_textContext, error, ban, ultimaURL, verificar } =
-		retorno as IOutputData_WCheckCitaLMDLahabana;
+	const { idDivBktServicesContainer_textContext, error, ban, ultimaURL, verificar } = retorno;
 
 	console.log({
 		retorno,
@@ -276,18 +275,47 @@ export const runCheckCitaLMDLahabana = async () => {
 		log(
 			' 	------> runCheckCitaLMDLahabana -> Hay turnos disponibles -> AVISAR! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 		);
-		// 	//Enviar Mensaje
-		// 	// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
-		// 	//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
-		// 	const chatIds = ['5493515925801@c.us']; //Yo
+		//Enviar Mensaje
+		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
+		//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
+		const chatIds = ['5493515925801@c.us']; //Yo
+		//120363146280744024@g.us LMD la habana
 
-		// 	const text = `Verificar Cita para LMH La Habana
+		const {
+			idDivNotAvailableSlotsTextTop,
+			idTimeListTable,
+			nuevaURL,
+			idDivSlotColumnContainer_1,
+			valueIdDivBktDatetimeSelectedDate,
+		} = retorno.otros as any;
 
-		//  https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx
-		// 	`;
-		// 	for (const chatId of chatIds) {
-		// 		await globalThis.client.sendMessage(chatId, text);
-		// 	}
+		const text = `Verificar Cita para LMH La Habana
+
+		 https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx
+
+
+		 \n
+
+			${JSON.stringify(
+				{
+					retorno,
+					fecha: momentoFormateado('YYYYMMDD_HHmmss'),
+					chequeoAnterior:
+						!idDivNotAvailableSlotsTextTop &&
+						idTimeListTable &&
+						nuevaURL.includes('#datetime') &&
+						idDivSlotColumnContainer_1 &&
+						valueIdDivBktDatetimeSelectedDate != '',
+				},
+				null,
+				2
+			)}
+
+
+			`;
+		for (const chatId of chatIds) {
+			await globalThis.client.sendMessage(chatId, text);
+		}
 	} else {
 		console.log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 		log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');

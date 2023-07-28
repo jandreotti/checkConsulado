@@ -11,11 +11,9 @@ iniciarCliente();
 
 //! CONFIGURACION CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
-setInterval(runCheckDolar, 30000);
-setInterval(runCheckTurnosPasaporte, 60000 * 3);
-
-//  setInterval(runCheckCitaLMDLahabana, 60000 * 3);
-// runCheckCitaLMDLahabana()
+// setInterval(runCheckDolar, 30000);
+// setInterval(runCheckTurnosPasaporte, 60000 * 3);
+setInterval(runCheckCitaLMDLahabana, 60000 * 3);
 
 //! CONFIGURACION EXPRESS
 const app = express();
