@@ -80,8 +80,8 @@ const run = async () => {
 		// Esperar a que se cargue la nueva pagina
 		// const newPagePromise = await getNewPageWhenLoaded(browser);
 		// const page2 = (await newPagePromise) as puppeteer.Page;
-		await page.waitForNavigation({ timeout: 40 * 1000 });
-		// await page.waitForNavigation({ waitUntil: 'networkidle2' });
+		// await page.waitForNavigation({ timeout: 40 * 1000 });
+		await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 40 * 1000 });
 		// await page.waitForNavigation({ timeout: 20 });
 		// await wait(5000);
 		console.error(5);
