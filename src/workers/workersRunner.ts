@@ -278,8 +278,8 @@ export const runCheckCitaLMDLahabana = async () => {
 		//Enviar Mensaje
 		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
 		//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
-		const chatIds = ['5493515925801@c.us']; //Yo
-		//120363146280744024@g.us LMD la habana
+		//const chatIds = ['5493515925801@c.us']; //Yo
+		const chatIds = ['120363146280744024@g.us']; //GRUPO LMD la habana
 
 		const {
 			idDivNotAvailableSlotsTextTop,
@@ -289,7 +289,7 @@ export const runCheckCitaLMDLahabana = async () => {
 			valueIdDivBktDatetimeSelectedDate,
 		} = retorno.otros as any;
 
-		const text = `Verificar Cita para LMH La Habana
+		const text = `Verificar Cita para LMH La Habana  (${valueIdDivBktDatetimeSelectedDate})
 
 		 https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx
 
@@ -317,6 +317,10 @@ export const runCheckCitaLMDLahabana = async () => {
 			await globalThis.client.sendMessage(chatId, text);
 		}
 	} else {
+		const chatIds = ['120363146280744024@g.us']; //GRUPO LMD la habana
+		for (const chatId of chatIds) {
+			await globalThis.client.sendMessage(chatId, 'NADA');
+		}
 		console.log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 		log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 	}

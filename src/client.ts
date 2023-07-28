@@ -172,18 +172,22 @@ export const iniciarCliente = async () => {
 				console.log(
 					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: ${
 						msg.body
-					} -> id:${msg.id._serialized} \n ${JSON.stringify(msg, null, 2)}`
+					}`
 				);
 
 			if (msg.type !== 'chat')
 				console.log(
 					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: type:${
 						msg.type
-					} -> id:${msg.id._serialized} \n ${JSON.stringify(msg, null, 2)}`
+					}`
 				);
 		});
 
-		console.log(`\LALA: Message received from ${msg.from}: ${msg.body}`);
+		// console.log(
+		// 	`Message received from ${msg.from}: ${msg.body}
+		// 	\n\n-> id:${msg.id._serialized}
+		// 	\n\n ${JSON.stringify(msg, null, 2)}`
+		// );
 	});
 
 	client.initialize();
