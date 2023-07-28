@@ -1,4 +1,4 @@
-import puppeteer, { TimeoutError } from 'puppeteer2';
+import puppeteer, { TimeoutError } from 'puppeteer';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';

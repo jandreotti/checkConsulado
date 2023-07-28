@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer2';
+import puppeteer from 'puppeteer';
 import { momento } from '../helpers/momento';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
