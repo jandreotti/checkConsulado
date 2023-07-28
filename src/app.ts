@@ -4,16 +4,16 @@ import { iniciarCliente } from './client.js';
 import { runCheckCitaLMDLahabana, runCheckDolar, runCheckTurnosPasaporte } from './workers/workersRunner.js';
 
 //! CONFIGURACION WHATSAPP WEB JS
-iniciarCliente();
+ iniciarCliente();
 
 // ! CONFIGURACION CHEQUEO PAGINA DE CONSULADO
 // setInterval(checkConsuladoPage, 10000);
 
 //! CONFIGURACION CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
-// setInterval(runCheckDolar, 30000);
-// setInterval(runCheckTurnosPasaporte, 60000 * 3);
-setInterval(runCheckCitaLMDLahabana, 60000 * 3);
+//setInterval(runCheckDolar, 30000);
+// setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
+setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
 //! CONFIGURACION EXPRESS
 const app = express();

@@ -110,9 +110,10 @@ const run = async () => {
 
 		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
 		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
-		const session = await page.target().createCDPSession();
-		await session.send('Page.enable');
-		await session.send('Page.setWebLifecycleState', { state: 'active' });
+		// const session = await page.target().createCDPSession();
+		// await session.send('Page.enable');
+		// await session.send('Page.setWebLifecycleState', { state: 'active' });
+		console.error(8)
 
 		await page.waitForNetworkIdle({
 			timeout: 50 * 1000,

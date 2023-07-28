@@ -182,7 +182,7 @@ export const runCheckCitaLMDLahabana = async () => {
 	console.log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 	log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 
-	//! VALIDACIONES
+	// //! VALIDACIONES
 	const estados = globalThis.estados;
 	if (!estados) {
 		console.log('Cliente de whastapp-web.js no esta listo');
