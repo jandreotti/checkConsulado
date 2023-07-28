@@ -1,7 +1,7 @@
 import express from 'express';
 import router from './routes/index.js';
 import { iniciarCliente } from './client.js';
-import { runCheckDolar, runCheckTurnosPasaporte } from './workers/workersRunner.js';
+import { runCheckCitaLMDLahabana, runCheckDolar, runCheckTurnosPasaporte } from './workers/workersRunner.js';
 
 //! CONFIGURACION WHATSAPP WEB JS
 iniciarCliente();
@@ -13,6 +13,9 @@ iniciarCliente();
 //// setInterval(checkDolarBlueCordoba, 30000);
 setInterval(runCheckDolar, 30000);
 setInterval(runCheckTurnosPasaporte, 60000 * 3);
+
+//  setInterval(runCheckCitaLMDLahabana, 60000 * 3);
+// runCheckCitaLMDLahabana()
 
 //! CONFIGURACION EXPRESS
 const app = express();

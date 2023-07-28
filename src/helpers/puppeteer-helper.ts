@@ -1,4 +1,4 @@
-import { Browser } from 'puppeteer';
+import { Browser } from 'puppeteer2';
 
 export const getNewPageWhenLoaded = async (browser: Browser) => {
 	return new Promise(x =>

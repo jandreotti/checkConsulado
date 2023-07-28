@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Page } from 'puppeteer2';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
@@ -38,6 +38,7 @@ const run = async () => {
 
 		const browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
+			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, // para ver que hace el explorador en la pagina
 			// slowMo:200, // Camara lenta para ver que hace el explorador
 			
@@ -56,7 +57,7 @@ const run = async () => {
 
 		// Esperar a que se cargue la nueva pagina
 		const newPagePromise = await getNewPageWhenLoaded(browser);
-		const page2 = (await newPagePromise) as puppeteer.Page;
+		const page2 = (await newPagePromise) as Page;
 		await page2.waitForNavigation();
 		// await page.waitForNavigation({ waitUntil: 'networkidle2' });
 		// await page.waitForNavigation({ timeout: 20 });

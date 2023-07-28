@@ -3,12 +3,13 @@
 
 import { spawn } from 'child_process';
 import path from 'path';
-import { momento, wait } from '../helpers/momento';
+import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { ejecutar } from './runner';
 import { IOutputData_WCheckDolar } from './wCheckDolar';
-import puppeteer from 'puppeteer';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import { IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
+import { IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
+import { log } from '../helpers/helpers';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
 
@@ -163,9 +164,9 @@ export const runCheckTurnosPasaporte = async () => {
 		//Enviar Mensaje
 		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
 		//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
-		const chatIds = ['5493515925801@c.us']; //Yo 
+		const chatIds = ['5493515925801@c.us']; //Yo
 
-	 const text = `Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
+		const text = `Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
 https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo
 		`;
@@ -174,5 +175,121 @@ https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/
 		}
 	} else {
 		console.log(' 	------> runCheckTurnosPasaporte -> No hay turnos disponibles');
+	}
+};
+
+export const runCheckCitaLMDLahabana = async () => {
+	console.log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
+	log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
+
+	//! VALIDACIONES
+	const estados = globalThis.estados;
+	if (!estados) {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+	const estadoActual = globalThis.estados[estados.length - 1].estado;
+	if (estadoActual !== 'LISTO') {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+
+	//! EJECUCION DEL PROCESO HIJO
+	const retorno = await ejecutar({
+		filename: 'wCheckCitaLMDLahabana.js', // Archivo a ejecutar
+		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
+		tagProcess: 'worker-check-cita-lmd-lahabana', // Tag para identificar el proceso hijo
+		debug: true, // Si se quiere ver el log del proceso hijo que largue con console.error
+	});
+
+	//! PROCESAMIENTO DEL RESULTADO
+	const { idDivBktServicesContainer_textContext, error, ban, ultimaURL, verificar } =
+		retorno as IOutputData_WCheckCitaLMDLahabana;
+
+	console.log({
+		retorno,
+
+		// idDivBktServicesContainer_textContext,
+		// ban,
+		// ultimaURL,
+
+		// idDivNotAvailableSlotsTextTop,
+		// idTimeListTable,
+		// nuevaURL,
+		// idDivSlotColumnContainer_1,
+		// valueIdDivBktDatetimeSelectedDate,
+
+		// avisarViejo: !idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime'),
+		// avisarNuevo:
+		// 	!idDivNotAvailableSlotsTextTop &&
+		// 	idTimeListTable &&
+		// 	nuevaURL.includes('#datetime') &&
+		// 	idDivSlotColumnContainer_1 &&
+		// 	valueIdDivBktDatetimeSelectedDate != '',
+		// error,
+		fecha: momentoFormateado('YYYYMMDD_HHmmss'),
+	});
+	log(
+		JSON.stringify(
+			{
+				retorno,
+				fecha: momentoFormateado('YYYYMMDD_HHmmss'),
+			},
+			null,
+			2
+		)
+	);
+
+	// AVISOS
+	// Esta baneado...
+	if (ban) {
+		console.log(' 	------> runCheckCitaLMDLahabana -> BANEADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log(' 	------> runCheckCitaLMDLahabana -> BANEADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		return;
+	}
+
+	if (error && error.timeout) {
+		console.log(' 	------> runCheckCitaLMDLahabana -> TIMEOUT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log(' 	------> runCheckCitaLMDLahabana -> TIMEOUT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		return;
+	}
+
+	if (error) {
+		console.log(' 	------> runCheckCitaLMDLahabana -> ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log(' 	------> runCheckCitaLMDLahabana -> ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		return;
+	}
+
+	//Chequeo si hay cita disponible
+	if (
+		// !idDivNotAvailableSlotsTextTop &&
+		// idTimeListTable &&
+		// nuevaURL.includes('#datetime') &&
+		// idDivSlotColumnContainer_1 &&
+		// valueIdDivBktDatetimeSelectedDate != ''
+		idDivBktServicesContainer_textContext != 'No hay horas disponibles.' ||
+		verificar
+	) {
+		console.log(
+			' 	------> runCheckCitaLMDLahabana -> Hay turnos disponibles -> AVISAR! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+		);
+		log(
+			' 	------> runCheckCitaLMDLahabana -> Hay turnos disponibles -> AVISAR! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+		);
+		// 	//Enviar Mensaje
+		// 	// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
+		// 	//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
+		// 	const chatIds = ['5493515925801@c.us']; //Yo
+
+		// 	const text = `Verificar Cita para LMH La Habana
+
+		//  https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx
+		// 	`;
+		// 	for (const chatId of chatIds) {
+		// 		await globalThis.client.sendMessage(chatId, text);
+		// 	}
+	} else {
+		console.log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
+		log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 	}
 };
