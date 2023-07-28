@@ -1,9 +1,0 @@
-{
-  "retorno": {
-    "idDivBktServicesContainer_textContext": "No hay horas disponibles.",
-    "ban": false,
-    "ultimaURL": "https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services",
-    "verificar": false
-  },
-  "fecha": "20230728_143527"
-} 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles
