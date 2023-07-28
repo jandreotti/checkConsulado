@@ -17,3 +17,67 @@
   },
   "fecha": "20230728_113400"
 } 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles
+
+
+
+
+
+
+
+
+
+[28/07/2023 12:56:56] runCheckCitaLMDLahabana START
+
+
+
+
+
+
+
+
+
+[28/07/2023 13:00:39] runCheckCitaLMDLahabana START{
+  "retorno": {
+    "idDivBktServicesContainer_textContext": "",
+    "ban": true,
+    "ultimaURL": "https://www.exteriores.gob.es/es/Paginas/index.aspx",
+    "verificar": false
+  },
+  "fecha": "20230728_130053"
+} 	------> runCheckCitaLMDLahabana -> BANEADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
+
+[28/07/2023 13:03:39] runCheckCitaLMDLahabana START{
+  "retorno": {
+    "idDivBktServicesContainer_textContext": "No hay horas disponibles.",
+    "ban": false,
+    "ultimaURL": "https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services",
+    "verificar": false
+  },
+  "fecha": "20230728_130434"
+}
+
+
+
+
+
+
+
+
+
+[28/07/2023 13:14:02] runCheckCitaLMDLahabana START{
+  "retorno": {
+    "idDivBktServicesContainer_textContext": "No hay horas disponibles.",
+    "ban": false,
+    "ultimaURL": "https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services",
+    "verificar": false
+  },
+  "fecha": "20230728_131455"
+} 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles
