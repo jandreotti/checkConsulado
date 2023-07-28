@@ -65,6 +65,8 @@ const run = async () => {
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
 		const page = await browser.newPage();
+		
+		await page.setCacheEnabled(false)
 		// const ua =
 		// "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
 		// await page.setUserAgent(ua);
