@@ -55,9 +55,9 @@ const run = async () => {
 				// '--disable-backgrounding-occluded-windows',
 				// '--disable-renderer-backgrounding',
 			],
-			//headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			//  headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
-			headless: true, //  para que no se vea lo que hace el explorador en la pagina
+			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 		});
 
@@ -164,13 +164,16 @@ const run = async () => {
 
 		try {
 			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
+			console.error('Analizando la pagina...2');
 			//Intento leer el elemento que dice No hay horas disponibles
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
 				const el = document.getElementById('idDivBktServicesContainer');
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
 				return el?.children[0]?.innerHTML?.split('<br>')[0]; //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
+			console.error('Analizando la pagina...3');
 		} catch (e) {
+			console.error(JSON.stringify(e, null, 2));
 			console.error("No se encontro el div 'idDivBktServicesContainer'");
 			// await page.screenshot({ path: `1fullpage_ERROR1-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 			// const bodyHTML1 = await page.content();
