@@ -113,7 +113,7 @@ const run = async () => {
 		// const session = await page.target().createCDPSession();
 		// await session.send('Page.enable');
 		// await session.send('Page.setWebLifecycleState', { state: 'active' });
-		console.error(8)
+		console.error(8);
 
 		await page.waitForNetworkIdle({
 			timeout: 50 * 1000,
