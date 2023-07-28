@@ -1,4 +1,4 @@
-import puppeteer, { Page } from 'puppeteer2';
+import puppeteer, { Page, TimeoutError } from 'puppeteer2';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
@@ -156,7 +156,9 @@ const run = async () => {
 				...outputData,
 				error: {
 					error: 'HUBO ERROR',
-					message: error,
+					message: error?.message,
+					timeout: error instanceof TimeoutError,
+					objeto: JSON.stringify(error),
 				},
 			})
 		); // print out data to STDOUT
