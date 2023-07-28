@@ -110,9 +110,9 @@ const run = async () => {
 
 		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
 		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
-		// const session = await page.target().createCDPSession();
-		// await session.send('Page.enable');
-		// await session.send('Page.setWebLifecycleState', { state: 'active' });
+		const session = await page.target().createCDPSession();
+		await session.send('Page.enable');
+		await session.send('Page.setWebLifecycleState', { state: 'active' });
 		console.error(8);
 
 		await page.waitForNetworkIdle({
@@ -188,7 +188,7 @@ const run = async () => {
 			if (size == 0) throw new TimeoutError("'Pagina no cargada???????????'");
 		});
 
-		// console.error('analisis2');
+		//console.error('analisis2');
 
 		// //Intento leer el elemento que dice No hay horas disponibles
 		// const idDivBktServicesContainer_textContext = await page.evaluate(() => {
