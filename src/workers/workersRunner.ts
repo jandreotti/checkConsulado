@@ -314,12 +314,12 @@ export const runCheckCitaLMDLahabana = async () => {
 
 			`;
 		for (const chatId of chatIds) {
-			// await globalThis.client.sendMessage(chatId, text);
+			await globalThis.client.sendMessage(chatId, text);
 		}
 	} else {
 		const chatIds = ['120363146280744024@g.us']; //GRUPO LMD la habana
 		for (const chatId of chatIds) {
-			// await globalThis.client.sendMessage(chatId, 'NADA');
+			await globalThis.client.sendMessage(chatId, 'NADA');
 		}
 		console.log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
 		log(' 	------> runCheckCitaLMDLahabana -> No hay turnos disponibles');
