@@ -129,9 +129,10 @@ await session.send('Page.enable');
   await Promise.all([
   bktContinue.click(),
   wait(5000),
-  page.waitForNetworkIdle({
-			 timeout: 50 * 1000,
-		 })
+  //page.waitForNetworkIdle({
+			 //timeout: 50 * 1000,
+		 //})
+  page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
    ]);
 
 		//console.error(7);
