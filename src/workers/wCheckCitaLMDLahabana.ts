@@ -103,9 +103,15 @@ const run = async () => {
 		/// Obtener el boton de continuar y presionarlo
 
 		const bktContinue = await page.$('#idCaptchaButton');
-		bktContinue.click();
+		
+  await Promise.all([
+  bktContinue.click(),
+  page.waitForNetworkIdle({
+			 timeout: 50 * 1000,
+		 })
+   ]);
 
-		console.error(7);
+		//console.error(7);
 
 		//obtener la parte de abajo y presionarla para continuar
 		// const idBktDefaultServicesContainer = await page2.$('#idBktDefaultServicesContainer');
@@ -118,9 +124,9 @@ const run = async () => {
 		// await session.send('Page.setWebLifecycleState', { state: 'active' });
 		console.error(8);
 
-		await page.waitForNetworkIdle({
-			timeout: 50 * 1000,
-		});
+		//await page.waitForNetworkIdle({
+			//timeout: 50 * 1000,
+		//});
 
 		await wait(3000);
 
