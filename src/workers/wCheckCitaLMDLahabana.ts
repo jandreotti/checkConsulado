@@ -94,7 +94,7 @@ const run = async () => {
 await Promise.all([
 		 a.click(),
    wait(5000),
-   page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 40 * 1000 })
+   page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
 ]);
 		console.error(4);
 		// Esperar a que se cargue la nueva pagina
