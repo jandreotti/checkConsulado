@@ -65,6 +65,12 @@ const run = async () => {
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
 		const page = await browser.newPage();
+
+  await page.setViewport({
+        width: 1920,
+        height: 1080
+  })
+
 		
 		await page.setCacheEnabled(false)
 		// const ua =
