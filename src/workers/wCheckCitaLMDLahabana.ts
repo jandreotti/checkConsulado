@@ -103,7 +103,7 @@ const run = async () => {
 		/// Obtener el boton de continuar y presionarlo
 
 		const bktContinue = await page.$('#idCaptchaButton');
-		await bktContinue.click();
+		bktContinue.click();
 
 		console.error(7);
 
