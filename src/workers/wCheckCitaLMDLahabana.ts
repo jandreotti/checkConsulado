@@ -179,7 +179,7 @@ const run = async () => {
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
 				const el = document.getElementById('idDivBktServicesContainer');
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
-				return el?.children[0]?.innerHTML?.split('<br>')[0]; //=== 'No hay horas disponibles.'; //No hay horas disponibles.
+				return Promise.resolve(el?.children[0]?.innerHTML?.split('<br>')[0]); //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
    console.error(idDivBktServicesContainer_textContext);
 			console.error('Analizando la pagina...3');
