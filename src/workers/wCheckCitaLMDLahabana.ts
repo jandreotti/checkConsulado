@@ -128,7 +128,7 @@ await Promise.all([
 		
   await Promise.all([
   bktContinue.click(),
-  wait(5000),
+  wait(15000),
   //page.waitForNetworkIdle({
 			 //timeout: 50 * 1000,
 		 //})
@@ -148,9 +148,15 @@ await Promise.all([
 		// await session.send('Page.setWebLifecycleState', { state: 'active' });
 		console.error(8);
 
-		//await page.waitForNetworkIdle({
-			//timeout: 50 * 1000,
-		//});
+try{
+		await page.waitForNetworkIdle({
+			timeout: 50 * 1000,
+		});
+}
+catch(e)
+{
+console.error("timeout waitForNetwork Iddle");
+}
 
 		await wait(3000);
 
