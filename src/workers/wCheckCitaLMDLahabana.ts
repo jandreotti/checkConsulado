@@ -106,6 +106,7 @@ const run = async () => {
 		
   await Promise.all([
   bktContinue.click(),
+  wait(5000),
   page.waitForNetworkIdle({
 			 timeout: 50 * 1000,
 		 })
@@ -172,7 +173,7 @@ const run = async () => {
 
 		try {
 			console.error('Analizando la pagina...1');
-			// await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
+			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
 			console.error('Analizando la pagina...2');
 			//Intento leer el elemento que dice No hay horas disponibles
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
@@ -180,6 +181,7 @@ const run = async () => {
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
 				return el?.children[0]?.innerHTML?.split('<br>')[0]; //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
+   console.error(idDivBktServicesContainer_textContext);
 			console.error('Analizando la pagina...3');
 		} catch (e) {
 			console.error(JSON.stringify(e, null, 2));
