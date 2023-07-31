@@ -1,4 +1,11 @@
-import puppeteer, { TimeoutError } from 'puppeteer';
+//import puppeteer, { TimeoutError } from 'puppeteer';
+
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import puppeteer from 'puppeteer-extra';
+import { TimeoutError } from 'puppeteer';
+puppeteer.use(StealthPlugin());
+// import randomUseragent from 'random-useragent';
+
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
@@ -48,17 +55,31 @@ const run = async () => {
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
 		const browser = await puppeteer.launch({
+			// args: [
+			// 	'--no-sandbox',
+			// 	'--disable-setuid-sandbox',
+			// 	// '--disable-background-timer-throttling',
+			// 	// '--disable-backgrounding-occluded-windows',
+			// 	// '--disable-renderer-backgrounding',
+			// 	// '--proxy-server=socks5://127.0.0.1:9150',
+			// ],
+
 			args: [
+				'--disable-gpu',
 				'--no-sandbox',
+				'--no-zygote',
 				'--disable-setuid-sandbox',
-				// '--disable-background-timer-throttling',
-				// '--disable-backgrounding-occluded-windows',
-				// '--disable-renderer-backgrounding',
+				'--disable-accelerated-2d-canvas',
+				'--disable-dev-shm-usage',
+				"--proxy-server='direct://'",
+				'--proxy-bypass-list=*',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
-			//headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
+			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
 			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
+			ignoreHTTPSErrors: true,
+			// devtools: true,
 		});
 
 		console.error(2);
@@ -66,24 +87,100 @@ const run = async () => {
 		// Abrir una nueva pagina
 		const page = await browser.newPage();
 
-  await page.setViewport({
-        width: 1920,
-        height: 1080
-  })
+		await page.setViewport({
+			width: 1920 + Math.floor(Math.random() * 100),
+			height: 3000 + Math.floor(Math.random() * 100),
+			deviceScaleFactor: 1,
+			hasTouch: false,
+			isLandscape: false,
+			isMobile: false,
+		});
 
-		
 		//await page.setCacheEnabled(false)
-		const ua =
-		 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
-		 await page.setUserAgent(ua);
+		const USER_AGENT =
+			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36';
+		// const userAgent = randomUseragent.getRandom();
+		// const UA = userAgent || USER_AGENT;
+		// await page.setUserAgent(UA);
+		await page.setUserAgent(USER_AGENT);
+
+		// const ua =
+		// 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36';
+		// await page.setUserAgent(ua);
+		// await page.setExtraHTTPHeaders({
+		// 	'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+		// });
+
+		// await page.setExtraHTTPHeaders({
+		// 	"Connection": "keep-alive",
+		// 	 "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36",
+		// 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		// 	"Sec-Fetch-Site": "same-origin",
+		// 	"Sec-Fetch-Mode": "cors",
+		// 	"Sec-Fetch-Dest": "empty",
+		// 	// "Accept": "application/json",
+		// 	"Sec-Fetch-User": "1",
+		// 	// "Sec-Fetch-Dest": "document",
+		// 	// "referer" :`https://www.supremenewyork.com/mobile/`,
+		// 	"Accept-Encoding": " gzip, deflate, br",
+		// 	"Accept-Language": " en-GB,en-US;q=0.9,en;q=0.8",
+		// 	// "Cookie": `${set_cookie}`,
+		// 	"dnt": "1",
+		// 	"sec-fetch-site" : "same-origin"
+		// },
+		// )
+
+		await page.setJavaScriptEnabled(true);
+
+		await page.evaluateOnNewDocument(() => {
+			//pass webdriver check
+			Object.defineProperty(navigator, 'webdriver', {
+				get: () => false,
+			});
+		});
+
+		await page.evaluateOnNewDocument(() => {
+			//pass chrome check
+			// @ts-ignore
+			window.chrome = {
+				runtime: {},
+				// etc.
+			};
+		});
+
+		await page.evaluateOnNewDocument(() => {
+			//pass plugins check
+			const originalQuery = window.navigator.permissions.query;
+			return (window.navigator.permissions.query = parameters =>
+				// @ts-ignore
+				parameters.name === 'notifications'
+					? Promise.resolve({ state: Notification.permission })
+					: originalQuery(parameters));
+		});
+
+		await page.evaluateOnNewDocument(() => {
+			// Overwrite the `plugins` property to use a custom getter.
+			Object.defineProperty(navigator, 'plugins', {
+				// This just needs to have `length > 0` for the current test,
+				// but we could mock the plugins too if necessary.
+				get: () => [1, 2, 3, 4, 5],
+			});
+		});
+
+		await page.evaluateOnNewDocument(() => {
+			// Overwrite the `plugins` property to use a custom getter.
+			Object.defineProperty(navigator, 'languages', {
+				get: () => ['en-US', 'en'],
+			});
+		});
+
 		await page.goto(url, { waitUntil: 'load' });
 
-// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
+		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
 		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
 		//const session = await page.target().createCDPSession();
 		//await session.send('Page.enable');
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
-	
 
 		console.error(3);
 		// Hacer click en el boton
@@ -91,11 +188,7 @@ const run = async () => {
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
 		);
 
-await Promise.all([
-		 a.click(),
-   wait(5000),
-   page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
-]);
+		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })]);
 		console.error(4);
 		// Esperar a que se cargue la nueva pagina
 		// const newPagePromise = await getNewPageWhenLoaded(browser);
@@ -106,11 +199,8 @@ await Promise.all([
 		// await wait(5000);
 		console.error(5);
 
-
-
-//await session.send('Page.enable');
+		//await session.send('Page.enable');
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
-	
 
 		// Verifico BANEO
 		const url2 = page.url();
@@ -124,33 +214,62 @@ await Promise.all([
 		}
 		console.error(6);
 
-
-await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 		const bodyHTML0 = await page.content();
 		fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
 
-	console.error(6.1);
+		console.error(6.1);
 
 		/// Obtener el boton de continuar y presionarlo
 
+		// await page.waitForSelector('', {
+		// 	visible: true,
+
+		// 	// waitUntil: "load",
+		// 	// waitUntil: "networkidle0",
+		// 	// waitUntil: "domcontentloaded",
+		// 	// waitUntil: "networkidle2",
+		// 	timeout: 10 * 1000,
+		// });
+
+		await wait(10000);
+
+		await page.waitForSelector('#idCaptchaButton', {
+			visible: true,
+		});
+		console.error(6.2);
 		const bktContinue = await page.$('#idCaptchaButton');
-		
-  await page.waitForSelector("#idCaptchaButton", {
-  visible: true,
-});
 
-  await Promise.all([
-  
-  
-  page.waitForNetworkIdle({
-			 timeout: 50 * 1000,
-		 }),
-  bktContinue.click(),
+		console.error(6.3);
 
-  //page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
-   ]);
+		await Promise.all([
+			page.waitForNetworkIdle({
+				timeout: 100 * 1000,
+				idleTime: 3000,
+			}),
+			bktContinue.click(),
+			page.mouse.move(0, 0),
+			page.mouse.move(100, 100),
+			page.mouse.move(400, 400),
 
-		//console.error(7);
+			//page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
+		]);
+
+		console.error(7);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
+
+		await wait(4000);
 
 		//obtener la parte de abajo y presionarla para continuar
 		// const idBktDefaultServicesContainer = await page2.$('#idBktDefaultServicesContainer');
@@ -163,15 +282,15 @@ await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_H
 		// await session.send('Page.setWebLifecycleState', { state: 'active' });
 		console.error(8);
 
-try{
-		await page.waitForNetworkIdle({
-			timeout: 50 * 1000,
-		});
-}
-catch(e)
-{
-console.error("timeout waitForNetwork Iddle");
-}
+		// try {
+		// 	await page.waitForNetworkIdle({
+		// 		timeout: 50 * 1000,
+		// 		idleTime: 3000,
+		// 	});
+		// } catch (e) {
+		// 	console.error('timeout waitForNetwork Iddle');
+		// }
+		// console.error(8.1);
 
 		//await wait(60000);
 
@@ -225,7 +344,7 @@ console.error("timeout waitForNetwork Iddle");
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
 				return Promise.resolve(el?.children[0]?.innerHTML?.split('<br>')[0]); //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
-   console.error(idDivBktServicesContainer_textContext);
+			console.error(idDivBktServicesContainer_textContext);
 			console.error('Analizando la pagina...3');
 		} catch (e) {
 			console.error(JSON.stringify(e, null, 2));
@@ -316,14 +435,22 @@ console.error("timeout waitForNetwork Iddle");
 			const bodyHTML2 = await page.content();
 			fs.writeFileSync(`2fullpage_PASOALGO2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
 
+			console.error('final 1');
 			//obtener la parte de abajo y presionarla para continuar
 			const idBktDefaultServicesContainer = await page.$('#idBktDefaultServicesContainer');
 			await idBktDefaultServicesContainer.click();
+			console.error('final 2');
 
 			// await wait(15000);
 			// esperar a que cargue la pagina
-			await page.waitForNetworkIdle();
+			try {
+				await page.waitForNetworkIdle();
+			} catch (e) {
+				console.error('error en waitForNetworkIdle2');
+			}
 			await wait(3000);
+
+			console.error('final 3');
 
 			//Grabo
 			await page.screenshot({
@@ -373,6 +500,8 @@ console.error("timeout waitForNetwork Iddle");
 				otros,
 			};
 		}
+
+		await wait(4000);
 
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
 		// if (
