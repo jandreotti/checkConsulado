@@ -135,7 +135,9 @@ await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_H
 
 		const bktContinue = await page.$('#idCaptchaButton');
 		
-  await page.waitForSelector("#idCaptchaButton");
+  await page.waitForSelector("#idCaptchaButton", {
+  visible: true,
+});
 
   await Promise.all([
   bktContinue.click(),
