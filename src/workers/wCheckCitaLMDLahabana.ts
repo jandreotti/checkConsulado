@@ -173,7 +173,7 @@ catch(e)
 console.error("timeout waitForNetwork Iddle");
 }
 
-		await wait(3000);
+		await wait(60000);
 
 		//Grabo la pantalla siempre que inicio el proceso
 		await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
