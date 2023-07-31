@@ -138,10 +138,10 @@ await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_H
   await Promise.all([
   bktContinue.click(),
   wait(15000),
-  //page.waitForNetworkIdle({
-			 //timeout: 50 * 1000,
-		 //})
-  page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
+  page.waitForNetworkIdle({
+			 timeout: 50 * 1000,
+		 })
+  //page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
    ]);
 
 		//console.error(7);
