@@ -56,7 +56,7 @@ const run = async () => {
 				// '--disable-renderer-backgrounding',
 			],
 			//headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
-			//  headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
+			headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
 			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 		});
