@@ -313,9 +313,9 @@ export const runCheckCitaLMDLahabana = async () => {
 
 
 			`;
-		for (const chatId of chatIds) {
-			await globalThis.client.sendMessage(chatId, text);
-		}
+		//for (const chatId of chatIds) {
+			//await globalThis.client.sendMessage(chatId, text);
+		//}
 	} else {
 		//const chatIds = ['120363146280744024@g.us']; //GRUPO LMD la habana
 		//for (const chatId of chatIds) {
