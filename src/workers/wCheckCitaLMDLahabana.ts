@@ -106,6 +106,8 @@ await Promise.all([
 		// await wait(5000);
 		console.error(5);
 
+
+
 //await session.send('Page.enable');
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
 	
@@ -121,6 +123,13 @@ await Promise.all([
 			process.exit(1);
 		}
 		console.error(6);
+
+
+await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		const bodyHTML0 = await page.content();
+		fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
+
+	console.error(6.1);
 
 		/// Obtener el boton de continuar y presionarlo
 
