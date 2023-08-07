@@ -248,6 +248,27 @@ const run = async () => {
 
 		console.error(6.3);
 
+		await page.on('load', msg => {
+			console.error(`load: ${JSON.stringify(msg, null, 2)}`);
+		});
+
+		await page.on('pageerror', msg => {
+			console.error(`pageerror: ${JSON.stringify(msg, null, 2)}`);
+		});
+
+		await page.on('console', msg => {
+			console.error(`console: ${JSON.stringify(msg, null, 2)}`);
+		});
+		await page.on('response', msg => {
+			console.error(`response: ${JSON.stringify(msg, null, 2)}`);
+		});
+
+		await page.on('domcontentloaded', msg => {
+			console.error(`domcontentloaded: ${JSON.stringify(msg, null, 2)}`);
+		});
+
+		console.error(6.4);
+
 		//
 		await bktContinue.click({
 			delay: 100,
@@ -255,9 +276,11 @@ const run = async () => {
 
 		let isLoadingAvailable = true; // Your condition-to-stop
 		let times = 0;
+		
 		while (isLoadingAvailable) {
 			times++;
 			console.error('esperando que cargue...:' + times);
+			console.error("url:"+page.url());
 
 			try {
 				await page.screenshot({
@@ -275,7 +298,7 @@ const run = async () => {
 					idleTime: 3000,
 				});
 				console.error('E3');
-				console.error(page.url());
+				console.error("url FINAL:"+page.url());
 				// const aux = await page.waitForResponse(
 				// 	response =>
 				// 		response.url() ===
