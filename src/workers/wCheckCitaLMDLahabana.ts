@@ -65,17 +65,18 @@ const run = async () => {
 			// ],
 
 			args: [
-				'--disable-gpu',
+				// '--incognito',
+				// '--disable-gpu',
 				'--no-sandbox',
-				'--no-zygote',
+				// '--no-zygote',
 				'--disable-setuid-sandbox',
-				'--disable-accelerated-2d-canvas',
-				'--disable-dev-shm-usage',
-				"--proxy-server='direct://'",
-				'--proxy-bypass-list=*',
+				// '--disable-accelerated-2d-canvas',
+				// '--disable-dev-shm-usage',
+				// "--proxy-server='direct://'",
+				// '--proxy-bypass-list=*',
 			],
-			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
-			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
+			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
 			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 			ignoreHTTPSErrors: true,
@@ -85,11 +86,13 @@ const run = async () => {
 		console.error(2);
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
-		const page = await browser.newPage();
+		const context = await browser.createIncognitoBrowserContext();
+		const page = await context.newPage();
+		// const page = await browser.newPage();
 
 		await page.setViewport({
-			width: 1920 + Math.floor(Math.random() * 100),
-			height: 3000 + Math.floor(Math.random() * 100),
+			width: 1080 + Math.floor(Math.random() * 100),
+			height: 1024 + Math.floor(Math.random() * 100),
 			deviceScaleFactor: 1,
 			hasTouch: false,
 			isLandscape: false,
