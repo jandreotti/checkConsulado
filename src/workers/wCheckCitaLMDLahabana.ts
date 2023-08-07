@@ -12,6 +12,7 @@ import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
 import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
+import axios from 'axios';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -58,6 +59,13 @@ const run = async () => {
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
+		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
+		const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
+		const proxies = res.data;
+		console.error(JSON.stringify(proxies));
+		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
+		console.error(proxy);
+
 		const browser = await puppeteer.launch({
 			// args: [
 			// 	'--no-sandbox',
@@ -78,8 +86,14 @@ const run = async () => {
 				// '--disable-dev-shm-usage',
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
+
+				//https://github.com/sunny9577/proxy-scraper
 				//'--proxy-server=socks5://212.83.143.97:38669',
-				'--proxy-server=socks5://115.127.10.154:1088',
+				//'--proxy-server=socks5://115.127.10.154:1088',
+				//proxy && proxy.host && proxy.port && '--proxy-server=socks5://' + proxy.host + ':' + proxy.port,
+				...(proxy && proxy.host && proxy.port && proxy.host != '' && proxy.port != ''
+					? '--proxy-server=socks5://' + proxy.host + ':' + proxy.port
+					: []),
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -619,7 +633,7 @@ const run = async () => {
 					error: `HUBO ERROR ${error.lala}`,
 					message: error?.message,
 					timeout: error instanceof TimeoutError,
-					proxyError: error?.message?.includes("net::ERR_PROXY_CONNECTION_FAILED"), //error instanceof ConnectionProxyError ProxyConnectionError,
+					proxyError: error?.message?.includes('net::ERR_PROXY_CONNECTION_FAILED'), //error instanceof ConnectionProxyError ProxyConnectionError,
 					objeto: JSON.stringify(error),
 				},
 			})
