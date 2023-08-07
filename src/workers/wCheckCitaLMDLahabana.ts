@@ -219,7 +219,9 @@ const proxyArgs = '--proxy-server=socks5://104.200.152.30:4145';
 		console.error('aa');
 		await wait(1000);
 
-		await page.goto(url, { waitUntil: 'load' });
+		await page.goto(url, { waitUntil: 'load',
+   timeout: 60 * 1000
+  });
 
 		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
 		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
