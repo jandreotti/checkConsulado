@@ -254,8 +254,10 @@ const run = async () => {
 		});
 
 		let isLoadingAvailable = true; // Your condition-to-stop
+		let times = 0;
 		while (isLoadingAvailable) {
-			console.error('esperando que cargue...');
+			times++;
+			console.error('esperando que cargue...:' + times);
 
 			try {
 				await page.screenshot({
@@ -285,7 +287,7 @@ const run = async () => {
 				// console.error('E4');
 			} catch (ex) {
 				console.error('EE' + ex.message);
-				continue;
+				if (times <= 10) continue;
 			}
 			isLoadingAvailable = false; // Update your condition-to-stop value
 		}
