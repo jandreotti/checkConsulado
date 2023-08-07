@@ -1,7 +1,5 @@
 //import puppeteer, { TimeoutError } from 'puppeteer';
 
-// import   scrollPageToBottom  from 'puppeteer-autoscroll-down'
-
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
 import { TimeoutError } from 'puppeteer';
@@ -11,7 +9,6 @@ puppeteer.use(StealthPlugin());
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
-import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -248,63 +245,32 @@ const run = async () => {
 
 		console.error(6.3);
 
-		//
-		await bktContinue.click({
-			delay: 100,
-		});
+		await Promise.all([
+			page.waitForNetworkIdle({
+				timeout: 100 * 1000,
+				idleTime: 3000,
+			}),
+			bktContinue.click(),
+			page.mouse.move(0, 0),
+			page.mouse.move(100, 100),
+			page.mouse.move(400, 400),
 
-		let isLoadingAvailable = true; // Your condition-to-stop
-		while (isLoadingAvailable) {
-			console.error('esperando que cargue...');
-
-			try {
-				await page.screenshot({
-					path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
-					fullPage: true,
-				});
-				const bodyHTML1 = await page.content();
-				fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-
-				console.error('E1');
-				await scrollPageToBottom(page as any, { size: 250, delay: 500 });
-				console.error('E2');
-				await page.waitForNetworkIdle({
-					timeout: 10 * 1000,
-					idleTime: 3000,
-				});
-				console.error('E3');
-				console.error(page.url());
-				// const aux = await page.waitForResponse(
-				// 	response =>
-				// 		response.url() ===
-				// 		//'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
-				// 		'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
-				// 	//&& response.status() === 200
-				// );
-				// console.error('status:' + aux.status());
-				// console.error('E4');
-			} catch (ex) {
-				console.error('EE' + ex.message);
-				continue;
-			}
-			isLoadingAvailable = false; // Update your condition-to-stop value
-		}
-		//
-
-		// await Promise.all([
-		// 	page.waitForNetworkIdle({
-		// 		timeout: 100 * 1000,
-		// 		idleTime: 3000,
-		// 	}),
-		// 	bktContinue.click(),
-		// 	page.mouse.move(0, 0),
-		// 	page.mouse.move(100, 100),
-		// 	page.mouse.move(400, 400),
-
-		// 	//page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
-		// ]);
+			//page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
+		]);
 
 		console.error(7);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
+
+		await page.mouse.move(100, 100);
+
+		await page.mouse.move(400, 400);
 
 		await wait(4000);
 
@@ -317,7 +283,7 @@ const run = async () => {
 		// const session = await page.target().createCDPSession();
 		// await session.send('Page.enable');
 		// await session.send('Page.setWebLifecycleState', { state: 'active' });
-		// console.error(8);
+		console.error(8);
 
 		// try {
 		// 	await page.waitForNetworkIdle({
