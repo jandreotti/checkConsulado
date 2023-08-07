@@ -78,7 +78,8 @@ const run = async () => {
 				// '--disable-dev-shm-usage',
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
-				'--proxy-server=socks5://212.83.143.97:38669',
+				//'--proxy-server=socks5://212.83.143.97:38669',
+				'--proxy-server=socks5://115.127.10.154:1088',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -618,7 +619,7 @@ const run = async () => {
 					error: `HUBO ERROR ${error.lala}`,
 					message: error?.message,
 					timeout: error instanceof TimeoutError,
-					proxyError: error?.message?.includes("'net::ERR_PROXY_CONNECTION_FAILED"), //error instanceof ConnectionProxyError ProxyConnectionError,
+					proxyError: error?.message?.includes("net::ERR_PROXY_CONNECTION_FAILED"), //error instanceof ConnectionProxyError ProxyConnectionError,
 					objeto: JSON.stringify(error),
 				},
 			})
