@@ -62,9 +62,11 @@ const run = async () => {
 		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
 		const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
 		const proxies = res.data;
-		console.error(JSON.stringify(proxies));
+		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
+		const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
+		console.error(proxyArgs);
 
 		const browser = await puppeteer.launch({
 			// args: [
@@ -89,11 +91,15 @@ const run = async () => {
 
 				//https://github.com/sunny9577/proxy-scraper
 				//'--proxy-server=socks5://212.83.143.97:38669',
+				//'--proxy-server=socks5://212.83.143.97:38669',
 				//'--proxy-server=socks5://115.127.10.154:1088',
+
 				//proxy && proxy.host && proxy.port && '--proxy-server=socks5://' + proxy.host + ':' + proxy.port,
-				...(proxy && proxy.host && proxy.port && proxy.host != '' && proxy.port != ''
-					? '--proxy-server=socks5://' + proxy.host + ':' + proxy.port
-					: []),
+				// ...(proxy && proxy.ip && proxy.port && proxy.ip != '' && proxy.port != ''
+				// 	? '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port
+				// 	: []),
+
+				proxyArgs,
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -106,9 +112,9 @@ const run = async () => {
 		console.error(2);
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
-		const context = await browser.createIncognitoBrowserContext();
-		const page = await context.newPage();
-		// const page = await browser.newPage();
+		// const context = await browser.createIncognitoBrowserContext();
+		// const page = await context.newPage();
+		const page = await browser.newPage();
 
 		await page.setViewport({
 			width: 1080 + Math.floor(Math.random() * 100),
@@ -120,6 +126,7 @@ const run = async () => {
 		});
 
 		//await page.setCacheEnabled(false)
+
 		const USER_AGENT =
 			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36';
 		// const userAgent = randomUseragent.getRandom();
@@ -196,6 +203,15 @@ const run = async () => {
 				get: () => ['en-US', 'en'],
 			});
 		});
+
+		//https://api.ipify.org?format=json
+		await page.goto('https://api.ipify.org', { waitUntil: 'load' });
+		console.error('a');
+		//const ip = await page.evaluate(`async (() => document.body.textContent.trim())()`);
+		const ip = await page.evaluate(() => document.body.textContent.trim());
+		console.error('IP: ', ip);
+		console.error('aa');
+		await wait(1000);
 
 		await page.goto(url, { waitUntil: 'load' });
 
@@ -300,12 +316,12 @@ const run = async () => {
 			console.error('url:' + page.url());
 
 			try {
-				await page.screenshot({
-					path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
-					fullPage: true,
-				});
-				const bodyHTML1 = await page.content();
-				fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+				// await page.screenshot({
+				// 	path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
+				// 	fullPage: true,
+				// });
+				// const bodyHTML1 = await page.content();
+				// fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
 
 				console.error('E1');
 				await scrollPageToBottom(page as any, { size: 250, delay: 500 });
@@ -633,7 +649,9 @@ const run = async () => {
 					error: `HUBO ERROR ${error.lala}`,
 					message: error?.message,
 					timeout: error instanceof TimeoutError,
-					proxyError: error?.message?.includes('net::ERR_PROXY_CONNECTION_FAILED'), //error instanceof ConnectionProxyError ProxyConnectionError,
+					proxyError:
+						error?.message?.includes('net::ERR_PROXY_CONNECTION_FAILED') ||
+						error?.message?.includes('net::ERR_SOCKS_CONNECTION_FAILED'), //error instanceof ConnectionProxyError ProxyConnectionError,
 					objeto: JSON.stringify(error),
 				},
 			})

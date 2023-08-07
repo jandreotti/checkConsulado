@@ -13,6 +13,8 @@ iniciarCliente();
 //// setInterval(checkDolarBlueCordoba, 30000);
 //setInterval(runCheckDolar, 30000);
 // setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
+//setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
+runCheckCitaLMDLahabana();
 setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
 //! CONFIGURACION EXPRESS
