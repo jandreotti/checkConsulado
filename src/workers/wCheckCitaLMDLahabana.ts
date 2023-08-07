@@ -64,7 +64,7 @@ const run = async () => {
 			// 	// '--disable-background-timer-throttling',
 			// 	// '--disable-backgrounding-occluded-windows',
 			// 	// '--disable-renderer-backgrounding',
-			// 	// '--proxy-server=socks5://127.0.0.1:9150',
+//			 	 //'--proxy-server=socks5://127.0.0.1:9150',
 			// ],
 
 			args: [
@@ -77,6 +77,7 @@ const run = async () => {
 				// '--disable-dev-shm-usage',
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
+							 	 '--proxy-server=socks5://212.83.143.97:38669',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -248,26 +249,26 @@ const run = async () => {
 
 		console.error(6.3);
 
-		await page.on('load', msg => {
-			console.error(`load: ${JSON.stringify(msg, null, 2)}`);
-		});
+		// await page.on('load', msg => {
+		// 	console.error(`load: ${JSON.stringify(msg, null, 2)}`);
+		// });
 
-		await page.on('pageerror', msg => {
-			console.error(`pageerror: ${JSON.stringify(msg, null, 2)}`);
-		});
+		// await page.on('pageerror', msg => {
+		// 	console.error(`pageerror: ${JSON.stringify(msg, null, 2)}`);
+		// });
 
-		await page.on('console', msg => {
-			console.error(`console: ${JSON.stringify(msg, null, 2)}`);
-		});
-		await page.on('response', msg => {
-			console.error(`response: ${JSON.stringify(msg, null, 2)}`);
-		});
+		// await page.on('console', msg => {
+		// 	console.error(`console: ${JSON.stringify(msg, null, 2)}`);
+		// });
+		// await page.on('response', msg => {
+		// 	console.error(`response: ${JSON.stringify(msg, null, 2)}`);
+		// });
 
-		await page.on('domcontentloaded', msg => {
-			console.error(`domcontentloaded: ${JSON.stringify(msg, null, 2)}`);
-		});
+		// await page.on('domcontentloaded', msg => {
+		// 	console.error(`domcontentloaded: ${JSON.stringify(msg, null, 2)}`);
+		// });
 
-		console.error(6.4);
+		// console.error(6.4);
 
 		//
 		await bktContinue.click({
