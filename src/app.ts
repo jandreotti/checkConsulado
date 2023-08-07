@@ -14,7 +14,8 @@ iniciarCliente();
 //setInterval(runCheckDolar, 30000);
 // setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
 //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
-runCheckCitaLMDLahabana();
+
+// runCheckCitaLMDLahabana();
 setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
 //! CONFIGURACION EXPRESS
