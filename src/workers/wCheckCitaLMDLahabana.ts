@@ -65,7 +65,7 @@ const run = async () => {
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
-		const proxyArgs = '--proxy-server="socks5://' + proxy.ip + ':' + proxy.port+'"';
+		const proxyArgs = '--proxy-server=socks5=' + proxy.ip + ':' + proxy.port;
 	 console.error(proxyArgs);
 
 		const browser = await puppeteer.launch({
