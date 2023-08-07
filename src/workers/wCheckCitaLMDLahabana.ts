@@ -64,7 +64,7 @@ const run = async () => {
 			// 	// '--disable-background-timer-throttling',
 			// 	// '--disable-backgrounding-occluded-windows',
 			// 	// '--disable-renderer-backgrounding',
-//			 	 //'--proxy-server=socks5://127.0.0.1:9150',
+			//			 	 //'--proxy-server=socks5://127.0.0.1:9150',
 			// ],
 
 			args: [
@@ -77,7 +77,7 @@ const run = async () => {
 				// '--disable-dev-shm-usage',
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
-							 	 '--proxy-server=socks5://212.83.143.97:38669',
+				'--proxy-server=socks5://212.83.143.97:38669',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -277,11 +277,11 @@ const run = async () => {
 
 		let isLoadingAvailable = true; // Your condition-to-stop
 		let times = 0;
-		
+
 		while (isLoadingAvailable) {
 			times++;
 			console.error('esperando que cargue...:' + times);
-			console.error("url:"+page.url());
+			console.error('url:' + page.url());
 
 			try {
 				await page.screenshot({
@@ -299,7 +299,7 @@ const run = async () => {
 					idleTime: 3000,
 				});
 				console.error('E3');
-				console.error("url FINAL:"+page.url());
+				console.error('url FINAL:' + page.url());
 				// const aux = await page.waitForResponse(
 				// 	response =>
 				// 		response.url() ===
@@ -614,9 +614,10 @@ const run = async () => {
 			JSON.stringify({
 				...outputData,
 				error: {
-					error: 'HUBO ERROR',
+					error: `HUBO ERROR ${error.lala}`,
 					message: error?.message,
 					timeout: error instanceof TimeoutError,
+					proxyError: error?.message?.includes("'net::ERR_PROXY_CONNECTION_FAILED"), //error instanceof ConnectionProxyError ProxyConnectionError,
 					objeto: JSON.stringify(error),
 				},
 			})
