@@ -253,6 +253,12 @@ export const runCheckCitaLMDLahabana = async () => {
 		return;
 	}
 
+	if (error && error.proxyError) {
+		console.log(' 	------> runCheckCitaLMDLahabana -> PROXY ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log(' 	------> runCheckCitaLMDLahabana -> PROXY ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		return;
+	}
+
 	if (error) {
 		console.log(' 	------> runCheckCitaLMDLahabana -> ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 		log(' 	------> runCheckCitaLMDLahabana -> ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');

@@ -27,6 +27,7 @@ export interface IOutputData_WCheckCitaLMDLahabana {
 		error: string;
 		message: string;
 		timeout: boolean;
+		proxyError: boolean;
 		objeto: string;
 	};
 
