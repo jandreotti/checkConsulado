@@ -205,7 +205,7 @@ const run = async () => {
 		});
 
 		//https://api.ipify.org?format=json
-		await page.goto('https://api.ipify.org', { waitUntil: 'load' });
+		await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000});
 		console.error('a');
 		//const ip = await page.evaluate(`async (() => document.body.textContent.trim())()`);
 		const ip = await page.evaluate(() => document.body.textContent.trim());
