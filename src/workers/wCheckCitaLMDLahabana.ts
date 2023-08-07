@@ -65,7 +65,7 @@ const run = async () => {
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
-		const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
+		const proxyArgs = '--proxy-server=socks5:' + proxy.ip + ':' + proxy.port;
 		console.error(proxyArgs);
 
 		const browser = await puppeteer.launch({
@@ -88,6 +88,9 @@ const run = async () => {
 				// '--disable-dev-shm-usage',
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
+
+// "--ignore-certificate-errors",
+//       "--ignore-certificate-errors-spki-list"
 
 				//https://github.com/sunny9577/proxy-scraper
 				//'--proxy-server=socks5://212.83.143.97:38669',
