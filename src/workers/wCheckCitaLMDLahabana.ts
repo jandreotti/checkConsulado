@@ -224,10 +224,10 @@ const run = async () => {
 		console.error('aa');
 		await wait(1000);
 
-		//await page.goto(url, { waitUntil: 'load',
-   //timeout: 60 * 1000
-  //});
-await page.goto(url);
+		await page.goto(url, { waitUntil: 'load',
+   timeout: 60 * 1000
+  });
+//await page.goto(url);
 
 		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
 		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
@@ -236,9 +236,9 @@ await page.goto(url);
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
 console.error("aaa");
 
-await page.waitForSelector('a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']', {
-			 visible: true,
-		});
+//await page.waitForSelector('a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']', {
+			 //visible: true,
+		//});
 		console.error(3);
 		// Hacer click en el boton
 		const a = await page.$(
