@@ -15,8 +15,8 @@ iniciarCliente();
 // setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
 //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
-// runCheckCitaLMDLahabana();
-setInterval(runCheckCitaLMDLahabana, 1000 * 20); //Chequea cada 3 minutos
+runCheckCitaLMDLahabana();
+setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
 //! CONFIGURACION EXPRESS
 const app = express();
