@@ -92,8 +92,8 @@ const run = async () => {
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
 
-// "--ignore-certificate-errors",
-//       "--ignore-certificate-errors-spki-list"
+ "--ignore-certificate-errors",
+       "--ignore-certificate-errors-spki-list"
 
 				//https://github.com/sunny9577/proxy-scraper
 				//'--proxy-server=socks5://212.83.143.97:38669',
