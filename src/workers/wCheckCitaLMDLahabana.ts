@@ -118,10 +118,10 @@ const run = async () => {
 		console.error(2);
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
-const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
+//const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
 		//const context = await browser.createIncognitoBrowserContext();
-		const page = await context.newPage();
-		//const page = await browser.newPage();
+		//const page = await context.newPage();
+		const page = await browser.newPage();
 
 		await page.setViewport({
 			width: 1080 + Math.floor(Math.random() * 100),
