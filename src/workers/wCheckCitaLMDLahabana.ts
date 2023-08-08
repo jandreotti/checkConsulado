@@ -293,6 +293,7 @@ console.error("aaa");
 
 		await page.waitForSelector('#idCaptchaButton', {
 			visible: true,
+timeout: 120 * 1000
 		});
 		console.error(6.2);
 		const bktContinue = await page.$('#idCaptchaButton');
