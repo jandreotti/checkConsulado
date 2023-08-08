@@ -61,13 +61,16 @@ const run = async () => {
 
 		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
 		//const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
-		const res = await axios.get('https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json');
+		//const res = await axios.get('https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json');
+  const res = await axios.get('https://www.proxyscan.io/api/proxy?last_check=9800&country=fr,us,ru&uptime=50&ping=500&limit=10&type=socks5');
+
   const proxies = res.data;
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
-		const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
+		const proxyArgs = '--proxy-server=socks5://' + proxy.Ip + ':' + proxy.Port;
 	 
+
 //const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
 
   console.error(proxyArgs);
