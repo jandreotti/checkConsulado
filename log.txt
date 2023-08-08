@@ -1,0 +1,19 @@
+
+
+
+
+
+
+
+
+
+
+[08/08/2023 10:46:27] runCheckCitaLMDLahabana START{
+  "retorno": {
+    "idDivBktServicesContainer_textContext": "No hay horas disponibles.",
+    "ban": false,
+    "ultimaURL": "https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services",
+    "verificar": false
+  },
+  "fecha": "20230808_104726"
+}
