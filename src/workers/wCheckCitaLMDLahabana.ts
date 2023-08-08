@@ -225,7 +225,7 @@ const run = async () => {
 		await wait(1000);
 
 		await page.goto(url, { waitUntil: 'load',
-   timeout: 60 * 1000
+   timeout: 120 * 1000
   });
 //await page.goto(url);
 
