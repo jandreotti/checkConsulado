@@ -65,9 +65,9 @@ const run = async () => {
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
-		//const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
+		const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
 	 
-const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
+//const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
 
   console.error(proxyArgs);
 
@@ -118,9 +118,10 @@ const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
 		console.error(2);
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
-		// const context = await browser.createIncognitoBrowserContext();
-		// const page = await context.newPage();
-		const page = await browser.newPage();
+const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
+		//const context = await browser.createIncognitoBrowserContext();
+		const page = await context.newPage();
+		//const page = await browser.newPage();
 
 		await page.setViewport({
 			width: 1080 + Math.floor(Math.random() * 100),
