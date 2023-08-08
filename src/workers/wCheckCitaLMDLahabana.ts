@@ -216,11 +216,11 @@ const run = async () => {
 		});
 
 		//https://api.ipify.org?format=json
-		await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000});
-		console.error('a');
+		// await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000});
+		// console.error('a');
 		//const ip = await page.evaluate(`async (() => document.body.textContent.trim())()`);
-		const ip = await page.evaluate(() => document.body.textContent.trim());
-		console.error('IP: ', ip);
+		// const ip = await page.evaluate(() => document.body.textContent.trim());
+		// console.error('IP: ', ip);
 		console.error('aa');
 		await wait(1000);
 
@@ -240,7 +240,7 @@ const run = async () => {
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
 		);
 
-		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })]);
+		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 60 * 1000 })]);
 		console.error(4);
 		// Esperar a que se cargue la nueva pagina
 		// const newPagePromise = await getNewPageWhenLoaded(browser);
