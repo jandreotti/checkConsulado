@@ -1,18 +1,13 @@
-//import puppeteer, { TimeoutError } from 'puppeteer';
-
-// import   scrollPageToBottom  from 'puppeteer-autoscroll-down'
-
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
-import { TimeoutError } from 'puppeteer';
+
 puppeteer.use(StealthPlugin());
 // import randomUseragent from 'random-useragent';
 
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
-// import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
-import axios from 'axios';
+import { TimeoutError } from 'puppeteer';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -59,33 +54,7 @@ const run = async () => {
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
-		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
-		//const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
-		//const res = await axios.get('https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json');
-		// const res = await axios.get(
-		// 	'https://www.proxyscan.io/api/proxy?last_check=9800&country=fr,us,ru&uptime=50&ping=500&limit=10&type=socks5'
-		// );
-
-		// const proxies = res.data;
-		// //console.error(JSON.stringify(proxies));
-		// const proxy = proxies[Math.floor(Math.random() * proxies.length)];
-		// // console.error(proxy);
-		// const proxyArgs = '--proxy-server=socks5://' + proxy.Ip + ':' + proxy.Port;
-
-		// //const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
-
-		// console.error(proxyArgs);
-
 		const browser = await puppeteer.launch({
-			// args: [
-			// 	'--no-sandbox',
-			// 	'--disable-setuid-sandbox',
-			// 	// '--disable-background-timer-throttling',
-			// 	// '--disable-backgrounding-occluded-windows',
-			// 	// '--disable-renderer-backgrounding',
-			//			 	 //'--proxy-server=socks5://127.0.0.1:9150',
-			// ],
-
 			args: [
 				// '--incognito',
 				// '--disable-gpu',
@@ -102,8 +71,6 @@ const run = async () => {
 
 				//https://github.com/sunny9577/proxy-scraper
 				//'--proxy-server=socks5://212.83.143.97:38669',
-				//'--proxy-server=socks5://212.83.143.97:38669',
-				//'--proxy-server=socks5://115.127.10.154:1088',
 
 				//proxy && proxy.host && proxy.port && '--proxy-server=socks5://' + proxy.host + ':' + proxy.port,
 				// ...(proxy && proxy.ip && proxy.port && proxy.ip != '' && proxy.port != ''
@@ -118,7 +85,7 @@ const run = async () => {
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 			ignoreHTTPSErrors: true,
 			// devtools: true,
-			ignoreDefaultArgs: ['--enable-automation'],
+			// ignoreDefaultArgs: ['--enable-automation'],
 		});
 
 		console.error(2);
@@ -127,167 +94,74 @@ const run = async () => {
 		//const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
 		//const context = await browser.createIncognitoBrowserContext();
 		//const page = await context.newPage();
-		// const page = await browser.newPage();
+		const page = await browser.newPage();
 
-		// await page.setViewport({
-		// 	width: 1080 + Math.floor(Math.random() * 100),
-		// 	height: 1024 + Math.floor(Math.random() * 100),
-		// 	deviceScaleFactor: 1,
-		// 	hasTouch: false,
-		// 	isLandscape: false,
-		// 	isMobile: false,
+		await page.setExtraHTTPHeaders({
+			'user-agent':
+				'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+			// 'upgrade-insecure-requests': '1',
+			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+			'accept-encoding': 'gzip, deflate, br',
+			'accept-language': 'en-US,en;q=0.9,en;q=0.8',
+		});
+
+		// Limit requests
+		// await page.setRequestInterception(true);
+		// page.on('response', async response => {
+		// console.error(
+		// 	'RESPONSE-> response.status():' +
+		// 		response.status() +
+		// 		' - response.url():' +
+		// 		response.url() +
+		// 		' - response.headers():' +
+		// 		JSON.stringify(response.headers())
+		// );
+
 		// });
 
-		// //await page.setCacheEnabled(false)
+		// page.on('request', async request => {
+		// console.error('REQUEST-> request.resourceType():' + request.resourceType() + ' - request.url():' + request.url());
 
-		// const USER_AGENT =
-		// 	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36';
-		// // const userAgent = randomUseragent.getRandom();
-		// // const UA = userAgent || USER_AGENT;
-		// // await page.setUserAgent(UA);
-		// await page.setUserAgent(USER_AGENT);
-
-		//
-		//
-		//
-		//
-		// const ua =
-		// 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36';
-		// await page.setUserAgent(ua);
-		// await page.setExtraHTTPHeaders({
-		// 	'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+		// console.error('request.resourceType():' + request.resourceType()
+		// 	+ ' - request.url():' + request.url()
+		// 	+ ' - request.method():' + request.method()
+		// 	+ ' - request.headers():' + JSON.stringify(request.headers())
+		// 	+ ' - request.postData():' + request.postData()
+		// 	+ ' - request.isNavigationRequest():' + request.isNavigationRequest()
+		// 	+ ' - request.frame():' + request.frame()
+		// 	+ ' - request.frame().url():' + request.frame().url()
+		// 	+ ' - request.frame().parentFrame():' + request.frame().parentFrame()
+		// 	+ ' - request.frame().childFrames():' + request.frame().childFrames()
+		// 	+ ' - request.frame().childFrames().length:' + request.frame().childFrames().length
+		// );
+		// if (request.resourceType() == 'image') {
+		// 	await request.abort();
+		// } else {
+		// 	await request.continue();
+		// }
 		// });
-
-		// await page.setExtraHTTPHeaders({
-		// 	"Connection": "keep-alive",
-		// 	 "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36",
-		// 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-		// 	"Sec-Fetch-Site": "same-origin",
-		// 	"Sec-Fetch-Mode": "cors",
-		// 	"Sec-Fetch-Dest": "empty",
-		// 	// "Accept": "application/json",
-		// 	"Sec-Fetch-User": "1",
-		// 	// "Sec-Fetch-Dest": "document",
-		// 	// "referer" :`https://www.supremenewyork.com/mobile/`,
-		// 	"Accept-Encoding": " gzip, deflate, br",
-		// 	"Accept-Language": " en-GB,en-US;q=0.9,en;q=0.8",
-		// 	// "Cookie": `${set_cookie}`,
-		// 	"dnt": "1",
-		// 	"sec-fetch-site" : "same-origin"
-		// },
-		// )
-
-		//
-		//
-		//
-		//
-		//
-
-		// await page.setJavaScriptEnabled(true);
-
-		// await page.evaluateOnNewDocument(() => {
-		// 	//pass webdriver check
-		// 	Object.defineProperty(navigator, 'webdriver', {
-		// 		get: () => false,
-		// 	});
-		// });
-
-		// await page.evaluateOnNewDocument(() => {
-		// 	//pass chrome check
-		// 	// @ts-ignore
-		// 	window.chrome = {
-		// 		runtime: {},
-		// 		// etc.
-		// 	};
-		// });
-
-		// await page.evaluateOnNewDocument(() => {
-		// 	//pass plugins check
-		// 	const originalQuery = window.navigator.permissions.query;
-		// 	return (window.navigator.permissions.query = parameters =>
-		// 		// @ts-ignore
-		// 		parameters.name === 'notifications'
-		// 			? Promise.resolve({ state: Notification.permission })
-		// 			: originalQuery(parameters));
-		// });
-
-		// await page.evaluateOnNewDocument(() => {
-		// 	// Overwrite the `plugins` property to use a custom getter.
-		// 	Object.defineProperty(navigator, 'plugins', {
-		// 		// This just needs to have `length > 0` for the current test,
-		// 		// but we could mock the plugins too if necessary.
-		// 		get: () => [1, 2, 3, 4, 5],
-		// 	});
-		// });
-
-		// await page.evaluateOnNewDocument(() => {
-		// 	// Overwrite the `plugins` property to use a custom getter.
-		// 	Object.defineProperty(navigator, 'languages', {
-		// 		get: () => ['en-US', 'en'],
-		// 	});
-		// });
-
-		var page = await pageInit(browser);
-
-		//https://api.ipify.org?format=json
-		//https://infosimples.github.io/detect-headless/
 
 		page.on('dialog', async dialog => {
 			await wait(1000);
 			console.error('close');
-			// try {
-			await dialog.accept();
-			// } catch (e) {
-			// console.error(e);
-			// }
+			try {
+				await dialog.accept();
+				await dialog.dismiss();
+			} catch (e) {
+				console.error('E?:' + e);
+			}
 		});
 
 		console.error(3);
-		//await page.goto('https://infosimples.github.io/detect-headless/', { waitUntil: 'load', timeout: 50 * 1000 });
-		await page.goto('https://infosimples.github.io/detect-headless/');
-		await page.mouse.move(50, 50, { steps: 50 });
-		await wait(571);
-		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(3.1);
-		// await wait(5000);
-		await page.screenshot({ path: `00fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
-		const bodyHTML00 = await page.content();
-		fs.writeFileSync(`00fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML00);
-		// await wait(25000);
-
-		console.error(3.4);
-		//await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000 });
-		await page.goto('https://api.ipify.org');
-		console.error('a');
-		// const ip = await page.evaluate(`async (() => document.body.textContent.trim())()`);
-		const element = await page.waitForSelector('body>pre');
-		// console.error(element);
-		const ip = await page.evaluate(() => document.body.textContent.trim());
-		console.error('IP: ', ip);
-		console.error('aa');
-		await wait(1000);
-
-		// console.error('____ LALALA ____');
-		// // outputData.ban = true;
-		// // outputData.ultimaURL = url2;
-		// //! RETORNO EL OBJETO outputData por medio del console.log
-		// console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
-		// process.exit(1);
-
-		//await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
+		//Inicio la primera pagina, espero 5-12 segundos y muevo el mouse
 		await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
+		console.error(3.1);
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait(571);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		//await page.goto(url);
 
-		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
-		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
-		//const session = await page.target().createCDPSession();
-		//await session.send('Page.enable');
-		//await session.send('Page.setWebLifecycleState', { state: 'active' });
-		console.error('aaa');
-
+		console.error(4);
 		await page.waitForSelector(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']",
 			{
@@ -295,28 +169,18 @@ const run = async () => {
 			}
 		);
 
-		console.error('aaaa');
+		console.error(5);
 		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
 		);
 
 		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })]);
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait(571);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(4);
-		// Esperar a que se cargue la nueva pagina
-		// const newPagePromise = await getNewPageWhenLoaded(browser);
-		// const page2 = (await newPagePromise) as puppeteer.Page;
-		// await page.waitForNavigation({ timeout: 40 * 1000 });
-		//await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 40 * 1000 });
-		// await page.waitForNavigation({ timeout: 20 });
-		// await wait(5000);
-		// console.error(5);
-
-		//await session.send('Page.enable');
-		//await session.send('Page.setWebLifecycleState', { state: 'active' });
+		console.error(6);
 
 		// Verifico BANEO
 		const url2 = page.url();
@@ -328,160 +192,107 @@ const run = async () => {
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 			process.exit(1);
 		}
-		console.error(6);
-
-		await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
-		const bodyHTML0 = await page.content();
-		fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
-
-		console.error(6.1);
-
-		/// Obtener el boton de continuar y presionarlo
-
-		// await page.waitForSelector('', {
-		// 	visible: true,
-
-		// 	// waitUntil: "load",
-		// 	// waitUntil: "networkidle0",
-		// 	// waitUntil: "domcontentloaded",
-		// 	// waitUntil: "networkidle2",
-		// 	timeout: 10 * 1000,
-		// });
-
-		await wait(3000);
-
-		await page.waitForSelector('#idCaptchaButton', {
-			visible: true,
-			timeout: 30 * 1000,
-		});
-		console.error(6.2);
-		const bktContinue = await page.$('#idCaptchaButton');
-
-		console.error(6.3);
-
-		// await page.on('load', msg => {
-		// 	console.error(`load: ${JSON.stringify(msg, null, 2)}`);
-		// });
-
-		// await page.on('pageerror', msg => {
-		// 	console.error(`pageerror: ${JSON.stringify(msg, null, 2)}`);
-		// });
-
-		// await page.on('console', msg => {
-		// 	console.error(`console: ${JSON.stringify(msg, null, 2)}`);
-		// });
-		// await page.on('response', msg => {
-		// 	console.error(`response: ${JSON.stringify(msg, null, 2)}`);
-		// });
-
-		// await page.on('domcontentloaded', msg => {
-		// 	console.error(`domcontentloaded: ${JSON.stringify(msg, null, 2)}`);
-		// });
-
-		// console.error(6.4);
-
-		//
-		await bktContinue.click({
-			delay: 100,
-		});
-		await page.mouse.move(50, 50, { steps: 50 });
-		await wait(571);
-		await page.mouse.move(0, 0, { steps: 50 });
-
-		// await page.waitForNetworkIdle({
-		// 	timeout: 100 * 1000,
-		// 	idleTime: 15000,
-		// });
-
-		let isLoadingAvailable = true; // Your condition-to-stop
-		let times = 0;
-
-		while (isLoadingAvailable) {
-			times++;
-			console.error('esperando que cargue...:' + times);
-			console.error('url:' + page.url());
-
-			try {
-				// await page.screenshot({
-				// 	path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
-				// 	fullPage: true,
-				// });
-				// const bodyHTML1 = await page.content();
-				// fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-
-				console.error('E1');
-				//await scrollPageToBottom(page as any, { size: 250, delay: 500 });
-				// console.error('E2');
-				await page.waitForNetworkIdle({
-					timeout: 25 * 1000,
-					idleTime: 10000,
-				});
-				console.error('E3');
-				// console.error('url FINAL:' + page.url());
-				// const aux = await page.waitForResponse(
-				// 	response =>
-				// 		response.url() ===
-				// 		//'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
-				// 		'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
-				// 	//&& response.status() === 200
-				// );
-				// console.error('status:' + aux.status());
-				// console.error('E4');
-			} catch (ex) {
-				console.error('EE:' + ex.message);
-				if (
-					page.url() ==
-					'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
-				) {
-					// console.error();
-					break;
-				}
-				if (times <= 6) continue;
-			}
-			isLoadingAvailable = false; // Update your condition-to-stop value
-		}
-		console.error('url FINAL:' + page.url());
-		//
-
-		// await Promise.all([
-		// 	page.waitForNetworkIdle({
-		// 		timeout: 100 * 1000,
-		// 		idleTime: 3000,
-		// 	}),
-		// 	bktContinue.click(),
-		// 	page.mouse.move(0, 0),
-		// 	page.mouse.move(100, 100),
-		// 	page.mouse.move(400, 400),
-
-		// 	//page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
-		// ]);
-
 		console.error(7);
 
-		await wait(4000);
+		const pressionar = async page => {
+			await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+			const bodyHTML0 = await page.content();
+			fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
 
-		//obtener la parte de abajo y presionarla para continuar
-		// const idBktDefaultServicesContainer = await page2.$('#idBktDefaultServicesContainer');
-		// await idBktDefaultServicesContainer.click();
+			const bktContinue = await page.$('#idCaptchaButton');
 
-		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
-		//FUENTE: https://github.com/puppeteer/puppeteer/issues/3339
-		// const session = await page.target().createCDPSession();
-		// await session.send('Page.enable');
-		// await session.send('Page.setWebLifecycleState', { state: 'active' });
-		// console.error(8);
+			console.error('P1');
 
-		// try {
-		// 	await page.waitForNetworkIdle({
-		// 		timeout: 50 * 1000,
-		// 		idleTime: 3000,
-		// 	});
-		// } catch (e) {
-		// 	console.error('timeout waitForNetwork Iddle');
-		// }
-		// console.error(8.1);
+			//
+			await bktContinue.click();
+			await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+			await page.mouse.move(50, 50, { steps: 50 });
+			await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+			await page.mouse.move(0, 0, { steps: 50 });
+			console.error('P2');
 
-		//await wait(60000);
+			// await page.waitForNetworkIdle({
+			// 	timeout: 100 * 1000,
+			// 	idleTime: 15000,
+			// });
+
+			let isLoadingAvailable = true; // Your condition-to-stop
+			let times = 0;
+
+			while (isLoadingAvailable) {
+				times++;
+				console.error('esperando que cargue...:' + times);
+				console.error('url:' + page.url());
+
+				await page.mouse.move(50, 50, { steps: 50 });
+				await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+				await page.mouse.move(0, 0, { steps: 50 });
+
+				try {
+					// await page.screenshot({
+					// 	path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
+					// 	fullPage: true,
+					// });
+					// const bodyHTML1 = await page.content();
+					// fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+
+					console.error('P3');
+					//await scrollPageToBottom(page as any, { size: 250, delay: 500 });
+					// console.error('E2');
+					await page.waitForNetworkIdle({
+						timeout: 25 * 1000,
+						idleTime: 10000,
+					});
+					console.error('P4');
+					// console.error('url FINAL:' + page.url());
+					// const aux = await page.waitForResponse(
+					// 	response =>
+					// 		response.url() ===
+					// 		//'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					// 		'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					// 	//&& response.status() === 200
+					// );
+					// console.error('status:' + aux.status());
+					// console.error('E4');
+				} catch (ex) {
+					console.error('EE:' + ex.message);
+					if (
+						page.url() ==
+						'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					) {
+						// console.error();
+						break;
+					}
+					if (times <= 6) continue;
+				}
+				isLoadingAvailable = false; // Update your condition-to-stop value
+			}
+			console.error('url FINAL:' + page.url());
+		};
+
+		// Obtener el boton de continuar y presionarlo
+		let contadorPresiones = 0;
+		try {
+			while (true) {
+				contadorPresiones++;
+				console.error('presionando boton de continuar...:' + contadorPresiones);
+				await page.waitForSelector('#idCaptchaButton', {
+					visible: true,
+					timeout: 30 * 1000,
+				});
+				await pressionar(page);
+			}
+		} catch (e) {
+			console.error('Error al presionar el boton de continuar:' + contadorPresiones + ' ' + e.message);
+		}
+		console.error(9);
+
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+		await page.mouse.move(50, 50, { steps: 50 });
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.mouse.move(0, 0, { steps: 50 });
+
+		console.error(10);
 
 		//Grabo la pantalla siempre que inicio el proceso
 		await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
@@ -757,174 +568,3 @@ const run = async () => {
 };
 
 run();
-
-async function pageInit(browser) {
-	var page,
-		pages = await browser.pages();
-	if (pages.length > 0) {
-		page = pages[0];
-	} else {
-		page = await browser.newPage();
-	}
-	// await page.setExtraHTTPHeaders({
-	// 	'Accept-Language': 'zh-CN,zh;q=0.9',
-	// });
-
-	// //User-Agent Test
-	// await page.setUserAgent(
-	// 	'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
-	// );
-	// await page.evaluateOnNewDocument(() => {
-	// 	//Webdriver Test
-	// 	Object.defineProperty(navigator, 'webdriver', {
-	// 		get: () => false,
-	// 	});
-	// 	//connection.rtt Test
-	// 	//@ts-ignore
-	// 	Object.defineProperty(navigator.connection, 'rtt', {
-	// 		get: () => 50,
-	// 	});
-	// 	//Plugins Length Test
-	// 	Object.defineProperty(navigator, 'plugins', {
-	// 		get: () => {
-	// 			var ChromiumPDFPlugin = {};
-	// 			//@ts-ignore
-	// 			ChromiumPDFPlugin.__proto__ = PluginArray.prototype;
-	// 			return [ChromiumPDFPlugin];
-	// 		},
-	// 	});
-
-	// 	Object.defineProperty(navigator, 'plugins', {
-	// 		get: () => {
-	// 			var ChromiumPDFPlugin = {};
-	// 			//@ts-ignore
-	// 			ChromiumPDFPlugin.__proto__ = Plugin.prototype;
-	// 			var plugins = {
-	// 				0: ChromiumPDFPlugin,
-	// 				description: 'Portable Document Format',
-	// 				filename: 'internal-pdf-viewer',
-	// 				length: 1,
-	// 				name: 'Chromium PDF Plugin',
-	// 				__proto__: PluginArray.prototype,
-	// 			};
-	// 			// const plugins = [
-	// 			// 	{ name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer', description: 'Portable Document Format' },
-	// 			// 	{ name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai', description: '' },
-	// 			// 	{ name: 'Native Client', filename: 'internal-nacl-plugin', description: '' },
-	// 			// ];
-	// 			return plugins;
-	// 		},
-	// 	});
-	// });
-
-	// //Chrome Test
-	// const trueChromeObject = {
-	// 	app: { isInstalled: false },
-	// 	webstore: { onInstallStageChanged: {}, onDownloadProgress: {} },
-	// 	runtime: {
-	// 		PlatformOs: { MAC: 'mac', WIN: 'win', ANDROID: 'android', CROS: 'cros', LINUX: 'linux', OPENBSD: 'openbsd' },
-	// 		PlatformArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 		PlatformNaclArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 		RequestUpdateCheckStatus: {
-	// 			THROTTLED: 'throttled',
-	// 			NO_UPDATE: 'no_update',
-	// 			UPDATE_AVAILABLE: 'update_available',
-	// 		},
-	// 		OnInstalledReason: {
-	// 			INSTALL: 'install',
-	// 			UPDATE: 'update',
-	// 			CHROME_UPDATE: 'chrome_update',
-	// 			SHARED_MODULE_UPDATE: 'shared_module_update',
-	// 		},
-	// 		OnRestartRequiredReason: { APP_UPDATE: 'app_update', OS_UPDATE: 'os_update', PERIODIC: 'periodic' },
-	// 	},
-	// };
-	// await page.evaluateOnNewDocument(() => {
-	// 	//@ts-ignore
-	// 	chrome = {
-	// 		app: { isInstalled: false },
-	// 		webstore: { onInstallStageChanged: {}, onDownloadProgress: {} },
-	// 		runtime: {
-	// 			PlatformOs: { MAC: 'mac', WIN: 'win', ANDROID: 'android', CROS: 'cros', LINUX: 'linux', OPENBSD: 'openbsd' },
-	// 			PlatformArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			PlatformNaclArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			RequestUpdateCheckStatus: {
-	// 				THROTTLED: 'throttled',
-	// 				NO_UPDATE: 'no_update',
-	// 				UPDATE_AVAILABLE: 'update_available',
-	// 			},
-	// 			OnInstalledReason: {
-	// 				INSTALL: 'install',
-	// 				UPDATE: 'update',
-	// 				CHROME_UPDATE: 'chrome_update',
-	// 				SHARED_MODULE_UPDATE: 'shared_module_update',
-	// 			},
-	// 			OnRestartRequiredReason: { APP_UPDATE: 'app_update', OS_UPDATE: 'os_update', PERIODIC: 'periodic' },
-	// 		},
-	// 	};
-	// 	//@ts-ignore
-	// 	window.chrome = {
-	// 		app: { isInstalled: false },
-	// 		webstore: { onInstallStageChanged: {}, onDownloadProgress: {} },
-	// 		runtime: {
-	// 			PlatformOs: { MAC: 'mac', WIN: 'win', ANDROID: 'android', CROS: 'cros', LINUX: 'linux', OPENBSD: 'openbsd' },
-	// 			PlatformArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			PlatformNaclArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			RequestUpdateCheckStatus: {
-	// 				THROTTLED: 'throttled',
-	// 				NO_UPDATE: 'no_update',
-	// 				UPDATE_AVAILABLE: 'update_available',
-	// 			},
-	// 			OnInstalledReason: {
-	// 				INSTALL: 'install',
-	// 				UPDATE: 'update',
-	// 				CHROME_UPDATE: 'chrome_update',
-	// 				SHARED_MODULE_UPDATE: 'shared_module_update',
-	// 			},
-	// 			OnRestartRequiredReason: { APP_UPDATE: 'app_update', OS_UPDATE: 'os_update', PERIODIC: 'periodic' },
-	// 		},
-	// 	};
-	// 	//@ts-ignore
-	// 	window.navigator.chrome = {
-	// 		app: { isInstalled: false },
-	// 		webstore: { onInstallStageChanged: {}, onDownloadProgress: {} },
-	// 		runtime: {
-	// 			PlatformOs: { MAC: 'mac', WIN: 'win', ANDROID: 'android', CROS: 'cros', LINUX: 'linux', OPENBSD: 'openbsd' },
-	// 			PlatformArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			PlatformNaclArch: { ARM: 'arm', X86_32: 'x86-32', X86_64: 'x86-64' },
-	// 			RequestUpdateCheckStatus: {
-	// 				THROTTLED: 'throttled',
-	// 				NO_UPDATE: 'no_update',
-	// 				UPDATE_AVAILABLE: 'update_available',
-	// 			},
-	// 			OnInstalledReason: {
-	// 				INSTALL: 'install',
-	// 				UPDATE: 'update',
-	// 				CHROME_UPDATE: 'chrome_update',
-	// 				SHARED_MODULE_UPDATE: 'shared_module_update',
-	// 			},
-	// 			OnRestartRequiredReason: { APP_UPDATE: 'app_update', OS_UPDATE: 'os_update', PERIODIC: 'periodic' },
-	// 		},
-	// 	};
-	// });
-
-	// //Permissions Test
-	// await page.evaluateOnNewDocument(() => {
-	// 	const originalQuery = window.navigator.permissions.query;
-	// 	//@ts-ignore
-	// 	return (window.navigator.permissions.query = parameters =>
-	// 		//@ts-ignore
-	// 		parameters.name === 'notifications'
-	// 			? Promise.resolve({ state: Notification.permission })
-	// 			: originalQuery(parameters));
-	// });
-
-	// //Languages Test
-	// await page.evaluateOnNewDocument(() => {
-	// 	Object.defineProperty(navigator, 'languages', {
-	// 		get: () => ['zh-CN'],
-	// 	});
-	// });
-
-	return page;
-}

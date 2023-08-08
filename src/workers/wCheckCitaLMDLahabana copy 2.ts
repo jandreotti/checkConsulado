@@ -75,7 +75,7 @@ const run = async () => {
 				// "--proxy-server='direct://'",
 				// '--proxy-bypass-list=*',
 			],
-			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
 			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
@@ -246,10 +246,10 @@ const run = async () => {
 		console.error(6.3);
 
 		await Promise.all([
-			page.waitForNetworkIdle({
-				timeout: 100 * 1000,
-				idleTime: 3000,
-			}),
+			// page.waitForNetworkIdle({
+			// 	timeout: 100 * 1000,
+			// 	idleTime: 3000,
+			// }),
 			bktContinue.click(),
 			page.mouse.move(0, 0),
 			page.mouse.move(100, 100),
@@ -447,7 +447,7 @@ const run = async () => {
 			// await wait(15000);
 			// esperar a que cargue la pagina
 			try {
-				await page.waitForNetworkIdle();
+				// await page.waitForNetworkIdle();
 			} catch (e) {
 				console.error('error en waitForNetworkIdle2');
 			}

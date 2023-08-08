@@ -38,15 +38,15 @@ const run = async () => {
 
 		const browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
-			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			headless: true,
 			// headless: false, // para ver que hace el explorador en la pagina
 			// slowMo:200, // Camara lenta para ver que hace el explorador
-			
 		});
 
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
-		const page = await browser.newPage();
+		const page: Page = await browser.newPage();
 		await page.goto(url, { waitUntil: 'load' });
 
 		// Hacer click en el boton

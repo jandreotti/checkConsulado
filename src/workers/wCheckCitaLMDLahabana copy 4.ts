@@ -4,15 +4,17 @@
 
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
-import { TimeoutError } from 'puppeteer';
+
 puppeteer.use(StealthPlugin());
 // import randomUseragent from 'random-useragent';
 
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
-import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
+// import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
 import axios from 'axios';
+import useProxy from 'puppeteer-page-proxy';
+import { TimeoutError } from 'puppeteer';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -62,19 +64,19 @@ const run = async () => {
 		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
 		//const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
 		//const res = await axios.get('https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json');
-		const res = await axios.get(
-			'https://www.proxyscan.io/api/proxy?last_check=9800&country=fr,us,ru&uptime=50&ping=500&limit=10&type=socks5'
-		);
+		// const res = await axios.get(
+		// 	'https://www.proxyscan.io/api/proxy?last_check=9800&country=fr,us,ru&uptime=50&ping=500&limit=10&type=socks5'
+		// );
 
-		const proxies = res.data;
-		//console.error(JSON.stringify(proxies));
-		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
-		console.error(proxy);
-		const proxyArgs = '--proxy-server=socks5://' + proxy.Ip + ':' + proxy.Port;
+		// const proxies = res.data;
+		// //console.error(JSON.stringify(proxies));
+		// const proxy = proxies[Math.floor(Math.random() * proxies.length)];
+		// // console.error(proxy);
+		// const proxyArgs = '--proxy-server=socks5://' + proxy.Ip + ':' + proxy.Port;
 
-		//const proxyArgs = '--proxy-server=html://178.33.3.163:8080';
+		// const proxyArgs = '--proxy-server=socks5://81.68.156.53:2080';
 
-		console.error(proxyArgs);
+		// console.error(proxyArgs);
 
 		const browser = await puppeteer.launch({
 			// args: [
@@ -110,11 +112,11 @@ const run = async () => {
 				// 	? '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port
 				// 	: []),
 
-				proxyArgs,
+				// proxyArgs,
 			],
-			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
+			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
-			headless: true, //  para que no se vea lo que hace el explorador en la pagina
+			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 			ignoreHTTPSErrors: true,
 			// devtools: true,
@@ -229,31 +231,88 @@ const run = async () => {
 
 		var page = await pageInit(browser);
 
+		await page.setExtraHTTPHeaders({
+			'user-agent':
+				'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+			'upgrade-insecure-requests': '1',
+			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+			'accept-encoding': 'gzip, deflate, br',
+			'accept-language': 'en-US,en;q=0.9,en;q=0.8',
+		});
+
+		// Limit requests
+		await page.setRequestInterception(true);
+		page.on('request', async request => {
+			if (request.resourceType() == 'image') {
+				await request.abort();
+			} else {
+				await request.continue();
+			}
+		});
+
 		//https://api.ipify.org?format=json
 		//https://infosimples.github.io/detect-headless/
 
 		page.on('dialog', async dialog => {
 			await wait(1000);
-			console.log('here');
-			await dialog.accept();
+			console.error('close');
+			try {
+				await dialog.accept();
+				await dialog.dismiss();
+			} catch (e) {
+				console.error('E?:' + e);
+			}
 		});
+
+		// await useProxy(page, 'socks5://45.91.93.166:26763');
+
+		// await page.setRequestInterception(true);
+		// page.on('request', async request => {
+		// 	console.error(JSON.stringify(request.url()));
+		// 	// request.continue();
+		// 	// if (request.resourceType() === 'image') {
+		// 	// 	// request.abort();
+		// 	// 	await useProxy(request, 'socks5://208.102.51.6:58208');
+		// 	// } else {
+		// 	 	await useProxy(request, 'socks5://36.26.205.255:3000');
+		// 	// }
+		// });
+
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
 
 		console.error(3);
 		await page.goto('https://infosimples.github.io/detect-headless/', { waitUntil: 'load', timeout: 50 * 1000 });
+		// await page.goto('https://infosimples.github.io/detect-headless/');
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait(1000);
+		await wait(571);
 		await page.mouse.move(0, 0, { steps: 50 });
 		console.error(3.1);
-		await wait(5000);
+		// await wait(5000);
 		await page.screenshot({ path: `00fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 		const bodyHTML00 = await page.content();
 		fs.writeFileSync(`00fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML00);
-		await wait(25000);
+		// await wait(25000);
+
+		console.error(3.2);
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+		await page.goto('https://nowsecure.nl/', { waitUntil: 'load', timeout: 50 * 1000 });
+		await page.mouse.move(50, 50, { steps: 50 });
+		await wait(571);
+		await page.mouse.move(0, 0, { steps: 50 });
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+		await page.screenshot({ path: `000fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		const bodyHTML000 = await page.content();
+		fs.writeFileSync(`00fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML000);
 
 		console.error(3.4);
-		await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000 });
+		//httpbin.org/ip
+		//http://lumtest.com/myip.json
+		//await page.goto('https://api.ipify.org', { waitUntil: 'load', timeout: 50 * 1000 });
+		await page.goto('https://api.ipify.org');
 		console.error('a');
 		// const ip = await page.evaluate(`async (() => document.body.textContent.trim())()`);
+		await page.waitForSelector('body>pre');
+		// console.error(element);
 		const ip = await page.evaluate(() => document.body.textContent.trim());
 		console.error('IP: ', ip);
 		console.error('aa');
@@ -266,8 +325,11 @@ const run = async () => {
 		// console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 		// process.exit(1);
 
-
-		await page.goto(url, { waitUntil: 'load', timeout: 120 * 1000 });
+		//await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
+		await page.goto(url, { waitUntil: 'load', timeout: 80 * 1000 });
+		await page.mouse.move(50, 50, { steps: 50 });
+		await wait(571);
+		await page.mouse.move(0, 0, { steps: 50 });
 		//await page.goto(url);
 
 		// Esto de aqui lo pongo para que este activa la pagina y funcione lo de abajo (AL FINAL SE SOLUCIONO CON headless: 'new',)
@@ -277,16 +339,23 @@ const run = async () => {
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
 		console.error('aaa');
 
-		//await page.waitForSelector('a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']', {
-		//visible: true,
-		//});
-		console.error(3);
+		await page.waitForSelector(
+			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']",
+			{
+				visible: true,
+			}
+		);
+
+		console.error('aaaa');
 		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
 		);
 
-		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 60 * 1000 })]);
+		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })]);
+		await page.mouse.move(50, 50, { steps: 50 });
+		await wait(571);
+		await page.mouse.move(0, 0, { steps: 50 });
 		console.error(4);
 		// Esperar a que se cargue la nueva pagina
 		// const newPagePromise = await getNewPageWhenLoaded(browser);
@@ -295,7 +364,7 @@ const run = async () => {
 		//await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 40 * 1000 });
 		// await page.waitForNavigation({ timeout: 20 });
 		// await wait(5000);
-		console.error(5);
+		// console.error(5);
 
 		//await session.send('Page.enable');
 		//await session.send('Page.setWebLifecycleState', { state: 'active' });
@@ -330,11 +399,11 @@ const run = async () => {
 		// 	timeout: 10 * 1000,
 		// });
 
-		await wait(10000);
+		await wait(3000);
 
 		await page.waitForSelector('#idCaptchaButton', {
 			visible: true,
-			timeout: 120 * 1000,
+			timeout: 30 * 1000,
 		});
 		console.error(6.2);
 		const bktContinue = await page.$('#idCaptchaButton');
@@ -366,6 +435,14 @@ const run = async () => {
 		await bktContinue.click({
 			delay: 100,
 		});
+		await page.mouse.move(50, 50, { steps: 50 });
+		await wait(571);
+		await page.mouse.move(0, 0, { steps: 50 });
+
+		// await page.waitForNetworkIdle({
+		// 	timeout: 100 * 1000,
+		// 	idleTime: 15000,
+		// });
 
 		let isLoadingAvailable = true; // Your condition-to-stop
 		let times = 0;
@@ -385,13 +462,13 @@ const run = async () => {
 
 				console.error('E1');
 				//await scrollPageToBottom(page as any, { size: 250, delay: 500 });
-				console.error('E2');
+				// console.error('E2');
 				await page.waitForNetworkIdle({
 					timeout: 25 * 1000,
-					idleTime: 15000,
+					idleTime: 10000,
 				});
 				console.error('E3');
-				console.error('url FINAL:' + page.url());
+				// console.error('url FINAL:' + page.url());
 				// const aux = await page.waitForResponse(
 				// 	response =>
 				// 		response.url() ===
@@ -402,11 +479,19 @@ const run = async () => {
 				// console.error('status:' + aux.status());
 				// console.error('E4');
 			} catch (ex) {
-				console.error('EE' + ex.message);
-				if (times <= 10) continue;
+				console.error('EE:' + ex.message);
+				if (
+					page.url() ==
+					'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+				) {
+					// console.error();
+					break;
+				}
+				if (times <= 6) continue;
 			}
 			isLoadingAvailable = false; // Update your condition-to-stop value
 		}
+		console.error('url FINAL:' + page.url());
 		//
 
 		// await Promise.all([
