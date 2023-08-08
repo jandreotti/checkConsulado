@@ -342,11 +342,11 @@ console.error("aaa");
 				// fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
 
 				console.error('E1');
-				await scrollPageToBottom(page as any, { size: 250, delay: 500 });
+				//await scrollPageToBottom(page as any, { size: 250, delay: 500 });
 				console.error('E2');
 				await page.waitForNetworkIdle({
-					timeout: 10 * 1000,
-					idleTime: 3000,
+					timeout: 25 * 1000,
+					idleTime: 15000,
 				});
 				console.error('E3');
 				console.error('url FINAL:' + page.url());
