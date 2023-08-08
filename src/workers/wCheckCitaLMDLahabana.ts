@@ -60,8 +60,9 @@ const run = async () => {
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
 		//const res=await axios.get('https://api.proxyscrape.com/?request=getproxies&proxytype=socks5&timeout=10000&country=all&ssl=all&anonymity=all')
-		const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
-		const proxies = res.data;
+		//const res = await axios.get('https://sunny9577.github.io/proxy-scraper/generated/socks5_proxies.json');
+		const res = await axios.get('https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json');
+  const proxies = res.data;
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
