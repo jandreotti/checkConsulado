@@ -65,9 +65,9 @@ const run = async () => {
 		//console.error(JSON.stringify(proxies));
 		const proxy = proxies[Math.floor(Math.random() * proxies.length)];
 		console.error(proxy);
-		//const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
+		const proxyArgs = '--proxy-server=socks5://' + proxy.ip + ':' + proxy.port;
 	 
-const proxyArgs = '--proxy-server=socks5://104.200.152.30:4145';
+//const proxyArgs = '--proxy-server=socks5://104.200.152.30:4145';
 
   console.error(proxyArgs);
 
