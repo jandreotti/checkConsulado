@@ -286,6 +286,7 @@ const run = async () => {
 			timeout: 60 * 1000,
 			idleTime: 3000,
 		});
+		
 		console.error(12);
 
 		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
