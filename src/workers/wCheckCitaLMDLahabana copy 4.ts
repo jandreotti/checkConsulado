@@ -451,7 +451,7 @@ const run = async () => {
 			times++;
 			console.error('esperando que cargue...:' + times);
 			console.error('url:' + page.url());
-
+ 
 			try {
 				// await page.screenshot({
 				// 	path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
