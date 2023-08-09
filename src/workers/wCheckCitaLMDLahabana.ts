@@ -283,7 +283,7 @@ const run = async () => {
 
 		// Espero a que cargue la pagina
 		await page.waitForNetworkIdle({
-			timeout: 120 * 1000,
+			timeout: 60 * 1000,
 			idleTime: 3000,
 		});
 		console.error(12);
