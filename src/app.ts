@@ -16,7 +16,7 @@ iniciarCliente();
 //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
 // runCheckCitaLMDLahabana();
-setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
+setInterval(runCheckCitaLMDLahabana, 60000 * 4); //Chequea cada 3 minutos
 
 //! CONFIGURACION EXPRESS
 const app = express();

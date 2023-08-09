@@ -26,6 +26,7 @@
 		"md5": "^2.3.0",
 		"moment": "^2.29.4",
 		"os-utils": "0.0.14",
+		"proxy-chain": "^2.3.0",
 		"puppeteer": "21.0.2",
 		"puppeteer-autoscroll-down": "^1.1.2",
 		"puppeteer-extra": "^3.3.6",

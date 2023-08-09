@@ -43,7 +43,6 @@ const run = async () => {
 		ban: false,
 		ultimaURL: '',
 		verificar: false,
-		otros: {},
 	};
 
 	try {
@@ -72,7 +71,6 @@ const run = async () => {
 				//https://github.com/PeterDaveHello/tor-socks-proxy
 
 				// `--proxy-server=http://127.0.0.1:8080`,
-				`--proxy-server=http://127.0.0.1:8089`,
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -152,7 +150,6 @@ const run = async () => {
 			await page.goto('https://api.ipify.org');
 			await page.waitForSelector('body>pre');
 			const ip = await page.evaluate(() => document.body.textContent.trim());
-			outputData.otros = { ...outputData.otros, ip: ip };
 			console.error('IP: ', ip);
 			console.error(2.2);
 		} catch (error) {
@@ -163,13 +160,13 @@ const run = async () => {
 		console.error(3);
 		//Inicio la primera pagina, espero 5-12 segundos y muevo el mouse
 		await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
-		console.error(4);
+		console.error(3.1);
 		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
 
-		console.error(5);
+		console.error(4);
 		await page.waitForSelector(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']",
 			{
@@ -177,7 +174,7 @@ const run = async () => {
 			}
 		);
 
-		console.error(6);
+		console.error(5);
 		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
@@ -188,7 +185,7 @@ const run = async () => {
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(7);
+		console.error(6);
 
 		// Verifico BANEO
 		const url2 = page.url();
@@ -200,99 +197,109 @@ const run = async () => {
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 			process.exit(1);
 		}
-		console.error(8);
+		console.error(7);
 
-		// const pressionar = async page => {
+		const pressionar = async page => {
+			await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+			const bodyHTML0 = await page.content();
+			fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
 
-		// grabo
-		await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
-		const bodyHTML0 = await page.content();
-		fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
+			const bktContinue = await page.$('#idCaptchaButton');
 
-		// Espero al selector del boton de continuar
-		await page.waitForSelector('#idCaptchaButton', {
-			visible: true,
-			timeout: 30 * 1000,
-		});
+			console.error('P1');
 
-		// Selecciono el boton
-		const bktContinue = await page.$('#idCaptchaButton');
+			//
+			await bktContinue.click();
+			await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+			await page.mouse.move(50, 50, { steps: 50 });
+			await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+			await page.mouse.move(0, 0, { steps: 50 });
+			console.error('P2');
 
+			// await page.waitForNetworkIdle({
+			// 	timeout: 100 * 1000,
+			// 	idleTime: 15000,
+			// });
+
+			let isLoadingAvailable = true; // Your condition-to-stop
+			let times = 0;
+
+			while (isLoadingAvailable) {
+				times++;
+				console.error('esperando que cargue...:' + times);
+				console.error('url:' + page.url());
+
+				await page.mouse.move(50, 50, { steps: 50 });
+				await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+				await page.mouse.move(0, 0, { steps: 50 });
+
+				try {
+					// await page.screenshot({
+					// 	path: `0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`,
+					// 	fullPage: true,
+					// });
+					// const bodyHTML1 = await page.content();
+					// fs.writeFileSync(`0.5fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+
+					console.error('P3');
+					//await scrollPageToBottom(page as any, { size: 250, delay: 500 });
+					// console.error('E2');
+					await page.waitForNetworkIdle({
+						timeout: 25 * 1000,
+						idleTime: 10000,
+					});
+					console.error('P4');
+					// console.error('url FINAL:' + page.url());
+					// const aux = await page.waitForResponse(
+					// 	response =>
+					// 		response.url() ===
+					// 		//'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					// 		'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					// 	//&& response.status() === 200
+					// );
+					// console.error('status:' + aux.status());
+					// console.error('E4');
+				} catch (ex) {
+					console.error('EE:' + ex.message);
+					if (
+						page.url() ==
+						'https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff/#services'
+					) {
+						// console.error();
+						break;
+					}
+					if (times <= 6) continue;
+				}
+				isLoadingAvailable = false; // Update your condition-to-stop value
+			}
+			console.error('url FINAL:' + page.url());
+		};
+
+		
+
+		// Obtener el boton de continuar y presionarlo
+		let contadorPresiones = 0;
+		try {
+			while (true) {
+				contadorPresiones++;
+				console.error('presionando boton de continuar...:' + contadorPresiones);
+				await page.waitForSelector('#idCaptchaButton', {
+					visible: true,
+					timeout: 30 * 1000,
+				});
+				await pressionar(page);
+			}
+		} catch (e) {
+			console.error('Error al presionar el boton de continuar:' + contadorPresiones + ' ' + e.message);
+		}
 		console.error(9);
 
-		console.error('url1:' + page.url());
-		// Hago click en el boton
-		await bktContinue.click();
+		await page.waitForTimeout((Math.floor(Math.random() * 12) + 5) * 1000);
+		await page.mouse.move(50, 50, { steps: 50 });
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.mouse.move(0, 0, { steps: 50 });
+
 		console.error(10);
-		console.error('url2:' + page.url());
-		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
-		await page.mouse.move(50, 50, { steps: 50 });
-		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
-		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(11);
-		console.error('url3:' + page.url());
-
-		// //! ///////////////////////////////
-		// await page.setRequestInterception(true);
-		// page.on('response', async response => {
-		// 	console.error(
-		// 		'RESPONSE-> response.status():' +
-		// 			response.status() +
-		// 			' - response.url():' +
-		// 			response.url() +
-		// 			' - response.headers():' +
-		// 			JSON.stringify(response.headers())
-		// 	);
-		// });
-
-		// page.on('request', async request => {
-		// 	console.error('REQUEST-> request.resourceType():' + request.resourceType() + ' - request.url():' + request.url());
-
-		// 	// console.error(
-		// 	// 	'request.resourceType():' +
-		// 	// 		request.resourceType() +
-		// 	// 		' - request.url():' +
-		// 	// 		request.url() +
-		// 	// 		' - request.method():' +
-		// 	// 		request.method() +
-		// 	// 		' - request.headers():' +
-		// 	// 		JSON.stringify(request.headers()) +
-		// 	// 		' - request.postData():' +
-		// 	// 		request.postData() +
-		// 	// 		' - request.isNavigationRequest():' +
-		// 	// 		request.isNavigationRequest() +
-		// 	// 		' - request.frame():' +
-		// 	// 		request.frame() +
-		// 	// 		' - request.frame().url():' +
-		// 	// 		request.frame().url() +
-		// 	// 		' - request.frame().parentFrame():' +
-		// 	// 		request.frame().parentFrame() +
-		// 	// 		' - request.frame().childFrames():' +
-		// 	// 		request.frame().childFrames() +
-		// 	// 		' - request.frame().childFrames().length:' +
-		// 	// 		request.frame().childFrames().length
-		// 	// );
-		// 	// if (request.resourceType() == 'image') {
-		// 	// 	await request.abort();
-		// 	// } else {
-		// 	await request.continue();
-		// 	// }
-		// });
-
-		// Espero a que cargue la pagina
-		await page.waitForNetworkIdle({
-			timeout: 120 * 1000,
-			idleTime: 3000,
-		});
-		console.error(12);
-
-		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
-		await page.mouse.move(50, 50, { steps: 50 });
-		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
-		await page.mouse.move(0, 0, { steps: 50 });
-
-		console.error(13);
-		console.error('url FINAL:' + page.url()); //ACA DEBE DECIR SERVICES?
 
 		//Grabo la pantalla siempre que inicio el proceso
 		await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
@@ -301,15 +308,39 @@ const run = async () => {
 
 		console.error('Analizando la pagina...');
 		// AQUI SE ANALIZA LA PAGINA
+		// -> El div que dice que no hay disponibilidad
+		//const idDivBktServicesContainer = await page.$('#idDivBktServicesContainer');
+		//let idDivBktServicesContainer_textContext = await page.evaluate(el => el, idDivBktServicesContainer);
 
+		// const element = await page.waitForSelector('#idDivBktServicesContainer'); // select the element
+		// const value = await element.evaluate(el => el.innerHTML); // grab the textContent from the element, by evaluating this function in the browser context
+		// //const value = await element.evaluate(el => el.children[0]); // grab the textContent from the element, by evaluating this function in the browser context
+		// //value.innerHTML
+		// //value.textContent
+		// //value.childElementCount
+		// //value.children[0].textContent
+		// console.error(5.5);
+
+		// console.error({
+		// 	primer: 'primer',
+		// 	uno: value.innerHTML,
+		// 	dos: value.textContent,
+		// 	tres: value.childElementCount,
+		// 	// cuatro: value.children[0].textContent,
+		// 	value,
+		// });
+
+		//const idDivBktServicesContainer_textContext = await page.evaluate(() => {
+
+		// await wait(30000);
 		// Grabo la ultimaURL
 		outputData = {
 			...outputData,
 			ultimaURL: page.url(),
 		};
 
-		// -> Verifico si dice "No hay horas disponibles"
 		let idDivBktServicesContainer_textContext;
+
 		try {
 			console.error('Analizando la pagina...1');
 			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
@@ -325,16 +356,37 @@ const run = async () => {
 		} catch (e) {
 			console.error(JSON.stringify(e, null, 2));
 			console.error("No se encontro el div 'idDivBktServicesContainer'");
+			// await page.screenshot({ path: `1fullpage_ERROR1-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+			// const bodyHTML1 = await page.content();
+			// fs.writeFileSync(`1fullpage_ERROR1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
 		}
 
-		console.error('Analizando la pagina... 4');
+		// await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		// const bodyHTML1 = await page.content();
+		// fs.writeFileSync(`1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+
+		console.error('analisis1');
 		//A veces aca se clava con una pagina vacia, entonces evaluo si el body tiene algun objeto, si no tiene ningun objeto lanzo un timeout
 		await page.evaluate(() => {
 			const size = document.querySelector('body').children.length;
+
 			if (size == 0) throw new TimeoutError("'Pagina no cargada???????????'");
 		});
 
-		console.error('Fin analisis de la pagina ');
+		//console.error('analisis2');
+
+		// //Intento leer el elemento que dice No hay horas disponibles
+		// const idDivBktServicesContainer_textContext = await page.evaluate(() => {
+		// 	const el = document.getElementById('idDivBktServicesContainer');
+		// 	//const el3 = document.querySelector('#idDivBktServicesContainer');
+		// 	return el?.children[0]?.innerHTML?.split('<br>')[0]; //=== 'No hay horas disponibles.'; //No hay horas disponibles.
+		// });
+
+		console.error('Fin analisis de la pagina');
+		// const bktContinue2 = await page.$('#bktContinue').catch(e => null);
+		// console.error(bktContinue2);
+
+		// console.error('paso');
 
 		await wait(1000);
 
@@ -364,8 +416,11 @@ const run = async () => {
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
 		//if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
 		if (idDivBktServicesContainer_textContext != 'No hay horas disponibles.') {
-			console.error('PASO ALGO');
+			//* Saco fotos si hay turnos disponibles
 			await page.screenshot({ path: `2fullpage_PASOALGO-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+			//* Guardo el HTML de la pagina para Debuguear
+			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
 			const bodyHTML3 = await page.content();
 			fs.writeFileSync(`2fullpage_PASOALGO-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
 
@@ -395,7 +450,11 @@ const run = async () => {
 
 			// await wait(15000);
 			// esperar a que cargue la pagina
-			await page.waitForNetworkIdle();
+			try {
+				await page.waitForNetworkIdle();
+			} catch (e) {
+				console.error('error en waitForNetworkIdle2');
+			}
 			await wait(3000);
 
 			console.error('final 3');
@@ -445,11 +504,11 @@ const run = async () => {
 
 			outputData = {
 				...outputData,
-				otros: { ...outputData.otros, ...otros },
+				otros,
 			};
 		}
 
-		await wait(1000);
+		await wait(4000);
 
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
 		// if (
@@ -473,6 +532,7 @@ const run = async () => {
 		// }
 
 		await page.close();
+		// await page2.close();
 		await browser.close();
 
 		//! GUARDO EN EL OBJETO outputData lo que quiero retornar
@@ -503,8 +563,7 @@ const run = async () => {
 					timeout: error instanceof TimeoutError,
 					proxyError:
 						error?.message?.includes('net::ERR_PROXY_CONNECTION_FAILED') ||
-						error?.message?.includes('net::ERR_SOCKS_CONNECTION_FAILED') ||
-						(error?.message?.includes('net::') && error?.message?.includes('PROXY')), //error instanceof ConnectionProxyError ProxyConnectionError,
+						error?.message?.includes('net::ERR_SOCKS_CONNECTION_FAILED'), //error instanceof ConnectionProxyError ProxyConnectionError,
 					objeto: JSON.stringify(error),
 				},
 			})
