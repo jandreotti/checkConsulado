@@ -13,7 +13,7 @@ import { momento, momentoFormateado, wait } from '../helpers/momento';
 import fs from 'fs';
 // import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
 import axios from 'axios';
-import useProxy from 'puppeteer-page-proxy';
+// import useProxy from 'puppeteer-page-proxy';
 import { TimeoutError } from 'puppeteer';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');

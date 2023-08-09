@@ -11,7 +11,7 @@ puppeteer.use(StealthPlugin());
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
-import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
+// import { scrollPageToBottom } from 'puppeteer-autoscroll-down';
 import axios from 'axios';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
