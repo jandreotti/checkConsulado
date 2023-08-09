@@ -516,7 +516,7 @@ const run = async () => {
 	//Ejecucion
 	try {
 		console.error('____ Ejecucion ____');
-		exec('sudo docker container restart proxy-openvpn_ovpn_proxy_1', (error, stdout, stderr) => {
+		exec('sudo docker container restart proxy-kav', (error, stdout, stderr) => {
 			if (error) {
 				console.error(`error EJECUCION:: ${error.message}`);
 				return;
