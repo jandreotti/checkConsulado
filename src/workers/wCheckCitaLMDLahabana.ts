@@ -5,6 +5,8 @@ import { momento, momentoFormateado, wait } from '../helpers/momento';
 import fs from 'fs';
 import { TimeoutError } from 'puppeteer';
 
+import { exec } from 'child_process';
+
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
 
@@ -511,6 +513,26 @@ const run = async () => {
 		); // print out data to STDOUT
 	}
 
+	//Ejecucion
+	try {
+		console.error('____ Ejecucion ____');
+		exec('sudo docker container restart proxy-openvpn_ovpn_proxy_1', (error, stdout, stderr) => {
+			if (error) {
+				console.error(`error EJECUCION:: ${error.message}`);
+				return;
+			}
+
+			if (stderr) {
+				console.error(`stderr EJECUCION: ${stderr}`);
+				return;
+			}
+
+			console.error(`stdout EJECUCION:\n${stdout}`);
+		});
+	} catch (e) {
+		console.error(`error EJECUCION:: ${e.message}`);
+	}
+	console.error('____ FIN Ejecucion ____');
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);
 };
