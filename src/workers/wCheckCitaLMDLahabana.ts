@@ -38,7 +38,7 @@ const run = async () => {
 	//
 	const { port } = inputData;
 	const proxy = `--proxy-server=http://127.0.0.1:${port}`;
-	const separador = port === '8091' ? '==============================>' : '';
+	const separador = port === '8091' ? '==================>' : '';
 	//
 
 	console.error(separador, `port:${port}`);
