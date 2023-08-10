@@ -10,7 +10,9 @@ import { exec } from 'child_process';
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
 
-export interface IInputData_WCheckCitaLMDLahabana {}
+export interface IInputData_WCheckCitaLMDLahabana {
+	port: string;
+}
 
 export interface IOutputData_WCheckCitaLMDLahabana {
 	idDivBktServicesContainer_textContext: string; //  se busca este div en la pagina y se ve si tiene el texto 'No hay horas disponibles.'
@@ -31,8 +33,16 @@ export interface IOutputData_WCheckCitaLMDLahabana {
 
 const run = async () => {
 	//! CON ESTAS LINEAS OBTENGO EL VALOR DEL ARGUMENTO QUE LE PASO AL PROCESO HIJO SI ES QUE LO NECESITO
-	// const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
-	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaLMDLahabana;
+	const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
+	const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaLMDLahabana;
+	//
+	const { port } = inputData;
+	const proxy = `--proxy-server=http://127.0.0.1:${port}`;
+	const separador = port === '8091' ? '==============================>' : '';
+	//
+
+	console.error(separador, `port:${port}`);
+	console.error(separador, proxy);
 
 	//! DECLARO EL VALOR POR DEFECTO QUE VOY A DEVOLVER EN CASO DE ERROR
 	let outputData: IOutputData_WCheckCitaLMDLahabana = {
@@ -45,11 +55,13 @@ const run = async () => {
 		ban: false,
 		ultimaURL: '',
 		verificar: false,
-		otros: {},
+		otros: {
+			port,
+		},
 	};
 
 	try {
-		console.error(1);
+		console.error(separador, 1);
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
@@ -74,7 +86,8 @@ const run = async () => {
 				//https://github.com/PeterDaveHello/tor-socks-proxy
 
 				// `--proxy-server=http://127.0.0.1:8080`,
-				`--proxy-server=http://127.0.0.1:8089`,
+				// `--proxy-server=http://127.0.0.1:8089`,
+				port ? proxy : '',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			// headless: false, //  VIEJO -> para ver que hace el explorador en la pagina
@@ -85,7 +98,7 @@ const run = async () => {
 			// ignoreDefaultArgs: ['--enable-automation'],
 		});
 
-		console.error(2);
+		console.error(separador, 2);
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
 		//const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
@@ -140,38 +153,38 @@ const run = async () => {
 
 		page.on('dialog', async dialog => {
 			await wait(1000);
-			console.error('close');
+			console.error(separador + 'close');
 			try {
 				await dialog.accept();
 				await dialog.dismiss();
 			} catch (e) {
-				console.error('E?:' + e);
+				console.error(separador + 'E?:' + e);
 			}
 		});
 
 		try {
-			console.error(2.1);
+			console.error(separador, 2.1);
 			await page.goto('https://api.ipify.org');
 			await page.waitForSelector('body>pre');
 			const ip = await page.evaluate(() => document.body.textContent.trim());
 			outputData.otros = { ...outputData.otros, ip: ip };
-			console.error('IP: ', ip);
-			console.error(2.2);
+			console.error(separador, 'IP: ', ip);
+			console.error(separador, 2.2);
 		} catch (error) {
-			console.error(error.message);
-			console.error(2.3);
+			console.error(separador, error.message);
+			console.error(separador, 2.3);
 		}
 
-		console.error(3);
+		console.error(separador, 3);
 		//Inicio la primera pagina, espero 5-12 segundos y muevo el mouse
 		await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
-		console.error(4);
+		console.error(separador, 4);
 		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
 
-		console.error(5);
+		console.error(separador, 5);
 		await page.waitForSelector(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']",
 			{
@@ -179,7 +192,7 @@ const run = async () => {
 			}
 		);
 
-		console.error(6);
+		console.error(separador, 6);
 		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
@@ -190,19 +203,19 @@ const run = async () => {
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(7);
+		console.error(separador, 7);
 
 		// Verifico BANEO
 		const url2 = page.url();
 		if (url2 == 'https://www.exteriores.gob.es/es/Paginas/index.aspx') {
-			console.error('____ BANEADO ____');
+			console.error(separador, '____ BANEADO ____');
 			outputData.ban = true;
 			outputData.ultimaURL = url2;
 			//! RETORNO EL OBJETO outputData por medio del console.log
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 			process.exit(1);
 		}
-		console.error(8);
+		console.error(separador, 8);
 
 		// const pressionar = async page => {
 
@@ -220,19 +233,19 @@ const run = async () => {
 		// Selecciono el boton
 		const bktContinue = await page.$('#idCaptchaButton');
 
-		console.error(9);
+		console.error(separador, 9);
 
-		console.error('url1:' + page.url());
+		console.error(separador, 'url1:' + page.url());
 		// Hago click en el boton
 		await bktContinue.click();
-		console.error(10);
-		console.error('url2:' + page.url());
+		console.error(separador, 10);
+		console.error(separador, 'url2:' + page.url());
 		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(11);
-		console.error('url3:' + page.url());
+		console.error(separador, 11);
+		console.error(separador, 'url3:' + page.url());
 
 		// //! ///////////////////////////////
 		// await page.setRequestInterception(true);
@@ -283,26 +296,26 @@ const run = async () => {
 
 		// Espero a que cargue la pagina
 		await page.waitForNetworkIdle({
-			timeout: 60 * 1000,
+			timeout: 40 * 1000,
 			idleTime: 3000,
 		});
 
-		console.error(12);
+		console.error(separador, 12);
 
 		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
 		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
 
-		console.error(13);
-		console.error('url FINAL:' + page.url()); //ACA DEBE DECIR SERVICES?
+		console.error(separador, 13);
+		console.error(separador, 'url FINAL:' + page.url()); //ACA DEBE DECIR SERVICES?
 
 		//Grabo la pantalla siempre que inicio el proceso
 		await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 		const bodyHTML1 = await page.content();
 		fs.writeFileSync(`1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
 
-		console.error('Analizando la pagina...');
+		console.error(separador, 'Analizando la pagina...');
 		// AQUI SE ANALIZA LA PAGINA
 
 		// Grabo la ultimaURL
@@ -314,30 +327,30 @@ const run = async () => {
 		// -> Verifico si dice "No hay horas disponibles"
 		let idDivBktServicesContainer_textContext;
 		try {
-			console.error('Analizando la pagina...1');
+			console.error(separador, 'Analizando la pagina...1');
 			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
-			console.error('Analizando la pagina...2');
+			console.error(separador, 'Analizando la pagina...2');
 			//Intento leer el elemento que dice No hay horas disponibles
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
 				const el = document.getElementById('idDivBktServicesContainer');
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
 				return Promise.resolve(el?.children[0]?.innerHTML?.split('<br>')[0]); //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
-			console.error(idDivBktServicesContainer_textContext);
-			console.error('Analizando la pagina...3');
+			console.error(separador, idDivBktServicesContainer_textContext);
+			console.error(separador, 'Analizando la pagina...3');
 		} catch (e) {
-			console.error(JSON.stringify(e, null, 2));
-			console.error("No se encontro el div 'idDivBktServicesContainer'");
+			console.error(separador, JSON.stringify(e, null, 2));
+			console.error(separador, "No se encontro el div 'idDivBktServicesContainer'");
 		}
 
-		console.error('Analizando la pagina... 4');
+		console.error(separador, 'Analizando la pagina... 4');
 		//A veces aca se clava con una pagina vacia, entonces evaluo si el body tiene algun objeto, si no tiene ningun objeto lanzo un timeout
 		await page.evaluate(() => {
 			const size = document.querySelector('body').children.length;
 			if (size == 0) throw new TimeoutError("'Pagina no cargada???????????'");
 		});
 
-		console.error('Fin analisis de la pagina ');
+		console.error(separador, 'Fin analisis de la pagina ');
 
 		await wait(1000);
 
@@ -367,7 +380,7 @@ const run = async () => {
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
 		//if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
 		if (idDivBktServicesContainer_textContext != 'No hay horas disponibles.') {
-			console.error('PASO ALGO');
+			console.error(separador, 'PASO ALGO');
 			await page.screenshot({ path: `2fullpage_PASOALGO-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 			const bodyHTML3 = await page.content();
 			fs.writeFileSync(`2fullpage_PASOALGO-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
@@ -390,18 +403,18 @@ const run = async () => {
 			const bodyHTML2 = await page.content();
 			fs.writeFileSync(`2fullpage_PASOALGO2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
 
-			console.error('final 1');
+			console.error(separador, 'final 1');
 			//obtener la parte de abajo y presionarla para continuar
 			const idBktDefaultServicesContainer = await page.$('#idBktDefaultServicesContainer');
 			await idBktDefaultServicesContainer.click();
-			console.error('final 2');
+			console.error(separador, 'final 2');
 
 			// await wait(15000);
 			// esperar a que cargue la pagina
 			await page.waitForNetworkIdle();
 			await wait(3000);
 
-			console.error('final 3');
+			console.error(separador, 'final 3');
 
 			//Grabo
 			await page.screenshot({
@@ -516,24 +529,27 @@ const run = async () => {
 
 	//Ejecucion
 	try {
-		console.error('____ Ejecucion ____');
-		exec('sudo docker container restart proxy-kav', (error, stdout, stderr) => {
+		console.error(separador, '____ Ejecucion ____');
+		//const cmd = port ? `sudo docker container restart proxy-kav-${port}` : 'sudo docker container restart proxy-kav';
+		const cmd =
+			port === '8089' ? `sudo docker container restart proxy-kav` : 'sudo docker container restart proxy-kav2';
+		exec(cmd, (error, stdout, stderr) => {
 			if (error) {
-				console.error(`error EJECUCION:: ${error.message}`);
+				console.error(separador, `error EJECUCION:: ${error.message}`);
 				return;
 			}
 
 			if (stderr) {
-				console.error(`stderr EJECUCION: ${stderr}`);
+				console.error(separador, `stderr EJECUCION: ${stderr}`);
 				return;
 			}
 
-			console.error(`stdout EJECUCION:\n${stdout}`);
+			console.error(separador, `stdout EJECUCION:\n${stdout}`);
 		});
 	} catch (e) {
-		console.error(`error EJECUCION:: ${e.message}`);
+		console.error(separador, `error EJECUCION:: ${e.message}`);
 	}
-	console.error('____ FIN Ejecucion ____');
+	console.error(separador, '____ FIN Ejecucion ____');
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);
 };

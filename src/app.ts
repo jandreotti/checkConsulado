@@ -13,10 +13,17 @@ iniciarCliente();
 //// setInterval(checkDolarBlueCordoba, 30000);
 //setInterval(runCheckDolar, 30000);
 // setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
-//setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
 
-// runCheckCitaLMDLahabana();
-setInterval(runCheckCitaLMDLahabana, 60000 * 4); //Chequea cada 3 minutos
+//setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
+// runCheckCitaLMDLahabana('8089');
+// runCheckCitaLMDLahabana('8091');
+
+setInterval(() => runCheckCitaLMDLahabana('8089'), 60000 * 3); //Chequea cada 3 minutos
+
+// Espero un minuto para iniciar cada 3 minutos el otro
+setTimeout(() => {
+	setInterval(() => runCheckCitaLMDLahabana('8090'), 60000 * 3); //Chequea cada 3 minutos
+}, 60000 * 1.5);
 
 //! CONFIGURACION EXPRESS
 const app = express();

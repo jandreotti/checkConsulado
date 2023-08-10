@@ -26,7 +26,13 @@ export const ejecutar = ({ filename, data = {}, tagProcess = 'worker-sin-tag', d
 		});
 
 		proc.stderr.on('data', data => {
-			if (debug) console.error(`${filename} (:---> ${data}`);
+			if (debug) {
+				const lineas = data.toString().split('\n');
+				for (const linea of lineas) {
+					if (linea.trim().length > 0) console.error(`${filename} (:---> ${linea}`);
+				}
+			}
+			// if (debug) console.error(`${filename} (:---> ${data}`);
 		});
 
 		proc.on('close', async code => {});

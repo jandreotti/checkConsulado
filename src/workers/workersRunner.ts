@@ -8,7 +8,7 @@ import { ejecutar } from './runner';
 import { IOutputData_WCheckDolar } from './wCheckDolar';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import { IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
-import { IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
+import { IInputData_WCheckCitaLMDLahabana, IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
 import { log } from '../helpers/helpers';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
@@ -178,7 +178,7 @@ https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/
 	}
 };
 
-export const runCheckCitaLMDLahabana = async () => {
+export const runCheckCitaLMDLahabana = async (port: string) => {
 	console.log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 	log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 
@@ -194,10 +194,14 @@ export const runCheckCitaLMDLahabana = async () => {
 	// 	return;
 	// }
 
+	const data = {
+		port,
+	} as IInputData_WCheckCitaLMDLahabana;
+
 	//! EJECUCION DEL PROCESO HIJO
 	const retorno = (await ejecutar({
 		filename: 'wCheckCitaLMDLahabana.js', // Archivo a ejecutar
-		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
+		data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
 		tagProcess: 'worker-check-cita-lmd-lahabana', // Tag para identificar el proceso hijo
 		debug: true, // Si se quiere ver el log del proceso hijo que largue con console.error
 	})) as IOutputData_WCheckCitaLMDLahabana;
