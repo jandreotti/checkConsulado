@@ -22,7 +22,7 @@ setInterval(() => runCheckCitaLMDLahabana('8089'), 60000 * 3); //Chequea cada 3 
 
 // Espero un minuto para iniciar cada 3 minutos el otro
 setTimeout(() => {
-	setInterval(() => runCheckCitaLMDLahabana('8090'), 60000 * 3); //Chequea cada 3 minutos
+	setInterval(() => runCheckCitaLMDLahabana('8091'), 60000 * 3); //Chequea cada 3 minutos
 }, 60000 * 1.5);
 
 //! CONFIGURACION EXPRESS
