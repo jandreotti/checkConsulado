@@ -4,7 +4,7 @@ import { momento } from '../helpers/momento';
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
 
-export interface IInputData_WCheckDolar {}
+export interface IInputData_WCheckDolar { }
 
 export interface IOutputData_WCheckDolar {
 	compra?: string;
@@ -45,7 +45,8 @@ const run = async () => {
 				?.textContent.trim()
 				.split('\n')[0]
 				.replace('$', '')
-				.replace(',', '.');
+				.replace(',', '.')
+				.trim();
 
 			const venta = document
 				.querySelector('#BluePromedio')
@@ -53,7 +54,8 @@ const run = async () => {
 				?.textContent.trim()
 				.split('\n')[0]
 				.replace('$', '')
-				.replace(',', '.');
+				.replace(',', '.')
+				.trim();
 
 			return { compra, venta };
 		});

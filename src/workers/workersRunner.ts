@@ -44,6 +44,7 @@ export const runCheckDolar = async data => {
 
 	//! PROCESAMIENTO DEL RESULTADO
 	const { compra, venta } = retorno as IOutputData_WCheckDolar;
+	console.log(`runCheckDolar valores: Compra:${compra} - Venta:${venta}`);
 
 	//! VALIDACIONES
 	// primer chequeo
@@ -71,7 +72,8 @@ export const runCheckDolar = async data => {
 
 	//! PROCESAMIENTO DEL RESULTADO
 	if (dolarBlueCompra != parseFloat(compra) || dolarBlueVenta != parseFloat(venta)) {
-		console.log(`      ------> runCheckDolar -> Cambio el dolar -> AVISAR!`);
+
+		console.log(`      ------> runCheckDolar -> Cambio el dolar -> AVISAR! Compra:${compra} - Venta:${venta}`);
 
 		console.log({
 			mensaje: 'AVISO DE CAMBIO DE DOLAR',
@@ -100,6 +102,9 @@ Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 		for (const chatId of chatIds) {
 			await globalThis.client.sendMessage(chatId, text);
 		}
+	}
+	else {
+		console.log(`[${momento()}] runCheckDolar -> Fin Chequeo sin cambios... Compra:${compra} - Venta:${venta}`);
 	}
 };
 
@@ -308,19 +313,19 @@ export const runCheckCitaLMDLahabana = async (port: string) => {
 		 \n
 
 			${JSON.stringify(
-				{
-					retorno,
-					fecha: momentoFormateado('YYYYMMDD_HHmmss'),
-					chequeoAnterior:
-						!idDivNotAvailableSlotsTextTop &&
-						idTimeListTable &&
-						nuevaURL.includes('#datetime') &&
-						idDivSlotColumnContainer_1 &&
-						valueIdDivBktDatetimeSelectedDate != '',
-				},
-				null,
-				2
-			)}
+			{
+				retorno,
+				fecha: momentoFormateado('YYYYMMDD_HHmmss'),
+				chequeoAnterior:
+					!idDivNotAvailableSlotsTextTop &&
+					idTimeListTable &&
+					nuevaURL.includes('#datetime') &&
+					idDivSlotColumnContainer_1 &&
+					valueIdDivBktDatetimeSelectedDate != '',
+			},
+			null,
+			2
+		)}
 
 
 			`;
