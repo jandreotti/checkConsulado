@@ -8,7 +8,7 @@ import { TimeoutError } from 'puppeteer';
 puppeteer.use(StealthPlugin());
 // import randomUseragent from 'random-useragent';
 
-import { momento, momentoFormateado, wait } from '../helpers/momento';
+import { momento, momentoFormateado, wait } from '../../helpers/momento';
 // import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
 // import { scrollPageToBottom } from 'puppeteer-autoscroll-down';

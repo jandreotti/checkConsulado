@@ -1,7 +1,7 @@
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
 puppeteer.use(StealthPlugin());
-import { momento, momentoFormateado, wait } from '../helpers/momento';
+import { momento, momentoFormateado, wait } from '../../helpers/momento';
 import fs from 'fs';
 import { TimeoutError } from 'puppeteer';
 
