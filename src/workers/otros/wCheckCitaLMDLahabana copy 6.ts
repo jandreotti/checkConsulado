@@ -1,7 +1,7 @@
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
 puppeteer.use(StealthPlugin());
-import { momento, momentoFormateado, wait } from '../helpers/momento';
+import { momento, momentoFormateado, wait } from '../../helpers/momento';
 import fs from 'fs';
 import { TimeoutError } from 'puppeteer';
 
@@ -67,11 +67,26 @@ const run = async () => {
 
 		const browser = await puppeteer.launch({
 			args: [
+				// '--incognito',
+				// '--disable-gpu',
 				'--no-sandbox',
+				// '--no-zygote',
 				'--disable-setuid-sandbox',
+				// '--disable-accelerated-2d-canvas',
+				// '--disable-dev-shm-usage',
+				// "--proxy-server='direct://'",
+				// '--proxy-bypass-list=*',
 
 				'--ignore-certificate-errors',
 				'--ignore-certificate-errors-spki-list',
+
+				//https://github.com/sunny9577/proxy-scraper
+				//'--proxy-server=socks5://212.83.143.97:38669',
+
+				//https://github.com/PeterDaveHello/tor-socks-proxy
+
+				// `--proxy-server=http://127.0.0.1:8080`,
+				// `--proxy-server=http://127.0.0.1:8089`,
 				port ? proxy : '',
 			],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
@@ -79,24 +94,63 @@ const run = async () => {
 			// headless: true, //  para que no se vea lo que hace el explorador en la pagina
 			// slowMo: 200, // Camara lenta para ver que hace el explorador
 			ignoreHTTPSErrors: true,
+			// devtools: true,
+			// ignoreDefaultArgs: ['--enable-automation'],
 		});
 
 		console.error(separador, 2);
-
 		//! OPERAR EN LA PAGINA
 		// Abrir una nueva pagina
+		//const context = await browser.createIncognitoBrowserContext({proxyServer:"socks5://"+ proxy.ip + ':' + proxy.port});
+		//const context = await browser.createIncognitoBrowserContext();
+		//const page = await context.newPage();
 		const page = await browser.newPage();
 
 		await page.setExtraHTTPHeaders({
 			'user-agent':
 				'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-			// 'upgrade-insecure-requests': '1', // Con esta opcion me da error
+			// 'upgrade-insecure-requests': '1',
 			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
 			'accept-encoding': 'gzip, deflate, br',
 			'accept-language': 'en-US,en;q=0.9,en;q=0.8',
 		});
 
-		// Esta opcion es para cerrar algun dialog que aparezca en la pagina
+		// Limit requests
+		// await page.setRequestInterception(true);
+		// page.on('response', async response => {
+		// console.error(
+		// 	'RESPONSE-> response.status():' +
+		// 		response.status() +
+		// 		' - response.url():' +
+		// 		response.url() +
+		// 		' - response.headers():' +
+		// 		JSON.stringify(response.headers())
+		// );
+
+		// });
+
+		// page.on('request', async request => {
+		// console.error('REQUEST-> request.resourceType():' + request.resourceType() + ' - request.url():' + request.url());
+
+		// console.error('request.resourceType():' + request.resourceType()
+		// 	+ ' - request.url():' + request.url()
+		// 	+ ' - request.method():' + request.method()
+		// 	+ ' - request.headers():' + JSON.stringify(request.headers())
+		// 	+ ' - request.postData():' + request.postData()
+		// 	+ ' - request.isNavigationRequest():' + request.isNavigationRequest()
+		// 	+ ' - request.frame():' + request.frame()
+		// 	+ ' - request.frame().url():' + request.frame().url()
+		// 	+ ' - request.frame().parentFrame():' + request.frame().parentFrame()
+		// 	+ ' - request.frame().childFrames():' + request.frame().childFrames()
+		// 	+ ' - request.frame().childFrames().length:' + request.frame().childFrames().length
+		// );
+		// if (request.resourceType() == 'image') {
+		// 	await request.abort();
+		// } else {
+		// 	await request.continue();
+		// }
+		// });
+
 		page.on('dialog', async dialog => {
 			await wait(1000);
 			console.error(separador + 'close');
@@ -108,7 +162,6 @@ const run = async () => {
 			}
 		});
 
-		// Obtengo la ip actual desde donde me estoy conectando para tener un control de la misma
 		try {
 			console.error(separador, 2.1);
 			await page.goto('https://api.ipify.org');
@@ -126,33 +179,29 @@ const run = async () => {
 		//Inicio la primera pagina, espero 5-12 segundos y muevo el mouse
 		await page.goto(url, { waitUntil: 'load', timeout: 40 * 1000 });
 		console.error(separador, 4);
-		await wait((Math.floor(Math.random() * 6) + 2) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
-		console.error(separador, 5);
 
-		// Espero que aparezca el enlace para presionar
+		console.error(separador, 5);
 		await page.waitForSelector(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']",
 			{
 				visible: true,
 			}
 		);
-		console.error(separador, 6);
 
-		// Hacer click en el enlace, esperar y mover el mouse mientras
+		console.error(separador, 6);
+		// Hacer click en el boton
 		const a = await page.$(
 			"a[href='https://www.citaconsular.es/es/hosteds/widgetdefault/28330379fc95acafd31ee9e8938c278ff']"
 		);
-		await Promise.all([
-			a.click(),
-			wait(5000),
-			page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })
-		]);
-		await wait((Math.floor(Math.random() * 6) + 2) * 1000);
+
+		await Promise.all([a.click(), wait(5000), page.waitForNavigation({ waitUntil: 'load', timeout: 40 * 1000 })]);
+		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
 		console.error(separador, 7);
 
@@ -168,45 +217,96 @@ const run = async () => {
 		}
 		console.error(separador, 8);
 
+		// const pressionar = async page => {
 
-
-		// Grabo
+		// grabo
 		await page.screenshot({ path: `0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 		const bodyHTML0 = await page.content();
 		fs.writeFileSync(`0fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML0);
 
-		// Espero que aparezca el boton de continuar
+		// Espero al selector del boton de continuar
 		await page.waitForSelector('#idCaptchaButton', {
 			visible: true,
 			timeout: 30 * 1000,
 		});
 
-		// Selecciono el boton de continuar
+		// Selecciono el boton
 		const bktContinue = await page.$('#idCaptchaButton');
+
 		console.error(separador, 9);
+
 		console.error(separador, 'url1:' + page.url());
-		// Hago click en el boton de continuar
+		// Hago click en el boton
 		await bktContinue.click();
 		console.error(separador, 10);
 		console.error(separador, 'url2:' + page.url());
-		await wait((Math.floor(Math.random() * 6) + 2) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
 		console.error(separador, 11);
 		console.error(separador, 'url3:' + page.url());
 
+		// //! ///////////////////////////////
+		// await page.setRequestInterception(true);
+		// page.on('response', async response => {
+		// 	console.error(
+		// 		'RESPONSE-> response.status():' +
+		// 			response.status() +
+		// 			' - response.url():' +
+		// 			response.url() +
+		// 			' - response.headers():' +
+		// 			JSON.stringify(response.headers())
+		// 	);
+		// });
 
-		// Espero a que cargue la pagina (Esto es lo que mas error puede dar)
+		// page.on('request', async request => {
+		// 	console.error('REQUEST-> request.resourceType():' + request.resourceType() + ' - request.url():' + request.url());
+
+		// 	// console.error(
+		// 	// 	'request.resourceType():' +
+		// 	// 		request.resourceType() +
+		// 	// 		' - request.url():' +
+		// 	// 		request.url() +
+		// 	// 		' - request.method():' +
+		// 	// 		request.method() +
+		// 	// 		' - request.headers():' +
+		// 	// 		JSON.stringify(request.headers()) +
+		// 	// 		' - request.postData():' +
+		// 	// 		request.postData() +
+		// 	// 		' - request.isNavigationRequest():' +
+		// 	// 		request.isNavigationRequest() +
+		// 	// 		' - request.frame():' +
+		// 	// 		request.frame() +
+		// 	// 		' - request.frame().url():' +
+		// 	// 		request.frame().url() +
+		// 	// 		' - request.frame().parentFrame():' +
+		// 	// 		request.frame().parentFrame() +
+		// 	// 		' - request.frame().childFrames():' +
+		// 	// 		request.frame().childFrames() +
+		// 	// 		' - request.frame().childFrames().length:' +
+		// 	// 		request.frame().childFrames().length
+		// 	// );
+		// 	// if (request.resourceType() == 'image') {
+		// 	// 	await request.abort();
+		// 	// } else {
+		// 	await request.continue();
+		// 	// }
+		// });
+
+		// Espero a que cargue la pagina
 		await page.waitForNetworkIdle({
 			timeout: 40 * 1000,
 			idleTime: 3000,
 		});
+
 		console.error(separador, 12);
-		await wait((Math.floor(Math.random() * 6) + 2) * 1000);
+
+		await page.waitForTimeout((Math.floor(Math.random() * 6) + 2) * 1000);
 		await page.mouse.move(50, 50, { steps: 50 });
-		await wait((Math.floor(Math.random() * 2) + 1) * 1000);
+		await page.waitForTimeout((Math.floor(Math.random() * 2) + 1) * 1000);
 		await page.mouse.move(0, 0, { steps: 50 });
+
 		console.error(separador, 13);
 		console.error(separador, 'url FINAL:' + page.url()); //ACA DEBE DECIR SERVICES?
 
@@ -214,7 +314,9 @@ const run = async () => {
 		await page.screenshot({ path: `1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 		const bodyHTML1 = await page.content();
 		fs.writeFileSync(`1fullpage_INICIAL-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+
 		console.error(separador, 'Analizando la pagina...');
+		// AQUI SE ANALIZA LA PAGINA
 
 		// Grabo la ultimaURL
 		outputData = {
@@ -222,23 +324,18 @@ const run = async () => {
 			ultimaURL: page.url(),
 		};
 
-		//! ANALISIS DE LA PAGINA FINAL
-
-
 		// -> Verifico si dice "No hay horas disponibles"
 		let idDivBktServicesContainer_textContext;
 		try {
 			console.error(separador, 'Analizando la pagina...1');
 			await page.waitForSelector('#idDivBktServicesContainer', { timeout: 40 * 1000 });
 			console.error(separador, 'Analizando la pagina...2');
-
 			//Intento leer el elemento que dice No hay horas disponibles
 			idDivBktServicesContainer_textContext = await page.evaluate(() => {
 				const el = document.getElementById('idDivBktServicesContainer');
 				//const el3 = document.querySelector('#idDivBktServicesContainer');
 				return Promise.resolve(el?.children[0]?.innerHTML?.split('<br>')[0]); //=== 'No hay horas disponibles.'; //No hay horas disponibles.
 			});
-
 			console.error(separador, idDivBktServicesContainer_textContext);
 			console.error(separador, 'Analizando la pagina...3');
 		} catch (e) {
@@ -247,16 +344,35 @@ const run = async () => {
 		}
 
 		console.error(separador, 'Analizando la pagina... 4');
-
 		//A veces aca se clava con una pagina vacia, entonces evaluo si el body tiene algun objeto, si no tiene ningun objeto lanzo un timeout
 		await page.evaluate(() => {
 			const size = document.querySelector('body').children.length;
 			if (size == 0) throw new TimeoutError("'Pagina no cargada???????????'");
 		});
 
-		console.error(separador, 'Fin analisis de la pagina 1');
+		console.error(separador, 'Fin analisis de la pagina ');
 
 		await wait(1000);
+
+		// console.error('fin2');
+
+		// // -> div que aparece cuando NO hay citas habilitadas => debe ser NULL
+		// const idDivNotAvailableSlotsTextTop = await page2.$('#idDivNotAvailableSlotsTextTop');
+
+		// // -> div que aparece cuando hay citas habilitadas => debe ser != null
+		// // este div tambien aparece (aunque aparece vacio, sin hijos) cuando la pagina da un error de -> SE HA PRODUCIDO UN ERROR AL CARGAR LOS DATOS
+		// const idTimeListTable = await page2.$('#idTimeListTable');
+
+		// // -> URL en la que se encuentra -> debe incluir #datetime al final
+		// const nuevaURL = page2.url();
+
+		// //
+		// // -> div que aparece cuando hay citas habilitadas => debe ser != null
+		// const idDivSlotColumnContainer_1 = await page2.$('#idDivSlotColumnContainer-1');
+
+		// // -> div que tiene un valor cuando hay citas habilitadas => debe ser != null -> Viernes 16 de Diciembre de 2022
+		// const idDivBktDatetimeSelectedDate = await page2.$('#idDivBktDatetimeSelectedDate');
+		// let valueIdDivBktDatetimeSelectedDate = await page2.evaluate(el => el.textContent, idDivBktDatetimeSelectedDate);
 
 		// Hacer click aqui:
 		// idDivBktDatetimeDatePickerText
@@ -286,16 +402,18 @@ const run = async () => {
 			});
 			const bodyHTML2 = await page.content();
 			fs.writeFileSync(`2fullpage_PASOALGO2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-			console.error(separador, 'final 1');
 
+			console.error(separador, 'final 1');
 			//obtener la parte de abajo y presionarla para continuar
 			const idBktDefaultServicesContainer = await page.$('#idBktDefaultServicesContainer');
 			await idBktDefaultServicesContainer.click();
 			console.error(separador, 'final 2');
 
+			// await wait(15000);
 			// esperar a que cargue la pagina
 			await page.waitForNetworkIdle();
 			await wait(3000);
+
 			console.error(separador, 'final 3');
 
 			//Grabo
@@ -312,7 +430,7 @@ const run = async () => {
 				ultimaURL: page.url(),
 			};
 
-			//! AQUI SE ANALIZA LA PAGINA FINAL
+			// AQUI SE ANALIZA LA PAGINA
 			// -> div que aparece cuando NO hay citas habilitadas => debe ser NULL
 			const idDivNotAvailableSlotsTextTop = await page.$('#idDivNotAvailableSlotsTextTop');
 
@@ -409,7 +527,7 @@ const run = async () => {
 		); // print out data to STDOUT
 	}
 
-	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)
+	//Ejecucion
 	try {
 		console.error(separador, '____ Ejecucion ____');
 		//const cmd = port ? `sudo docker container restart proxy-kav-${port}` : 'sudo docker container restart proxy-kav';

@@ -88,8 +88,9 @@ export const runCheckDolar = async data => {
 		dolarBlueVenta = parseFloat(venta);
 
 		//Enviar Mensaje
-		const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
+		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
 		// const chatIds = ['5493515925801@c.us'];
+		const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
 
 		const text = `Cambio la cotizacion del dolar:
 
@@ -164,7 +165,8 @@ export const runCheckTurnosPasaporte = async () => {
 		//Enviar Mensaje
 		// const chatIds = ['5493515925801@c.us', '5493513041739@c.us']; //Yo y Fer
 		//const chatIds = ['5493515925801@c.us','5493515312948@c.us']; //Yo y Pupi.
-		const chatIds = ['5493515925801@c.us']; //Yo
+		//const chatIds = ['5493515925801@c.us']; //Yo
+		const chatIds = ['120363163745507206@g.us']; //GRUPO PASAPORTES CONSULADO CORDOBA ESPAÑA
 
 		const text = `Verificar Cita para renovar pasaporte: (${valueIdDivBktDatetimeSelectedDate})
 
@@ -183,16 +185,16 @@ export const runCheckCitaLMDLahabana = async (port: string) => {
 	log(`\n\n\n\n\n\n\n\n\n\n[${momento()}] runCheckCitaLMDLahabana START`);
 
 	//! VALIDACIONES
-	// const estados = globalThis.estados;
-	// if (!estados) {
-	// 	console.log('Cliente de whastapp-web.js no esta listo');
-	// 	return;
-	// }
-	// const estadoActual = globalThis.estados[estados.length - 1].estado;
-	// if (estadoActual !== 'LISTO') {
-	// 	console.log('Cliente de whastapp-web.js no esta listo');
-	// 	return;
-	// }
+	const estados = globalThis.estados;
+	if (!estados) {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+	const estadoActual = globalThis.estados[estados.length - 1].estado;
+	if (estadoActual !== 'LISTO') {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
 
 	const data = {
 		port,
@@ -244,7 +246,6 @@ export const runCheckCitaLMDLahabana = async (port: string) => {
 	);
 
 	// AVISOS
-	// Esta baneado...
 	if (ban) {
 		console.log(' 	------> runCheckCitaLMDLahabana -> BANEADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 		log(' 	------> runCheckCitaLMDLahabana -> BANEADO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
