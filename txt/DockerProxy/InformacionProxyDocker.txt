@@ -1,0 +1,46 @@
+ARCHIVOS EN: D:\Udemy\Proyectos\WSP
+
+
+https://hub.docker.com/r/jonoh/openvpn-proxy
+https://github.com/jonohill/docker-openvpn-proxy
+https://github.com/jonohill/docker-openvpn-proxy/blob/master/docker-compose.yml
+
+
+---- PROCEDIMIENTO PARA AGREGAR LOS CONTENEDORES DOCKERS QUE ACTUEN COMO PROXY ---
+1º GENERAR el archivo ovpn desde  https://my.kaspersky.com/VPN#/portal/pages/ksec
+2º Renombrarlo a vpn.ovpn
+4º CREAR el archivo .env con el user y el pass que dio la pagina
+5º Copiar los archivos (junto con el docker-compose.yml en una carpeta nueva) en /home/chanfi/otros/proxy-openvpn/{FER/MIO}/NUMERO
+6º Eliminar el contenedor anterior
+	docker container stop proxy-kav
+	docker container rm proxy-kav
+7º recrear el contenedor
+	docker-compose up -d
+	
+
+Cambiar IP: 
+sudo docker container restart proxy-kav
+	
+
+Chequear IP:
+curl https://api.ipify.org
+curl https://api.ipify.org -x http://127.0.0.1:8089
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+OTRA INFORMACION CIRCUNSTANCIAL
+
+198.145.224.134
+
+remote location-pub-kl--cambodia-phnom-penh.aura-servers.com 1194
+188.215.235.210
+188.215.235.229
+188.215.235.253
+
+

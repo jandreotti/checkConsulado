@@ -1,0 +1,28 @@
+version: "3"
+
+# Try `docker-compose up`
+
+services:
+    ovpn_proxy:
+        image: jonoh/openvpn-proxy
+        container_name: proxy-kav
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun
+        dns:
+            - 1.1.1.1
+            - 1.0.0.1
+        volumes:
+            - ./vpn.ovpn:/config/config.ovpn
+        environment: # This needs to change - your local network
+            - LOCAL_NETWORK=10.0.8.1/24
+            # Create a .env file with these values
+            # Adjust for your needs
+            # - OPENVPN_TUNNEL_HOSTS=*.corp.com
+            - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+            - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+        ports:
+            - 8088:80
+            - 8089:8080
+        restart: always
