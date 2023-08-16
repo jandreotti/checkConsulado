@@ -4,9 +4,11 @@ import { Estado } from './interfaces/estado';
 import os from 'os-utils';
 import { hostname } from 'os';
 
-import { momentoSecondsToTime, momentoSecondsToTime2 } from './helpers/momento';
+import { momentoFormateado, momentoSecondsToTime, momentoSecondsToTime2 } from './helpers/momento';
+import { log } from './helpers/helpers';
 
 const destroyClient = async starter => {
+	log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: (${starter}) Shutting down...`, "wsp.log");
 	console.log(`(${starter}) Shutting down...`);
 	await globalThis.client.destroy();
 	process.exit(0);
@@ -48,6 +50,7 @@ export const iniciarCliente = async () => {
 
 	client.on('loading_screen', (percent, message) => {
 		console.log('LOADING', percent, message);
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: loading_screen ${percent} _ ${message}`, "wsp.log");
 		globalThis.estado = globalThis.estados.push({
 			estado: 'INICIANDO',
 			valor: percent,
@@ -56,6 +59,7 @@ export const iniciarCliente = async () => {
 
 	client.on('authenticated', session => {
 		console.log('AUTHENTICATED');
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: authenticated`, "wsp.log");
 		globalThis.estado = globalThis.estados.push({
 			estado: 'AUTENTICADO',
 			valor: 0,
@@ -63,6 +67,7 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('auth_failure', msg => {
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: auth_failure`, "wsp.log");
 		// Fired if session restore was unsuccessful
 		console.error('AUTHENTICATION FAILURE', msg);
 		globalThis.estado = globalThis.estados.push({
@@ -72,6 +77,8 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('message_create', msg => {
+
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: message_create`, "wsp.log");
 		// Fired on all message creations, including your own
 		if (msg.fromMe) {
 			// do stuff here
@@ -80,6 +87,7 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('message_revoke_everyone', async (after, before) => {
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: message_revoke_everyone`, "wsp.log");
 		// Fired whenever a message is deleted by anyone (including you)
 		console.log({ after: after.body }); // message after it was deleted.
 		if (before) {
@@ -88,6 +96,8 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('qr', qr => {
+
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: qr ${qr}`, "wsp.log");
 		// Generate and scan this code with your phone
 		console.log('QR RECIBIDO', qr);
 		globalThis.estado = globalThis.estados.push({
@@ -99,6 +109,8 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('ready', () => {
+
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: ready`, "wsp.log");
 		console.log('Client is ready!');
 		// Number where you want to send the message.
 		// const number = '+5493516461960';
@@ -120,6 +132,8 @@ export const iniciarCliente = async () => {
 	});
 
 	client.on('message', async msg => {
+
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: message`, "wsp.log");
 		if (msg.body == '!stats') {
 			let mensaje = '*ESTADO:*\n';
 
@@ -170,15 +184,13 @@ export const iniciarCliente = async () => {
 			// console.log({ contact });
 			if (msg.type === 'chat')
 				console.log(
-					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: ${
-						msg.body
+					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: ${msg.body
 					}`
 				);
 
 			if (msg.type !== 'chat')
 				console.log(
-					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: type:${
-						msg.type
+					`[[ (${contact.name}) /// (${contact.pushname})]] (${msg.from.slice(0, msg.from.length - 5)}) --->: type:${msg.type
 					}`
 				);
 		});
@@ -190,9 +202,22 @@ export const iniciarCliente = async () => {
 		// );
 	});
 
+	client.on("change_state", (state) => {
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: change_state ${state}`, "wsp.log");
+	});
+
+	client.on("disconnected", (reason) => {
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: disconnected ${reason}`, "wsp.log");
+	});
+
+	client.on("remote_session_saved", () => {
+		log(`[${momentoFormateado('YYYYMMDD_HHmmss')}] WSP INFO: remote_session_saved`, "wsp.log");
+	});
 	client.initialize();
 
 	process.on('SIGINT', async () => {
 		destroyClient('SIGINT');
 	});
+
+
 };
