@@ -78,7 +78,7 @@ export const iniciarCliente = async () => {
 
 	client.on('message_create', msg => {
 
-		log(`[${momento()}] WSP INFO: message_create`, "wsp.log");
+		log(`[${momento()}] WSP INFO: message_create: (${msg.to}) -> ${msg.body} `, "wsp.log");
 		// Fired on all message creations, including your own
 		if (msg.fromMe) {
 			// do stuff here
@@ -133,7 +133,7 @@ export const iniciarCliente = async () => {
 
 	client.on('message', async msg => {
 
-		log(`[${momento()}] WSP INFO: message`, "wsp.log");
+		log(`[${momento()}] WSP INFO: message: ${msg.body}`, "wsp.log");
 		if (msg.body == '!stats') {
 			let mensaje = '*ESTADO:*\n';
 
