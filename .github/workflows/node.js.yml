@@ -43,6 +43,8 @@ jobs:
 
       - run: ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/sesionWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_auth
 
+      - run: ln -s /home/chanfi/Runners/checkConsulado/_work/checkConsulado/cacheWSP /home/chanfi/Runners/checkConsulado/_work/checkConsulado/checkConsulado/.wwebjs_cache
+
       - run: npm i
 
       - run: pm2 reload checkConsulado
