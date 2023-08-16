@@ -22,7 +22,7 @@ const run = async () => {
 	try {
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const browser = await puppeteer.launch({
-			userDataDir: "/tmp/limpiar1/",
+			// userDataDir: "/tmp/limpiar1/",
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 		});

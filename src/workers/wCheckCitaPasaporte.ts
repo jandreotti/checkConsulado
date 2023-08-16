@@ -37,7 +37,7 @@ const run = async () => {
 			'https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo';
 
 		const browser = await puppeteer.launch({
-			userDataDir: "/tmp/limpiar2",
+			// userDataDir: "/tmp/limpiar2",
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
 			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			headless: true,
