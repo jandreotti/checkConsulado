@@ -66,6 +66,7 @@ const run = async () => {
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
 		const browser = await puppeteer.launch({
+			userDataDir: "/tmp/limpiar3/",
 			args: [
 				'--no-sandbox',
 				'--disable-setuid-sandbox',
