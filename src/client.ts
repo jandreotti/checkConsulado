@@ -133,7 +133,7 @@ export const iniciarCliente = async () => {
 
 	client.on('message', async msg => {
 
-		log(`[${momento()}] WSP INFO: message: ${msg.body}`, "wsp.log");
+		log(`[${momento()}] WSP INFO: message: (${msg.from}) -> ${msg.body}`, "wsp.log");
 		if (msg.body == '!stats') {
 			let mensaje = '*ESTADO:*\n';
 
