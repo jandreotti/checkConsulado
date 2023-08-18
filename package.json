@@ -12,6 +12,7 @@
 	"author": "jandreotti",
 	"license": "ISC",
 	"devDependencies": {
+		"@types/fs-extra": "^11.0.1",
 		"@types/md5": "^2.3.2",
 		"@types/os-utils": "0.0.1",
 		"@types/qr-image": "^3.2.5",

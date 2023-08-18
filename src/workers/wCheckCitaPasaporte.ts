@@ -1,7 +1,7 @@
 import puppeteer, { Browser, Page, TimeoutError } from 'puppeteer';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
-import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
-import fs from 'fs';
+import { getChromeTmpDataDir, getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
+import fs from "fs-extra";
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -165,7 +165,13 @@ const run = async () => {
 			})
 		); // print out data to STDOUT
 	} finally {
+		const chromeTmpDataDir = getChromeTmpDataDir(browser);
 		await browser.close();
+		console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
+		if (chromeTmpDataDir !== null) {
+			console.error("removiendo... ");
+			fs.removeSync(chromeTmpDataDir);
+		}
 	}
 
 	//! Esto es clave para que salga, porque a veces no salia
