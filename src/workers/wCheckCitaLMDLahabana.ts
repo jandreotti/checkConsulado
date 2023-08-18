@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import { Browser, TimeoutError } from 'puppeteer';
 
 import { exec } from 'child_process';
-import { getChromeTmpDataDir } from '../helpers/puppeteer-helper';
+import { closeBrowser } from '../helpers/puppeteer-helper';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -169,17 +169,23 @@ const run = async () => {
 			//! RETORNO EL OBJETO outputData por medio del console.log
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 
-			try {
-				const chromeTmpDataDir = getChromeTmpDataDir(browser);
-				await browser.close();
-				console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-				if (chromeTmpDataDir !== null) {
-					console.error("removiendo... ");
-					fs.removeSync(chromeTmpDataDir);
-				}
-			} catch (error) {
-				console.error(separador, 'Error al cerrar el navegador por BAN: ', error.message);
-			}
+			// try {
+			// 	// obtengo la carpeta temporal que crea el navegador
+			// 	const chromeTmpDataDir = getChromeTmpDataDir(browser);
+			// 	// cierro el navegador
+			// 	await browser.close();
+			// 	// borro la carpeta temporal
+			// 	console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
+			// 	if (chromeTmpDataDir !== null) {
+			// 		console.error("removiendo... ");
+			// 		fs.removeSync(chromeTmpDataDir);
+			// 	}
+			// } catch (error) {
+			// 	console.error(separador, 'Error al cerrar el navegador por BAN: ', error.message);
+			// }
+
+			const res = await closeBrowser(browser);
+			console.error(`closeBrowser: ${res}`);
 
 			process.exit(1);
 		}
@@ -425,13 +431,18 @@ const run = async () => {
 			})
 		); // print out data to STDOUT
 	} finally {
-		const chromeTmpDataDir = getChromeTmpDataDir(browser);
-		await browser.close();
-		console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-		if (chromeTmpDataDir !== null) {
-			console.error("removiendo... ");
-			fs.removeSync(chromeTmpDataDir);
-		}
+		// // obtengo la carpeta temporal que crea el navegador
+		// const chromeTmpDataDir = getChromeTmpDataDir(browser);
+		// // cierro el navegador
+		// await browser.close();
+		// // borro la carpeta temporal
+		// console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
+		// if (chromeTmpDataDir !== null) {
+		// 	console.error("removiendo... ");
+		// 	fs.removeSync(chromeTmpDataDir);
+		// }
+		const res = await closeBrowser(browser);
+		console.error(`closeBrowser: ${res}`);
 	}
 
 	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)

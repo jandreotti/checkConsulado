@@ -1,7 +1,8 @@
 import puppeteer, { Browser } from 'puppeteer';
 import { momento } from '../helpers/momento';
-import { getChromeTmpDataDir } from '../helpers/puppeteer-helper';
+// import { getChromeTmpDataDir } from '../helpers/puppeteer-helper';
 import fs from "fs-extra";
+import { closeBrowser } from '../helpers/puppeteer-helper';
 
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
@@ -76,15 +77,18 @@ const run = async () => {
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT
 	}
 	finally {
-
-
-		const chromeTmpDataDir = getChromeTmpDataDir(browser);
-		await browser.close();
-		console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-		if (chromeTmpDataDir !== null) {
-			console.error("removiendo... ");
-			fs.removeSync(chromeTmpDataDir);
-		}
+		// // obtengo la carpeta temporal que crea el navegador
+		// const chromeTmpDataDir = getChromeTmpDataDir(browser);
+		// // cierro el navegador
+		// await browser.close();
+		// // borro la carpeta temporal
+		// console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
+		// if (chromeTmpDataDir !== null) {
+		// 	console.error("removiendo... ");
+		// 	fs.removeSync(chromeTmpDataDir);
+		// }
+		const res = await closeBrowser(browser);
+		console.error(`closeBrowser: ${res}`);
 	}
 
 
