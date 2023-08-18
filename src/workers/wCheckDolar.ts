@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import { momento } from '../helpers/momento';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
@@ -19,9 +19,10 @@ const run = async () => {
 	//! DECLARO EL VALOR POR DEFECTO QUE VOY A DEVOLVER EN CASO DE ERROR
 	let outputData: IOutputData_WCheckDolar = {};
 
+	let browser: Browser;
 	try {
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
-		const browser = await puppeteer.launch({
+		browser = await puppeteer.launch({
 			// userDataDir: "/tmp/limpiar1/",
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
 			headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
@@ -62,7 +63,7 @@ const run = async () => {
 		});
 
 		await page.close();
-		await browser.close();
+		// await browser.close();
 
 		//! RETORNO EL OBJETO outputData por medio del console.log
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
@@ -71,6 +72,10 @@ const run = async () => {
 		// console.error({ errorCheckDolarBlueCordoba: error });
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT
 	}
+	finally {
+		await browser.close();
+	}
+
 
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);

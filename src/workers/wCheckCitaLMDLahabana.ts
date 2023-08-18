@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer-extra';
 puppeteer.use(StealthPlugin());
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import fs from 'fs';
-import { TimeoutError } from 'puppeteer';
+import { Browser, TimeoutError } from 'puppeteer';
 
 import { exec } from 'child_process';
 
@@ -60,12 +60,14 @@ const run = async () => {
 		},
 	};
 
+	let browser: Browser;
+
 	try {
 		console.error(separador, 1);
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url = 'https://www.exteriores.gob.es/Consulados/lahabana/es/ServiciosConsulares/Paginas/cita4LMD.aspx';
 
-		const browser = await puppeteer.launch({
+		browser = await puppeteer.launch({
 			// userDataDir: "/tmp/limpiar3/",
 			args: [
 				'--no-sandbox',
@@ -165,6 +167,13 @@ const run = async () => {
 			outputData.ultimaURL = url2;
 			//! RETORNO EL OBJETO outputData por medio del console.log
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
+
+			try {
+				await browser.close();
+			} catch (error) {
+				console.error(separador, 'Error al cerrar el navegador por BAN: ', error.message);
+			}
+
 			process.exit(1);
 		}
 		console.error(separador, 8);
@@ -372,7 +381,7 @@ const run = async () => {
 		// }
 
 		await page.close();
-		await browser.close();
+		// await browser.close();
 
 		//! GUARDO EN EL OBJETO outputData lo que quiero retornar
 		outputData = {
@@ -408,6 +417,8 @@ const run = async () => {
 				},
 			})
 		); // print out data to STDOUT
+	} finally {
+		await browser.close();
 	}
 
 	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)

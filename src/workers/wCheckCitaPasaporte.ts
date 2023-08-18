@@ -1,4 +1,4 @@
-import puppeteer, { Page, TimeoutError } from 'puppeteer';
+import puppeteer, { Browser, Page, TimeoutError } from 'puppeteer';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from 'fs';
@@ -31,12 +31,13 @@ const run = async () => {
 		valueIdDivBktDatetimeSelectedDate: '',
 	};
 
+	let browser: Browser;
 	try {
 		//! INICIO EL NAVEGADOR EN LA URL SOLICITADA
 		const url =
 			'https://www.exteriores.gob.es/Consulados/cordoba/es/ServiciosConsulares/Paginas/index.aspx?scco=Argentina&scd=129&scca=Pasaportes+y+otros+documentos&scs=Pasaportes+-+Requisitos+y+procedimiento+para+obtenerlo';
 
-		const browser = await puppeteer.launch({
+		browser = await puppeteer.launch({
 			// userDataDir: "/tmp/limpiar2",
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
 			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
@@ -136,7 +137,7 @@ const run = async () => {
 
 		await page.close();
 		await page2.close();
-		await browser.close();
+		// await browser.close();
 
 		//! GUARDO EN EL OBJETO outputData lo que quiero retornar
 		outputData = {
@@ -163,6 +164,8 @@ const run = async () => {
 				},
 			})
 		); // print out data to STDOUT
+	} finally {
+		await browser.close();
 	}
 
 	//! Esto es clave para que salga, porque a veces no salia
