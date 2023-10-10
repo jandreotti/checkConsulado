@@ -13,7 +13,7 @@ iniciarCliente();
 //! CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
 setInterval(runCheckDolar, 30000);
-runCheckDolar(undefined);
+// runCheckDolar(undefined);
 
 //! TURNO PASAPORTE
 setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
