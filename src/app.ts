@@ -3,27 +3,34 @@ import router from './routes/index.js';
 import { iniciarCliente } from './client.js';
 import { runCheckCitaLMDLahabana, runCheckDolar, runCheckTurnosPasaporte } from './workers/workersRunner.js';
 
+
 //! CONFIGURACION WHATSAPP WEB JS
 iniciarCliente();
 
-// ! CONFIGURACION CHEQUEO PAGINA DE CONSULADO
+// ! CONFIGURACION CHEQUEO PAGINA DE CONSULADO (YA NO SE USA)
 // setInterval(checkConsuladoPage, 10000);
 
-//! CONFIGURACION CHEQUEO DE DOLAR
+//! CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
 setInterval(runCheckDolar, 30000);
+runCheckDolar(undefined);
+
+//! TURNO PASAPORTE
 setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
 
-//setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
-// runCheckCitaLMDLahabana('8089');
-// runCheckCitaLMDLahabana('8091');
+//! TURNO LA HABANA
+// //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
+// // runCheckCitaLMDLahabana('8089');
+// // runCheckCitaLMDLahabana('8091');
 
-setInterval(() => runCheckCitaLMDLahabana('8089'), 60000 * 3); //Chequea cada 3 minutos
+// // Inicio el chequeo cada 3 minutos
+// setInterval(() => runCheckCitaLMDLahabana('8089'), 60000 * 3); //Chequea cada 3 minutos 
 
-// Espero un minuto para iniciar cada 3 minutos el otro
-setTimeout(() => {
-	setInterval(() => runCheckCitaLMDLahabana('8091'), 60000 * 3); //Chequea cada 3 minutos
-}, 60000 * 1.5);
+// // Espero un minuto para iniciar cada 3 minutos el otro
+// setTimeout(() => {
+// 	setInterval(() => runCheckCitaLMDLahabana('8091'), 60000 * 3); //Chequea cada 3 minutos
+// }, 60000 * 1.5);
+
 
 //! CONFIGURACION EXPRESS
 const app = express();

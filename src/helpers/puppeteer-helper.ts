@@ -28,6 +28,11 @@ export const getNewPageWhenLoaded = async (browser: Browser) => {
 // 	return chromeTmpDataDir;
 // };
 
+/**
+ *  Funcion que Obtiene el path de los archivos temporales, Cierra el browser y borra la carpeta de los archivos temporales
+ * @param browser 
+ * @returns 
+ */
 export const closeBrowser = async (browser: Browser): Promise<string> => {
 
 	let res;

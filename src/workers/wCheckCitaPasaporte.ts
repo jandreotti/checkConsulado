@@ -165,17 +165,7 @@ const run = async () => {
 			})
 		); // print out data to STDOUT
 	} finally {
-		// // obtengo la carpeta temporal que crea el navegador
-		// const chromeTmpDataDir = getChromeTmpDataDir(browser);
-		// // cierro el navegador
-		// await browser.close();
-		// // borro la carpeta temporal
-		// console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-		// if (chromeTmpDataDir !== null) {
-		// 	console.error("removiendo... ");
-		// 	fs.removeSync(chromeTmpDataDir);
-		// }
-
+		// Cierro el browser y elimino la carpeta temporal
 		const res = await closeBrowser(browser);
 		console.error(`closeBrowser: ${res}`);
 	}

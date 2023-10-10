@@ -169,21 +169,8 @@ const run = async () => {
 			//! RETORNO EL OBJETO outputData por medio del console.log
 			console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 
-			// try {
-			// 	// obtengo la carpeta temporal que crea el navegador
-			// 	const chromeTmpDataDir = getChromeTmpDataDir(browser);
-			// 	// cierro el navegador
-			// 	await browser.close();
-			// 	// borro la carpeta temporal
-			// 	console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-			// 	if (chromeTmpDataDir !== null) {
-			// 		console.error("removiendo... ");
-			// 		fs.removeSync(chromeTmpDataDir);
-			// 	}
-			// } catch (error) {
-			// 	console.error(separador, 'Error al cerrar el navegador por BAN: ', error.message);
-			// }
 
+			// Cierro el browser y elimino la carpeta temporal
 			const res = await closeBrowser(browser);
 			console.error(`closeBrowser: ${res}`);
 
@@ -431,16 +418,7 @@ const run = async () => {
 			})
 		); // print out data to STDOUT
 	} finally {
-		// // obtengo la carpeta temporal que crea el navegador
-		// const chromeTmpDataDir = getChromeTmpDataDir(browser);
-		// // cierro el navegador
-		// await browser.close();
-		// // borro la carpeta temporal
-		// console.error(`chromeTmpDataDir: ${chromeTmpDataDir}`);
-		// if (chromeTmpDataDir !== null) {
-		// 	console.error("removiendo... ");
-		// 	fs.removeSync(chromeTmpDataDir);
-		// }
+		// Cierro el browser y elimino la carpeta temporal
 		const res = await closeBrowser(browser);
 		console.error(`closeBrowser: ${res}`);
 	}
