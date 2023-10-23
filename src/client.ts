@@ -103,6 +103,7 @@ export const iniciarCliente = async () => {
 		globalThis.estado = globalThis.estados.push({
 			estado: 'QR',
 			valor: qr,
+			fecha: new Date(),
 		} as Estado);
 
 		globalThis.qrCode = qr;

@@ -96,6 +96,25 @@ const qrImage = async (req, res, next) => {
 		.join('\n');
 
 	const estadoActual = estados[estados.length - 1].estado;
+
+	//Fecha ultimo estado
+	let fecha = "";
+	try {
+		const fechaEstado = estados[estados.length - 1].fecha;
+		const day = fechaEstado.getDate() + "";
+		const month = (fechaEstado.getMonth() + 1) + "";
+		const year = fechaEstado.getFullYear() + "";
+		const hour = fechaEstado.getHours() + "";
+		const minutes = fechaEstado.getMinutes() + "";
+		const seconds = fechaEstado.getSeconds() + "";
+		fecha = day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":" + seconds;
+	}
+	catch (err) {
+		console.log(err);
+		fecha = "Sin fecha (ERROR)";
+	}
+
+
 	const qrCode = globalThis.qrCode;
 
 	let html = '';
@@ -122,7 +141,7 @@ const qrImage = async (req, res, next) => {
 				<title>QR</title>
 			</head>
 			<body>
-				<h1>(QR) (Estado Actual: ${estadoActual} )</h1>
+				<h1>(QR) (Estado Actual: ${estadoActual} ) ->   {${fecha}}</h1>
 				${htmlCode}
 
 				<label>QR: \n${qrCode}</label>
