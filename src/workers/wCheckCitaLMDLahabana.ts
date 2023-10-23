@@ -422,7 +422,7 @@ const run = async () => {
 		const res = await closeBrowser(browser);
 		console.error(`closeBrowser: ${res}`);
 	}
-
+ 
 	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)
 	try {
 		console.error(separador, '____ Ejecucion ____');
