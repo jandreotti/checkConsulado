@@ -2,6 +2,7 @@ import puppeteer, { Browser, Page, TimeoutError } from 'puppeteer';
 import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { closeBrowser, getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import fs from "fs-extra";
+import { exec } from 'child_process';
 
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
@@ -22,6 +23,11 @@ const run = async () => {
 	// const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
 	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaPasaporte;
 
+	const port = "8089";
+	const proxy = `--proxy-server=http://127.0.0.1:${port}`; // 8089 o 8091
+	// const separador = port === '8091' ? '==================>' : '';
+	//
+
 	//! DECLARO EL VALOR POR DEFECTO QUE VOY A DEVOLVER EN CASO DE ERROR
 	let outputData: IOutputData_WCheckCitaPasaporte = {
 		idDivNotAvailableSlotsTextTop: false,
@@ -39,7 +45,11 @@ const run = async () => {
 
 		browser = await puppeteer.launch({
 			// userDataDir: "/tmp/limpiar2",
-			args: ['--no-sandbox', '--disable-setuid-sandbox'],
+			args: [
+				'--no-sandbox',
+				'--disable-setuid-sandbox',
+				proxy,
+			],
 			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			headless: true,
 			// headless: false, // para ver que hace el explorador en la pagina
@@ -181,6 +191,31 @@ const run = async () => {
 		const res = await closeBrowser(browser);
 		console.error(`closeBrowser: ${res}`);
 	}
+
+	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)
+	try {
+		// console.error(separador, '____ Ejecucion ____');
+		//const cmd = port ? `sudo docker container restart proxy-kav-${port}` : 'sudo docker container restart proxy-kav';
+		const cmd =
+			port === '8089' ? `sudo docker container restart proxy-kav` : 'sudo docker container restart proxy-kav2';
+		exec(cmd, (error, stdout, stderr) => {
+			if (error) {
+				// console.error(separador, `error EJECUCION:: ${error.message}`);
+				return;
+			}
+
+			if (stderr) {
+				// console.error(separador, `stderr EJECUCION: ${stderr}`);
+				return;
+			}
+
+			// console.error(separador, `stdout EJECUCION:\n${stdout}`);
+		});
+	} catch (e) {
+		// console.error(separador, `error EJECUCION:: ${e.message}`);
+	}
+
+	// console.error(separador, '____ FIN Ejecucion ____');
 
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);

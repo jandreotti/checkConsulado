@@ -445,6 +445,7 @@ const run = async () => {
 	} catch (e) {
 		console.error(separador, `error EJECUCION:: ${e.message}`);
 	}
+	
 	console.error(separador, '____ FIN Ejecucion ____');
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);
