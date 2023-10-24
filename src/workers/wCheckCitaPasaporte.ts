@@ -7,7 +7,9 @@ import { exec } from 'child_process';
 // WARNING: don't use console.log here for debug, use console.error instead. STDOUT is used to deliver output data -> console.error('Mensaje');
 // find value of input process argument with --input-data
 
-export interface IInputData_WCheckCitaPasaporte { }
+export interface IInputData_WCheckCitaPasaporte {
+	port?: string;
+}
 
 export interface IOutputData_WCheckCitaPasaporte {
 	idDivNotAvailableSlotsTextTop: boolean;
@@ -20,12 +22,13 @@ export interface IOutputData_WCheckCitaPasaporte {
 
 const run = async () => {
 	//! CON ESTAS LINEAS OBTENGO EL VALOR DEL ARGUMENTO QUE LE PASO AL PROCESO HIJO SI ES QUE LO NECESITO
-	// const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
-	// const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaPasaporte;
-
-	const port = "8089";
-	const proxy = `--proxy-server=http://127.0.0.1:${port}`; // 8089 o 8091
-	// const separador = port === '8091' ? '==================>' : '';
+	const inpDataB64 = process.argv.find(a => a.startsWith('--input-data')).replace('--input-data', '');
+	const inputData = JSON.parse(Buffer.from(inpDataB64, 'base64').toString()) as IInputData_WCheckCitaPasaporte;
+	//
+	const { port } = inputData;
+	const proxy = `--proxy-server=http://127.0.0.1:${port}`;
+	const separador = port === '8091' ? '==================>' : '';
+	// const separador = '==================>';
 	//
 
 	//! DECLARO EL VALOR POR DEFECTO QUE VOY A DEVOLVER EN CASO DE ERROR
@@ -48,7 +51,7 @@ const run = async () => {
 			args: [
 				'--no-sandbox',
 				'--disable-setuid-sandbox',
-				proxy,
+				port ? proxy : '',
 			],
 			// headless: 'new', // trabaja en background ->  con este anda bien el waitforNetworkIdle
 			headless: true,
@@ -194,28 +197,28 @@ const run = async () => {
 
 	//Ejecucion de comando para reiniciar el docker que contiene el proxy (Con esto de abajo cambio la IP)
 	try {
-		// console.error(separador, '____ Ejecucion ____');
+		console.error(separador, '____ Ejecucion ____');
 		//const cmd = port ? `sudo docker container restart proxy-kav-${port}` : 'sudo docker container restart proxy-kav';
 		const cmd =
 			port === '8089' ? `sudo docker container restart proxy-kav` : 'sudo docker container restart proxy-kav2';
 		exec(cmd, (error, stdout, stderr) => {
 			if (error) {
-				// console.error(separador, `error EJECUCION:: ${error.message}`);
+				console.error(separador, `error EJECUCION:: ${error.message}`);
 				return;
 			}
 
 			if (stderr) {
-				// console.error(separador, `stderr EJECUCION: ${stderr}`);
+				console.error(separador, `stderr EJECUCION: ${stderr}`);
 				return;
 			}
 
-			// console.error(separador, `stdout EJECUCION:\n${stdout}`);
+			console.error(separador, `stdout EJECUCION:\n${stdout}`);
 		});
 	} catch (e) {
-		// console.error(separador, `error EJECUCION:: ${e.message}`);
+		console.error(separador, `error EJECUCION:: ${e.message}`);
 	}
 
-	// console.error(separador, '____ FIN Ejecucion ____');
+	console.error(separador, '____ FIN Ejecucion ____');
 
 	//! Esto es clave para que salga, porque a veces no salia
 	process.exit(1);

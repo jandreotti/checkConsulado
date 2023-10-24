@@ -7,7 +7,7 @@ import { momento, momentoFormateado, wait } from '../helpers/momento';
 import { ejecutar } from './runner';
 import { IOutputData_WCheckDolar } from './wCheckDolar';
 import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
-import { IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
+import { IInputData_WCheckCitaPasaporte, IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
 import { IInputData_WCheckCitaLMDLahabana, IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
 import { log } from '../helpers/helpers';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
@@ -108,7 +108,7 @@ Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 	}
 };
 
-export const runCheckTurnosPasaporte = async () => {
+export const runCheckTurnosPasaporte = async (port: string = "") => {
 	console.log(`\n[${momento()}] runCheckTurnosPasaporte START`);
 
 	// //! VALIDACIONES
@@ -123,10 +123,14 @@ export const runCheckTurnosPasaporte = async () => {
 		return;
 	}
 
+	const data = {
+		port,
+	} as IInputData_WCheckCitaPasaporte;
+
 	//! EJECUCION DEL PROCESO HIJO
 	const retorno = await ejecutar({
 		filename: 'wCheckCitaPasaporte.js', // Archivo a ejecutar
-		// data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
+		data, // Datos a enviar al proceso hijo (osea al archivo wCheckCitaPasaporte.js en el inputData)
 		tagProcess: 'worker-check-cita-pasaporte', // Tag para identificar el proceso hijo
 		debug: false, // Si se quiere ver el log del proceso hijo que largue con console.error
 	});

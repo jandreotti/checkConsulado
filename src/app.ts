@@ -16,7 +16,12 @@ setInterval(runCheckDolar, 30000);
 // runCheckDolar(undefined);
 
 //! TURNO PASAPORTE
-setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
+// setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
+setInterval(() => runCheckTurnosPasaporte('8089'), 60000 * 3); //Chequea cada 3 minutos 
+
+setTimeout(() => {
+	setInterval(() => runCheckTurnosPasaporte('8091'), 60000 * 3); //Chequea cada 3 minutos
+}, 60000 * 1.5);
 
 //! TURNO LA HABANA
 // //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
