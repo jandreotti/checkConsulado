@@ -65,6 +65,12 @@ const run = async () => {
 		// await page.waitForNavigation({ timeout: 20 });
 		await wait(5000);
 
+
+		//! Grabo a ver que hay
+		await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		const bodyHTML1 = await page2.content();
+		fs.writeFileSync(`1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+
 		///obtener el boton de continuar y presionarlo
 		const bktContinue = await page2.$('#bktContinue');
 		await bktContinue.click();
@@ -99,6 +105,11 @@ const run = async () => {
 		// Hacer click aqui:
 		// idDivBktDatetimeDatePickerText
 
+		//! Grabo a ver que hay
+		await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		const bodyHTML2 = await page2.content();
+		fs.writeFileSync(`2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
 		// if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
 		// 	//* Saco fotos si hay turnos disponibles
@@ -115,25 +126,25 @@ const run = async () => {
 		// }
 
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
-		// if (
-		// 	!idDivNotAvailableSlotsTextTop &&
-		// 	idTimeListTable &&
-		// 	nuevaURL.includes('#datetime') &&
-		// 	idDivSlotColumnContainer_1 &&
-		// 	valueIdDivBktDatetimeSelectedDate != ''
-		// ) {
-		// 	//* Saco fotos si hay turnos disponibles
-		// 	await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		if (
+			!idDivNotAvailableSlotsTextTop &&
+			idTimeListTable &&
+			nuevaURL.includes('#datetime') &&
+			idDivSlotColumnContainer_1 &&
+			valueIdDivBktDatetimeSelectedDate != ''
+		) {
+			//* Saco fotos si hay turnos disponibles
+			await page2.screenshot({ path: `3fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 
-		// 	//* Guardo el HTML de la pagina para Debuguear
-		// 	// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
-		// 	// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
-		// 	const bodyHTML3 = await page2.content();
-		// 	//
-		// 	// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-		// 	// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-		// 	fs.writeFileSync(`2fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
-		// }
+			//* Guardo el HTML de la pagina para Debuguear
+			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+			const bodyHTML3 = await page2.content();
+			//
+			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+			fs.writeFileSync(`3fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+		}
 
 		await page.close();
 		await page2.close();
@@ -152,6 +163,7 @@ const run = async () => {
 		//! RETORNO EL OBJETO outputData por medio del console.log
 		console.log(JSON.stringify(outputData)); // print out data to STDOUT -> outputData
 	} catch (error) {
+
 		//! SI HAY UN ERROR, retorno el objeto outputData con los valores originales y el error
 		console.log(
 			JSON.stringify({

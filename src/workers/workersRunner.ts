@@ -141,6 +141,22 @@ export const runCheckTurnosPasaporte = async () => {
 		error,
 	} = retorno as IOutputData_WCheckCitaPasaporte;
 
+
+	log(
+		JSON.stringify(
+			{
+				retorno,
+				fecha: momentoFormateado('YYYYMMDD_HHmmss'),
+				error: error ? "SI HAY ERROR!!!!!!!" : '',
+			},
+			null,
+			2
+		)
+	);
+
+	if (error) console.log("SI HAY ERROR !!!!!!!!!!!!!!!!!!");
+
+
 	console.log({
 		idDivNotAvailableSlotsTextTop,
 		idTimeListTable,
