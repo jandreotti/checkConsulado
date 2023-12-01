@@ -97,9 +97,11 @@ const qrImage = async (req, res, next) => {
 
 	const estadoActual = estados[estados.length - 1].estado;
 
+	console.log({ estados });
 	//Fecha ultimo estado
 	let fecha = "";
 	try {
+
 		const fechaEstado = estados[estados.length - 1].fecha;
 		const day = fechaEstado.getDate() + "";
 		const month = (fechaEstado.getMonth() + 1) + "";
