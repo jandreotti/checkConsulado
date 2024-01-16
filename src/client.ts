@@ -175,10 +175,15 @@ export const iniciarCliente = async () => {
 		}
 		if (msg.body == '!dolar') {
 
-			msg.reply(
-				"Compra: " + dolarBlueCompra + "\n" +
-				"Venta: " + dolarBlueVenta
-			);
+			const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
+			const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+
+			const text = `Cambio la cotizacion del dolar (CORDOBA):
+
+			Compra: $${dolarBlueCompraS}
+			Venta:     *$${dolarBlueVentaS}*`;
+
+			msg.reply(text);
 		}
 
 		// if (msg.body.startsWith('!!s')) {

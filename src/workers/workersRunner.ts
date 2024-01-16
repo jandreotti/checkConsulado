@@ -198,7 +198,7 @@ export const runCheckDolarFetch = async data => {
 		const chatIds = ['5493515925801@c.us'];
 		// const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
 
-		const text = `Cambio la cotizacion del dolar:
+		const text = `Cambio la cotizacion del dolar (CORDOBA):
 
 Compra: $${dolarBlueCompraS} (${diferenciaCompra > 0 ? '+' : ''}${diferenciaCompra})
 Venta:     *$${dolarBlueVentaS} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
