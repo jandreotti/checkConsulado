@@ -79,10 +79,12 @@ const run = async () => {
 		await wait(5000);
 
 
+		//! Grabar Comentado 1
 		//! Grabo a ver que hay
-		await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
-		const bodyHTML1 = await page2.content();
-		fs.writeFileSync(`1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+		// await page2.screenshot({ path: `1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		// const bodyHTML1 = await page2.content();
+		// fs.writeFileSync(`1fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+		//! FIN Grabar Comentado 1		
 
 		///obtener el boton de continuar y presionarlo
 		const bktContinue = await page2.$('#bktContinue');
@@ -118,10 +120,12 @@ const run = async () => {
 		// Hacer click aqui:
 		// idDivBktDatetimeDatePickerText
 
+		//! Grabar Comentado 2
 		//! Grabo a ver que hay
-		await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
-		const bodyHTML2 = await page2.content();
-		fs.writeFileSync(`2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+		// await page2.screenshot({ path: `2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		// const bodyHTML2 = await page2.content();
+		// fs.writeFileSync(`2fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+		//! FIN Grabar Comentado 2
 
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (PRIMERA VERSION)
 		// if (!idDivNotAvailableSlotsTextTop && idTimeListTable && nuevaURL.includes('#datetime')) {
@@ -138,26 +142,28 @@ const run = async () => {
 		// 	fs.writeFileSync(`1fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
 		// }
 
+		//! Grabar Comentado 3
 		//? GRABO CUANDO PASA ALGO EN LA PANTALLA 3 (SEGUNDA VERSION)
-		if (
-			!idDivNotAvailableSlotsTextTop &&
-			idTimeListTable &&
-			nuevaURL.includes('#datetime') &&
-			idDivSlotColumnContainer_1 &&
-			valueIdDivBktDatetimeSelectedDate != ''
-		) {
-			//* Saco fotos si hay turnos disponibles
-			await page2.screenshot({ path: `3fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
+		// if (
+		// 	!idDivNotAvailableSlotsTextTop &&
+		// 	idTimeListTable &&
+		// 	nuevaURL.includes('#datetime') &&
+		// 	idDivSlotColumnContainer_1 &&
+		// 	valueIdDivBktDatetimeSelectedDate != ''
+		// ) {
+		// 	//* Saco fotos si hay turnos disponibles
+		// 	await page2.screenshot({ path: `3fullpage-${momentoFormateado('YYYYMMDD_HHmmss')}.png`, fullPage: true });
 
-			//* Guardo el HTML de la pagina para Debuguear
-			// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
-			// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
-			const bodyHTML3 = await page2.content();
-			//
-			// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
-			// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
-			fs.writeFileSync(`3fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
-		}
+		// 	//* Guardo el HTML de la pagina para Debuguear
+		// 	// const bodyHTML1 = await page2.evaluate(() => document.documentElement.outerHTML);
+		// 	// const bodyHTML2 = await page2.evaluate(() => document.querySelector('*').outerHTML);
+		// 	const bodyHTML3 = await page2.content();
+		// 	//
+		// 	// fs.writeFileSync(`fullpage1-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML1);
+		// 	// fs.writeFileSync(`fullpage2-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML2);
+		// 	fs.writeFileSync(`3fullpage3-${momentoFormateado('YYYYMMDD_HHmmss')}.html`, bodyHTML3);
+		// }
+		//! FIN Grabar Comentado 3
 
 		await page.close();
 		await page2.close();
