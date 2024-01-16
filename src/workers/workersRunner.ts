@@ -190,6 +190,9 @@ export const runCheckDolarFetch = async data => {
 		dolarBlueCompra = compra;
 		dolarBlueVenta = venta;
 
+		const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
+		const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+
 		//Enviar Mensaje
 		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
 		const chatIds = ['5493515925801@c.us'];
@@ -197,8 +200,8 @@ export const runCheckDolarFetch = async data => {
 
 		const text = `Cambio la cotizacion del dolar:
 
-Compra: $${compra} (${diferenciaCompra > 0 ? '+' : ''}${diferenciaCompra})
-Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
+Compra: $${dolarBlueCompraS} (${diferenciaCompra > 0 ? '+' : ''}${diferenciaCompra})
+Venta:     *$${dolarBlueVentaS} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 
 		for (const chatId of chatIds) {
 			await globalThis.client.sendMessage(chatId, text);

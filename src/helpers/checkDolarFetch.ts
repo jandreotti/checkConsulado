@@ -16,7 +16,7 @@ export const checkearDolarFetch = async () => {
   return { compra, venta };
 };
 
-export const checkearDolarAxios = async () => {
+export const checkearDolarAxios = async (): Promise<{ compra: number, venta: number; }> => {
   const resp = await axios("https://www.infodolar.com/cotizacion-dolar-provincia-cordoba.aspx");
   const html = resp.data;
   // Obtengo compra y venta
