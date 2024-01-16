@@ -176,8 +176,7 @@ export const iniciarCliente = async () => {
 		}
 		if (msg.body == '!dolar') {
 
-			// const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
-			// const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+
 			const dolarBlueCompraS = numberToDecimalString(dolarBlueCompra, 2);
 			const dolarBlueVentaS = numberToDecimalString(dolarBlueVenta, 2);
 

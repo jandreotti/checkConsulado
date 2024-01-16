@@ -117,7 +117,7 @@ Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 	}
 };
 
-export const runCheckDolarFetch = async data => {
+export const runCheckDolarAxios = async data => {
 	console.log(`\n[${momento()}] runCheckDolarFetch START`);
 	const actualCheck = Date.now();
 
@@ -191,15 +191,13 @@ export const runCheckDolarFetch = async data => {
 		dolarBlueCompra = compra;
 		dolarBlueVenta = venta;
 
-		// const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
-		// const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
 		const dolarBlueCompraS = numberToDecimalString(dolarBlueCompra, 2);
 		const dolarBlueVentaS = numberToDecimalString(dolarBlueVenta, 2);
 
 		//Enviar Mensaje
 		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
-		const chatIds = ['5493515925801@c.us'];
-		// const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
+		// const chatIds = ['5493515925801@c.us'];
+		const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
 
 		const text = `Cambio la cotizacion del dolar (CORDOBA):
 

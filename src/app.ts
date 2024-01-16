@@ -1,7 +1,7 @@
 import express from 'express';
 import router from './routes/index.js';
 import { iniciarCliente } from './client.js';
-import { runCheckCitaLMDLahabana, runCheckDolar, runCheckDolarFetch, runCheckTurnosPasaporte } from './workers/workersRunner.js';
+import { runCheckCitaLMDLahabana, runCheckDolar, runCheckDolarAxios, runCheckTurnosPasaporte } from './workers/workersRunner.js';
 
 
 //! CONFIGURACION WHATSAPP WEB JS
@@ -12,7 +12,7 @@ iniciarCliente();
 
 //! CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
-setInterval(runCheckDolarFetch, 30000);
+setInterval(runCheckDolarAxios, 30000);
 // runCheckDolar(undefined);
 
 //! TURNO PASAPORTE
