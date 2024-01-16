@@ -6,6 +6,7 @@ import { hostname } from 'os';
 
 import { momento, momentoSecondsToTime2 } from './helpers/momento';
 import { log } from './helpers/helpers';
+import { dolarBlueCompra, dolarBlueVenta } from './workers/workersRunner';
 
 const destroyClient = async starter => {
 	log(`[${momento()}] WSP INFO: (${starter}) Shutting down...`, "wsp.log");
@@ -171,6 +172,13 @@ export const iniciarCliente = async () => {
 		}
 		if (msg.body == '!gordochoto') {
 			msg.reply('OINK OINK');
+		}
+		if (msg.body == '!dolar') {
+
+			msg.reply(
+				"Compra: " + dolarBlueCompra + "\n" +
+				"Venta: " + dolarBlueVenta
+			);
 		}
 
 		// if (msg.body.startsWith('!!s')) {
