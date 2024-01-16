@@ -7,6 +7,7 @@ import { hostname } from 'os';
 import { momento, momentoSecondsToTime2 } from './helpers/momento';
 import { log } from './helpers/helpers';
 import { dolarBlueCompra, dolarBlueVenta } from './workers/workersRunner';
+import { numberToDecimalString } from './helpers/formatters';
 
 const destroyClient = async starter => {
 	log(`[${momento()}] WSP INFO: (${starter}) Shutting down...`, "wsp.log");
@@ -175,8 +176,10 @@ export const iniciarCliente = async () => {
 		}
 		if (msg.body == '!dolar') {
 
-			const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
-			const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+			// const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
+			// const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+			const dolarBlueCompraS = numberToDecimalString(dolarBlueCompra, 2);
+			const dolarBlueVentaS = numberToDecimalString(dolarBlueVenta, 2);
 
 			const text = `Cotizacion del dolar (CORDOBA):
 

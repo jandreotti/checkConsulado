@@ -1,4 +1,5 @@
 import axios from "axios";
+import { roundNumber } from "./formatters";
 
 export const checkearDolarFetch = async () => {
   const resp = await fetch("https://www.infodolar.com/cotizacion-dolar-provincia-cordoba.aspx");
@@ -10,8 +11,8 @@ export const checkearDolarFetch = async () => {
   compraS = compraS.replace(".", "").replace(",", ".");
   ventaS = ventaS.replace(".", "").replace(",", ".");
   // Redondeo a 2 caracteres
-  const compra = roundNum(parseFloat(compraS), 2);
-  const venta = roundNum(parseFloat(ventaS), 2);
+  const compra = roundNumber(parseFloat(compraS), 2);
+  const venta = roundNumber(parseFloat(ventaS), 2);
   console.log({ compra, venta });
   return { compra, venta };
 };
@@ -26,14 +27,10 @@ export const checkearDolarAxios = async (): Promise<{ compra: number, venta: num
   compraS = compraS.replace(".", "").replace(",", ".");
   ventaS = ventaS.replace(".", "").replace(",", ".");
   // Redondeo a 2 caracteres
-  const compra = roundNum(parseFloat(compraS), 2);
-  const venta = roundNum(parseFloat(ventaS), 2);
+  const compra = roundNumber(parseFloat(compraS), 2);
+  const venta = roundNumber(parseFloat(ventaS), 2);
   console.log({ compra, venta });
   return { compra, venta };
 };
 
 
-const roundNum = (num: number, length: number) => {
-  var number = Math.round(num * Math.pow(10, length)) / Math.pow(10, length);
-  return number;
-};

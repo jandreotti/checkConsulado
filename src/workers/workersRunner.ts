@@ -11,6 +11,7 @@ import { IInputData_WCheckCitaPasaporte, IOutputData_WCheckCitaPasaporte } from 
 import { IInputData_WCheckCitaLMDLahabana, IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
 import { log } from '../helpers/helpers';
 import { checkearDolarAxios, checkearDolarFetch } from '../helpers/checkDolar';
+import { numberToDecimalString } from '../helpers/formatters';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
 
@@ -190,8 +191,10 @@ export const runCheckDolarFetch = async data => {
 		dolarBlueCompra = compra;
 		dolarBlueVenta = venta;
 
-		const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
-		const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+		// const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
+		// const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
+		const dolarBlueCompraS = numberToDecimalString(dolarBlueCompra, 2);
+		const dolarBlueVentaS = numberToDecimalString(dolarBlueVenta, 2);
 
 		//Enviar Mensaje
 		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
