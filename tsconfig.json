@@ -5,7 +5,8 @@
       "target": "es6",
       "moduleResolution": "node",
       "sourceMap": true,
-      "outDir": "dist"
+      "outDir": "dist",
+      "skipLibCheck": true //! Esta opcion es importante para que la libreria funcione whatsapp-web.js -> https://github.com/pedroslopez/whatsapp-web.js/issues/2604
     },
     "lib": ["es2015"]
   }

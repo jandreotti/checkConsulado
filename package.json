@@ -31,6 +31,6 @@
 		"puppeteer-extra": "^3.3.6",
 		"puppeteer-extra-plugin-stealth": "^2.11.2",
 		"qr-image": "^3.2.0",
-		"whatsapp-web.js": "github:alechkos/whatsapp-web.js#forward-with-caption"
+		"whatsapp-web.js": "^1.23.0"
 	}
 }

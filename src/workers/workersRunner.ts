@@ -10,6 +10,7 @@ import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import { IInputData_WCheckCitaPasaporte, IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
 import { IInputData_WCheckCitaLMDLahabana, IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
 import { log } from '../helpers/helpers';
+import { checkearDolarFetch } from '../helpers/checkDolarFetch';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
 
@@ -44,6 +45,8 @@ export const runCheckDolar = async data => {
 
 	//! PROCESAMIENTO DEL RESULTADO
 	const { compra, venta } = retorno as IOutputData_WCheckDolar;
+
+
 	console.log(`runCheckDolar valores: Compra:${compra} - Venta:${venta}`);
 
 	//! VALIDACIONES
@@ -70,6 +73,11 @@ export const runCheckDolar = async data => {
 		return;
 	}
 
+	if (isNaN(parseFloat(compra)) || isNaN(parseFloat(venta))) {
+		console.log(`[${momento()}] runCheckDolar -> Fin Chequeo por compra/venta NaN...`, { compra, venta, dolarBlueCompra, dolarBlueVenta });
+		return;
+	}
+
 	//! PROCESAMIENTO DEL RESULTADO
 	if (dolarBlueCompra != parseFloat(compra) || dolarBlueVenta != parseFloat(venta)) {
 
@@ -91,8 +99,8 @@ export const runCheckDolar = async data => {
 
 		//Enviar Mensaje
 		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
-		// const chatIds = ['5493515925801@c.us'];
-		const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
+		const chatIds = ['5493515925801@c.us'];
+		// const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
 
 		const text = `Cambio la cotizacion del dolar:
 
@@ -105,6 +113,99 @@ Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
 	}
 	else {
 		console.log(`[${momento()}] runCheckDolar -> Fin Chequeo sin cambios... Compra:${compra} - Venta:${venta}`);
+	}
+};
+
+export const runCheckDolarFetch = async data => {
+	console.log(`\n[${momento()}] runCheckDolarFetch START`);
+	const actualCheck = Date.now();
+
+	//! VALIDACIONES
+	const estados = globalThis.estados;
+	if (!estados) {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+	const estadoActual = globalThis.estados[estados.length - 1].estado;
+	if (estadoActual !== 'LISTO') {
+		console.log('Cliente de whastapp-web.js no esta listo');
+		return;
+	}
+
+	//! EJECUCION DEL PROCESO 
+	const { compra, venta } = await checkearDolarFetch();
+
+	//! PROCESAMIENTO DEL RESULTADO
+
+	console.log(`runCheckDolarFetch valores: Compra:${compra} - Venta:${venta}`);
+
+	//! VALIDACIONES
+
+	// validacion para que no chequee una compra/venta nula y no es NaN
+	if (!compra || !venta) {
+		console.log(`[${momento()}] runCheckDolarFetch -> Fin Chequeo por compra/venta nula...`, { compra, venta });
+		return;
+	}
+
+	if (isNaN(compra) || isNaN(venta)) {
+		console.log(`[${momento()}] runCheckDolarFetch -> Fin Chequeo por compra/venta NaN...`, { compra, venta, dolarBlueCompra, dolarBlueVenta });
+		return;
+	}
+
+	// primer chequeo
+	if (dolarBlueCompra === 0 && dolarBlueVenta === 0) {
+		dolarBlueCompra = compra;
+		dolarBlueVenta = venta;
+		lastCheck = actualCheck;
+		console.log(`[${momento()}] runCheckDolarFetch -> Fin Primer Chequeo...`);
+		return;
+	}
+
+	// validacion para que no procese una operacion lenta despues de una rapida
+	if (lastCheck > actualCheck) {
+		console.log(`[${momento()}] runCheckDolarFetch -> Fin Chequeo por terminar tarde...`);
+		return;
+	} else {
+		lastCheck = actualCheck;
+	}
+
+
+
+	//! PROCESAMIENTO DEL RESULTADO
+	if (dolarBlueCompra != compra || dolarBlueVenta != venta) {
+
+		console.log(`      ------> runCheckDolarFetch -> Cambio el dolar -> AVISAR! Compra:${compra} - Venta:${venta}`);
+
+		console.log({
+			mensaje: 'AVISO DE CAMBIO DE DOLAR',
+			compra,
+			venta,
+			dolarBlueCompra,
+			dolarBlueVenta,
+		});
+
+		const diferenciaCompra = compra - dolarBlueCompra;
+		const diferenciaVenta = venta - dolarBlueVenta;
+
+		dolarBlueCompra = compra;
+		dolarBlueVenta = venta;
+
+		//Enviar Mensaje
+		//const chatIds = ['5493515925801@c.us', '5493512298961@c.us', '5493516461960@c.us', '5493541521564@c.us'];
+		const chatIds = ['5493515925801@c.us'];
+		// const chatIds = ['120363166505865460@g.us']; //GRUPO DOLARITOR
+
+		const text = `Cambio la cotizacion del dolar:
+
+Compra: $${compra} (${diferenciaCompra > 0 ? '+' : ''}${diferenciaCompra})
+Venta:     *$${venta} (${diferenciaVenta > 0 ? '+' : ''}${diferenciaVenta})*`;
+
+		for (const chatId of chatIds) {
+			await globalThis.client.sendMessage(chatId, text);
+		}
+	}
+	else {
+		console.log(`[${momento()}] runCheckDolarFetch -> Fin Chequeo sin cambios... Compra:${compra} - Venta:${venta}`);
 	}
 };
 
