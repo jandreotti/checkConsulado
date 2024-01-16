@@ -10,7 +10,7 @@ import { getNewPageWhenLoaded } from '../helpers/puppeteer-helper';
 import { IInputData_WCheckCitaPasaporte, IOutputData_WCheckCitaPasaporte } from './wCheckCitaPasaporte';
 import { IInputData_WCheckCitaLMDLahabana, IOutputData_WCheckCitaLMDLahabana } from './wCheckCitaLMDLahabana';
 import { log } from '../helpers/helpers';
-import { checkearDolarFetch } from '../helpers/checkDolarFetch';
+import { checkearDolarAxios, checkearDolarFetch } from '../helpers/checkDolarFetch';
 // const __dirnamee = path.resolve(); //C:\Users\computadora\Desktop\WSP\wsp-example
 // console.log(__dirname); //C:\Users\computadora\Desktop\WSP\wsp-example\dist\workers
 
@@ -133,7 +133,7 @@ export const runCheckDolarFetch = async data => {
 	}
 
 	//! EJECUCION DEL PROCESO 
-	const { compra, venta } = await checkearDolarFetch();
+	const { compra, venta } = await checkearDolarAxios();
 
 	//! PROCESAMIENTO DEL RESULTADO
 
