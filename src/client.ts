@@ -178,10 +178,10 @@ export const iniciarCliente = async () => {
 			const dolarBlueCompraS = (Math.round(dolarBlueCompra * 100) / 100).toFixed(2);
 			const dolarBlueVentaS = (Math.round(dolarBlueVenta * 100) / 100).toFixed(2);
 
-			const text = `Cambio la cotizacion del dolar (CORDOBA):
+			const text = `Cotizacion del dolar (CORDOBA):
 
-			Compra: $${dolarBlueCompraS}
-			Venta:     *$${dolarBlueVentaS}*`;
+Compra: $${dolarBlueCompraS}
+Venta:     *$${dolarBlueVentaS}*`;
 
 			msg.reply(text);
 		}
