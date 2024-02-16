@@ -112,7 +112,7 @@ const qrImage = async (req, res, next) => {
 		fecha = day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":" + seconds;
 	}
 	catch (err) {
-		console.log(err);
+		// console.log(err);
 		fecha = "Sin fecha (ERROR)";
 	}
 

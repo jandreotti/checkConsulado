@@ -124,12 +124,12 @@ export const runCheckDolarAxios = async data => {
 	//! VALIDACIONES
 	const estados = globalThis.estados;
 	if (!estados) {
-		console.log('Cliente de whastapp-web.js no esta listo');
+		console.log('Cliente de whastapp-web.js no esta listo 1');
 		return;
 	}
 	const estadoActual = globalThis.estados[estados.length - 1].estado;
 	if (estadoActual !== 'LISTO') {
-		console.log('Cliente de whastapp-web.js no esta listo');
+		console.log('Cliente de whastapp-web.js no esta listo 2');
 		return;
 	}
 

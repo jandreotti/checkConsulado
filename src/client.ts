@@ -17,6 +17,7 @@ const destroyClient = async starter => {
 };
 
 export const iniciarCliente = async () => {
+	console.log("Iniciar Cliente: Creando cliente");
 	const client = new Client({
 		authStrategy: new LocalAuth(),
 		puppeteer: {
@@ -39,8 +40,11 @@ export const iniciarCliente = async () => {
 		//     ],
 		// },
 	});
+	console.log("Iniciar Cliente: Creando cliente FIN");
+
 
 	// VARIABLES GLOBALES
+	console.log("Iniciar Cliente: Creando variables globales");
 	globalThis.client = client;
 
 	globalThis.estados = [
@@ -49,6 +53,11 @@ export const iniciarCliente = async () => {
 			valor: 0,
 		} as Estado,
 	];
+	console.log("Iniciar Cliente: Creando variables globales FIN");
+
+
+	// EVENTOS
+	console.log("Iniciar Cliente: Creando eventos");
 
 	client.on('loading_screen', (percent, message) => {
 		console.log('LOADING', percent, message);
@@ -230,7 +239,13 @@ Venta:     *$${dolarBlueVentaS}*`;
 		log(`[${momento()}] WSP INFO: remote_session_saved`, "wsp.log");
 	});
 
+	console.log("Iniciar Cliente: Creando eventos FIN");
+
+
+	// INICIAR 
+	console.log("Iniciar Cliente: client.initialize();");
 	client.initialize();
+	console.log("Iniciar Cliente: client.initialize(); FIN");
 
 	process.on('SIGINT', async () => {
 		destroyClient('SIGINT');

@@ -5,24 +5,29 @@ import { runCheckCitaLMDLahabana, runCheckDolar, runCheckDolarAxios, runCheckTur
 
 
 //! CONFIGURACION WHATSAPP WEB JS
+console.log("-----------------INICIAR CLIENTE-----------------");
 iniciarCliente();
+console.log("-----------------FIN INICIAR CLIENTE-----------------");
 
 // ! CONFIGURACION CHEQUEO PAGINA DE CONSULADO (YA NO SE USA)
 // setInterval(checkConsuladoPage, 10000);
 
 //! CHEQUEO DE DOLAR
 //// setInterval(checkDolarBlueCordoba, 30000);
+console.log("-----------------SET INTERVAL CHECK DOLAR-----------------");
 setInterval(runCheckDolarAxios, 30000);
 // runCheckDolar(undefined);
+console.log("-----------------FIN SET INTERVAL CHECK DOLAR-----------------");
+
 
 //! TURNO PASAPORTE
 // setInterval(runCheckTurnosPasaporte, 60000 * 3); //chequea cada 3 minutos
 
 //estos de abajo son los que van
-setInterval(() => runCheckTurnosPasaporte('8089'), 60000 * 3); //Chequea cada 3 minutos 
-setTimeout(() => {
-	setInterval(() => runCheckTurnosPasaporte('8091'), 60000 * 3); //Chequea cada 3 minutos empezando 1.5 minutos despues
-}, 60000 * 1.5);
+// setInterval(() => runCheckTurnosPasaporte('8089'), 60000 * 3); //Chequea cada 3 minutos 
+// setTimeout(() => {
+// 	setInterval(() => runCheckTurnosPasaporte('8091'), 60000 * 3); //Chequea cada 3 minutos empezando 1.5 minutos despues
+// }, 60000 * 1.5);
 
 //! TURNO LA HABANA
 // //setInterval(runCheckCitaLMDLahabana, 60000 * 3); //Chequea cada 3 minutos
